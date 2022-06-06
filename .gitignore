@@ -1,0 +1,4 @@
+.vagrant/
+.ssh/
+synced_data/
+Vagrantfile
