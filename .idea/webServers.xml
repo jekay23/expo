@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="e6e9bbee-e41c-4e8c-bc02-3f0926169a6b" name="Expo local VM" url="http://expo.local">
+        <fileTransfer rootFolder="/var/www/" accessType="SFTP" host="127.0.0.1" port="2222" sshConfigId="82f2593f-cd24-404b-ae72-63f47910842b" sshConfig="vagrant@127.0.0.1:2222 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
