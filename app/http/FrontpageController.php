@@ -13,6 +13,7 @@ class FrontpageController
 {
     public function openFrontpage()
     {
+        require __DIR__ . '/../../resources/views/View.php';
         $view = new View();
         $view->showView('frontpage');
     }
