@@ -5,9 +5,9 @@
  * Manages the front page, which is accessed by URL 'IP/'.
  */
 
-namespace App\Http;
+namespace Expo\App\Http;
 
-use Resources\Views\View;
+use Expo\Resources\Views\View;
 
 class FrontpageController
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Resources\Views;
+namespace Expo\Resources\Views;
 
 class View
 {

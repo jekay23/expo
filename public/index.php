@@ -4,6 +4,8 @@
  * This is the front controller, which routes all requests to their controllers.
  */
 
+namespace Expo\Pub;
+
 $route = $_GET['page'];
 if ($route == 'favicon.ico') {
     require 'images/favicon.ico';
