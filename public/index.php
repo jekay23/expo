@@ -24,13 +24,12 @@ $routes = array(
     'compilation' => __DIR__ . "/../app/http/CompilationPageController.php"
 );
 
-$route = $_GET['page'];
-if ($route == 'favicon.ico') {
+list($routeMain, $routeSecondary) = array_pad(explode("/", $_GET['page']), 2, null);
+
+if ($routeMain == 'favicon.ico') {
     require 'images/favicon.ico';
-} elseif ($route == '') {
-    require $routes["$route"];
+} elseif ($routeMain == '') {
+    require $routes["$routeMain"];
     $controller = new FrontpageController();
-    $controller->openFrontpage();
+    $controller->openFrontpage($routeSecondary);
 }
-# $controller = new FrontpageController();
-# $controller->openFrontpage();
