@@ -8,6 +8,7 @@ namespace Expo\Pub;
 
 use Expo\App\Http\FrontpageController;
 
+// display all errors and warnings on the webpage (should be disabled for release)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -41,6 +42,7 @@ spl_autoload_register(function ($class) {
     }
 });
 
+// $routeMain determines which controller we use next, $routeSecondary is given to this controller as argument
 list($routeMain, $routeSecondary) = array_pad(explode("/", $_GET['page']), 2, null);
 
 if ($routeMain == 'favicon.ico') {

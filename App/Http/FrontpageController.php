@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Front page controller
+ * Front page controller class
  * Manages the front page, which is accessed by URL 'IP/'.
  */
 
