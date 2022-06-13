@@ -6,8 +6,13 @@
 
 namespace Expo\Pub;
 
+use Expo\App\Http\CompilationPageController;
+use Expo\App\Http\ExhibitionPageController;
 use Expo\App\Http\FrontpageController;
+use Expo\App\Http\PhotoPageController;
 use Expo\App\Http\ProfilePageController;
+use Expo\App\Http\SignInPageController;
+use Expo\App\Http\SignUpPageController;
 use Expo\Routes\Router;
 
 // display all errors and warnings on the webpage (should be disabled for release)
@@ -54,6 +59,26 @@ Router::route('/favicon.ico', function () {
 
 Router::route('/profile', function () {
     ProfilePageController::openPage();
+});
+
+Router::route('/photo', function () {
+    PhotoPageController::openPage();
+});
+
+Router::route('/compilation', function () {
+    CompilationPageController::openPage();
+});
+
+Router::route('/exhibition', function () {
+    ExhibitionPageController::openPage();
+});
+
+Router::route('/sign-in', function () {
+    SignInPageController::openPage();
+});
+
+Router::route('/sign-up', function () {
+    SignUpPageController::openPage();
 });
 
 Router::execute($_SERVER['REQUEST_URI']);

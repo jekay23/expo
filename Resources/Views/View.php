@@ -9,12 +9,22 @@ namespace Expo\Resources\Views;
 
 class View
 {
+    private static $requests = array(
+        'frontpage' => 'frontpageTemplate.php',
+        'profile' => 'profilePageTemplate.php',
+        'photo' => 'photoPageTemplate.php',
+        'compilation' => 'compilationPageTemplate.php',
+        'exhibition' => 'exhibitionPageTemplate.php',
+        'signIn' => 'signInPageTemplate.php',
+        'signUp' => 'signUpPageTemplate.php'
+    );
+
     public static function showView($requestView)
     {
-        if ($requestView == 'frontpage') {
-            require 'frontpageTemplate.php';
-        } elseif ($requestView == 'profile') {
-            require 'profilePageTemplate.php';
+        foreach (self::$requests as $request => $template) {
+            if ($requestView == $request) {
+                require $template;
+            }
         }
     }
 }
