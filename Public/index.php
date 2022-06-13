@@ -4,9 +4,7 @@
  * This is the front controller, which routes all requests to their controllers.
  */
 
-namespace Expo\Pub;
-
-use Expo\App\Http\FrontpageController;
+use Expo\Routes\Router;
 
 // display all errors and warnings on the webpage (should be disabled for release)
 error_reporting(E_ALL);
@@ -14,7 +12,6 @@ ini_set('display_errors', 1);
 
 // autoloader
 spl_autoload_register(function ($class) {
-
     // project-specific namespace prefix
     $prefix = 'Expo\\';
 
@@ -42,12 +39,9 @@ spl_autoload_register(function ($class) {
     }
 });
 
-// $routeMain determines which controller we use next, $routeSecondary is given to this controller as argument
-list($routeMain, $routeSecondary) = array_pad(explode("/", $_GET['page']), 2, null);
+// $routeMain determines which controller we use next, $routeSecondary is given to this controller as an argument
+list($pathMain, $pathSecondary) = array_pad(explode("/", $_GET['page']), 2, null);
 
-if ($routeMain == 'favicon.ico') {
-    require 'Images/favicon.ico';
-} elseif ($routeMain == '') {
-    $controller = new FrontpageController();
-    $controller->openFrontpage($routeSecondary);
-}
+Router::route('', 'FrontpageController');
+
+Router::execute($pathMain, $pathSecondary);
