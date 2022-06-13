@@ -7,6 +7,7 @@
 namespace Expo\Pub;
 
 use Expo\App\Http\FrontpageController;
+use Expo\Routes\Router;
 
 // display all errors and warnings on the webpage (should be disabled for release)
 error_reporting(E_ALL);
@@ -43,11 +44,8 @@ spl_autoload_register(function ($class) {
 });
 
 // $routeMain determines which controller we use next, $routeSecondary is given to this controller as argument
-list($routeMain, $routeSecondary) = array_pad(explode("/", $_GET['page']), 2, null);
+Router::route('/', function (){
+    FrontpageController::openPage();
+});
 
-if ($routeMain == 'favicon.ico') {
-    require 'Images/favicon.ico';
-} elseif ($routeMain == '') {
-    $controller = new FrontpageController();
-    $controller->openFrontpage($routeSecondary);
-}
+Router::execute($_SERVER['REQUEST_URI']);

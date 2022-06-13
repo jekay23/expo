@@ -11,7 +11,7 @@ use Expo\Resources\Views\View;
 
 class FrontpageController
 {
-    public function openFrontpage($route)
+    public static function openPage()
     {
         require __DIR__ . '/../../Resources/Views/View.php';
         $view = new View();
