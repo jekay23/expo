@@ -13,6 +13,7 @@ use Expo\App\Http\PhotoPageController;
 use Expo\App\Http\ProfilePageController;
 use Expo\App\Http\SignInPageController;
 use Expo\App\Http\SignUpPageController;
+use Expo\Resources\Views\View;
 use Expo\Routes\Router;
 
 // display all errors and warnings on the webpage (should be disabled for release)
@@ -75,6 +76,10 @@ Router::route('sign-in', function () {
 
 Router::route('sign-up', function () {
     SignUpPageController::openPage();
+});
+
+Router::route('404', function () {
+    View::showView('404');
 });
 
 Router::execute($_SERVER['REQUEST_URI']);

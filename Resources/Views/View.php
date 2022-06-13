@@ -16,7 +16,8 @@ class View
         'compilation' => 'compilationPageTemplate.php',
         'exhibition' => 'exhibitionPageTemplate.php',
         'signIn' => 'signInPageTemplate.php',
-        'signUp' => 'signUpPageTemplate.php'
+        'signUp' => 'signUpPageTemplate.php',
+        '404' => '404Template.php'
     );
 
     public static function showView($requestView)

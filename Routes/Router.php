@@ -66,6 +66,7 @@ class Router
                 return call_user_func_array($callback, array($requestList, $query, $fragment));
             }
         }
-        // here there'll be handling of incorrect URLs
+        // page not found, call 404
+        return call_user_func_array(self::$routes['404'], array($requestList, $query, $fragment));
     }
 }
