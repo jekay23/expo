@@ -9,7 +9,7 @@ namespace Expo\Resources\Views;
 
 class View
 {
-    public function showView($requestView)
+    public static function showView($requestView)
     {
         if ($requestView == 'frontpage') {
             require 'frontpageView.php';

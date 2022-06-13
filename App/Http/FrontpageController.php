@@ -13,8 +13,6 @@ class FrontpageController
 {
     public static function openPage()
     {
-        require __DIR__ . '/../../Resources/Views/View.php';
-        $view = new View();
-        $view->showView('frontpage');
+        View::showView('frontpage');
     }
 }
