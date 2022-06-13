@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Router class
+ * Stores the route table and calls corresponding to URLs functions
+ */
+
 namespace Expo\Routes;
 
 class Router
