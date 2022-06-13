@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Router class
+ * Stores the route table and calls corresponding to URLs functions
+ */
+
 namespace Expo\Routes;
 
 class Router
@@ -18,20 +23,47 @@ class Router
     }
 
     // build a regular-expression version of the pattern, and save the matching callback function
-    public static function route($pattern, $callback)
+    public static function route($uriMain, $callback)
     {
-        $pattern = '/^' . str_replace('/', '\/', $pattern) . '$/';
-        self::$routes[$pattern] = $callback;
+        self::$routes[$uriMain] = $callback;
     }
 
 
-    // check if the requested URL matches a known pattern, if so - call the callback function
-    public static function execute($url)
+    // check if the requested URI matches a known pattern, if so - call the callback function
+    public static function execute($requestUri)
     {
-        foreach (self::$routes as $pattern => $callback) {
-            if (preg_match($pattern, $url, $params)) {
-                array_shift($params);
-                return call_user_func_array($callback, array_values($params));
+        /**
+         * URI structure:
+         * /profile/18264772/edit?user=8376583#email
+         * | main  |    list     |   query    | fragment
+         *
+         * main - $requestMain - determines which controller is called next
+         * list - $requestList - parsed here into an array, passed further as argument
+         * query - $query - parsed here into an array from string $queryString, passed further as argument
+         * fragment - $fragment - passed further as argument
+         */
+
+        // remove the preceding '/'
+        if ($requestUri[0] == '/') {
+            $requestUri = substr($requestUri, 1);
+        }
+
+        // detach and save the fragment
+        // ? Is this supposed to not work? I write fragment into URI, xdebug does not see it...
+        list($requestUri, $fragment) = array_pad(explode('#', $requestUri), 2, '');
+
+        // detach and parse the query string
+        list($requestUri, $queryString) = array_pad(explode('?', $requestUri), 2, '');
+        parse_str($queryString, $query);
+
+        // parse the remaining part into main (string) and list (array of strings)
+        $requestList = explode('/', $requestUri);
+        $requestMain = array_shift($requestList);
+
+        // determine the next controller based on $requestMain
+        foreach (self::$routes as $uriMain => $callback) {
+            if ($uriMain == $requestMain) {
+                return call_user_func_array($callback, array($requestList, $query, $fragment));
             }
         }
         // here there'll be handling of incorrect URLs

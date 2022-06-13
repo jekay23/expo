@@ -49,35 +49,31 @@ spl_autoload_register(function ($class) {
 });
 
 // $routeMain determines which controller we use next, $routeSecondary is given to this controller as argument
-Router::route('/', function () {
+Router::route('', function () {
     FrontpageController::openPage();
 });
 
-Router::route('/favicon.ico', function () {
-    require 'Images/favicon.ico';
-});
-
-Router::route('/profile', function () {
+Router::route('profile', function () {
     ProfilePageController::openPage();
 });
 
-Router::route('/photo', function () {
+Router::route('photo', function () {
     PhotoPageController::openPage();
 });
 
-Router::route('/compilation', function () {
+Router::route('compilation', function () {
     CompilationPageController::openPage();
 });
 
-Router::route('/exhibition', function () {
+Router::route('exhibition', function () {
     ExhibitionPageController::openPage();
 });
 
-Router::route('/sign-in', function () {
+Router::route('sign-in', function () {
     SignInPageController::openPage();
 });
 
-Router::route('/sign-up', function () {
+Router::route('sign-up', function () {
     SignUpPageController::openPage();
 });
 
