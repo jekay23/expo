@@ -7,6 +7,7 @@
 namespace Expo\Pub;
 
 use Expo\App\Http\FrontpageController;
+use Expo\App\Http\ProfilePageController;
 use Expo\Routes\Router;
 
 // display all errors and warnings on the webpage (should be disabled for release)
@@ -15,7 +16,6 @@ ini_set('display_errors', 1);
 
 // autoloader
 spl_autoload_register(function ($class) {
-
     // project-specific namespace prefix
     $prefix = 'Expo\\';
 
@@ -44,8 +44,16 @@ spl_autoload_register(function ($class) {
 });
 
 // $routeMain determines which controller we use next, $routeSecondary is given to this controller as argument
-Router::route('/', function (){
+Router::route('/', function () {
     FrontpageController::openPage();
+});
+
+Router::route('/favicon.ico', function () {
+    require 'Images/favicon.ico';
+});
+
+Router::route('/profile', function () {
+    ProfilePageController::openPage();
 });
 
 Router::execute($_SERVER['REQUEST_URI']);

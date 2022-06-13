@@ -12,7 +12,9 @@ class View
     public static function showView($requestView)
     {
         if ($requestView == 'frontpage') {
-            require 'frontpageView.php';
+            require 'frontpageTemplate.php';
+        } elseif ($requestView == 'profile') {
+            require 'profilePageTemplate.php';
         }
     }
 }
