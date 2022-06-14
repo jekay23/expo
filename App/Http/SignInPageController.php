@@ -11,7 +11,7 @@ use Expo\Resources\Views\View;
 
 class SignInPageController
 {
-    public static function openPage()
+    public static function openPage($requestList, $query, $fragment)
     {
         View::showView('signIn');
     }
