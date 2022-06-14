@@ -44,7 +44,7 @@ class Router
          */
 
         // remove the preceding '/'
-        if ($requestUri[0] == '/') {
+        if ('/' == $requestUri[0]) {
             $requestUri = substr($requestUri, 1);
         }
 
