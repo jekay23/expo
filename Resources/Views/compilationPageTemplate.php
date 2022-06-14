@@ -3,7 +3,7 @@
 <head>
     <?php
     $compilationName = 'Лето в Академгородке' ?>
-    <title><?= "Подборка ;quot$compilationName;quot | Выставка фотографов мехмата" ?></title>
+    <title><?= "Подборка &quot;$compilationName&quot; | Выставка фотографов мехмата" ?></title>
     <link rel="shortcut icon" type="image/jpg" href="../../Public/Images/favicon.ico"/>
 </head>
 <body>
