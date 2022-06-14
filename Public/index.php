@@ -20,7 +20,7 @@ use Expo\Routes\Router;
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// autoloader
+# autoloader
 spl_autoload_register(function ($class) {
     // project-specific namespace prefix
     $prefix = 'Expo\\';
@@ -49,36 +49,36 @@ spl_autoload_register(function ($class) {
     }
 });
 
-// $routeMain determines which controller we use next, $routeSecondary is given to this controller as argument
-Router::route('', function () {
-    FrontpageController::openPage();
+Router::route('', function ($requestList, $query, $fragment) {
+    FrontpageController::openPage($requestList, $query, $fragment);
 });
 
-Router::route('profile', function () {
-    ProfilePageController::openPage();
+Router::route('profile', function ($requestList, $query, $fragment) {
+    ProfilePageController::openPage($requestList, $query, $fragment);
 });
 
-Router::route('photo', function () {
-    PhotoPageController::openPage();
+Router::route('photo', function ($requestList, $query, $fragment) {
+    PhotoPageController::openPage($requestList, $query, $fragment);
 });
 
-Router::route('compilation', function () {
-    CompilationPageController::openPage();
+Router::route('compilation', function ($requestList, $query, $fragment) {
+    CompilationPageController::openPage($requestList, $query, $fragment);
 });
 
-Router::route('exhibition', function () {
-    ExhibitionPageController::openPage();
+Router::route('exhibition', function ($requestList, $query, $fragment) {
+    ExhibitionPageController::openPage($requestList, $query, $fragment);
 });
 
-Router::route('sign-in', function () {
-    SignInPageController::openPage();
+Router::route('sign-in', function ($requestList, $query, $fragment) {
+    SignInPageController::openPage($requestList, $query, $fragment);
 });
 
-Router::route('sign-up', function () {
-    SignUpPageController::openPage();
+Router::route('sign-up', function ($requestList, $query, $fragment) {
+    SignUpPageController::openPage($requestList, $query, $fragment);
 });
 
 Router::route('404', function () {
+    // ? Should everything be through view without any exceptions?
     View::showView('404');
 });
 

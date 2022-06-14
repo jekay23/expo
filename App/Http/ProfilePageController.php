@@ -11,8 +11,16 @@ use Expo\Resources\Views\View;
 
 class ProfilePageController
 {
-    public static function openPage()
+    public static function openPage($requestList, $query, $fragment)
     {
-        View::showView('profile');
+        if ($requestList) {
+            if ('1' == $requestList[0]) {
+                View::showView('profile');
+            } else {
+                View::showView('404');
+            }
+        } else {
+            View::showView('404'); // duplication now, but will be removed once the DB is connected
+        }
     }
 }
