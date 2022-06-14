@@ -82,4 +82,8 @@ Router::route('404', function () {
     View::showView('404');
 });
 
+Router::route('phpinfo', function () {
+    phpinfo();
+});
+
 Router::execute($_SERVER['REQUEST_URI']);
