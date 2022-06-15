@@ -20,7 +20,7 @@ class CompilationPageController
                 View::showView('404');
             }
         } else {
-            View::showView('404'); // duplication now, but will be removed once the DB is connected
+            View::showView('404'); // TODO duplication now, but will be removed once the DB is connected
         }
     }
 }
