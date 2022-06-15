@@ -2,3 +2,4 @@
 .ssh/
 synced_data/
 Vagrantfile
+.idea/
