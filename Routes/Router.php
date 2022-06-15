@@ -56,12 +56,10 @@ class Router
         $requestList = explode('/', $requestUri);
         $requestMain = array_shift($requestList);
 
-        // determine the next controller based on $requestMain
-        foreach (self::$routes as $uriMain => $callback) {
-            if ($uriMain == $requestMain) {
-                return call_user_func_array($callback, array($requestList, $query));
-            }
+        if (isset(self::$routes[$requestMain])) {
+            return call_user_func_array(self::$routes[$requestMain], array($requestList, $query));
         }
+
         // page not found, call 404
         return call_user_func_array(self::$routes['404'], array($requestList, $query));
     }

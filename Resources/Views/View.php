@@ -32,25 +32,23 @@ class View
             'signUp' => 'Регистрация',
             '404' => 'Страница не найдена'
         );
-        foreach ($titles as $request => $title) {
-            if ($requestTitle == $request) {
-                if ($requestTitle !== 'frontpage') {
-                    $title = $title . ' | Выставка фотографов мехмата';
-                }
-                break;
-            }
+
+        $title = $titles[$requestTitle]; // TODO add isset() just in case the page is not caught into 404
+
+        if ($requestTitle !== 'frontpage') {
+            $title = $title . ' | Выставка фотографов мехмата';
         }
+
         return $title;
     }
 
     public static function showView($requestView)
     {
         $title = self::makeTitle($requestView);
-        foreach (self::$requests as $request => $template) {
-            if ($requestView == $request) {
-                require 'mainTemplate.php';
-                break;
-            }
+
+        if (isset(self::$requests[$requestView])) {
+            $template = self::$requests[$requestView];
+            require 'mainTemplate.php';
         }
     }
 }
