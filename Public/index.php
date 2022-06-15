@@ -49,32 +49,32 @@ spl_autoload_register(function ($class) {
     }
 });
 
-Router::route('', function ($requestList, $query, $fragment) {
-    FrontpageController::openPage($requestList, $query, $fragment);
+Router::route('', function ($requestList, $query) {
+    FrontpageController::openPage($requestList, $query);
 });
 
-Router::route('profile', function ($requestList, $query, $fragment) {
-    ProfilePageController::openPage($requestList, $query, $fragment);
+Router::route('profile', function ($requestList, $query) {
+    ProfilePageController::openPage($requestList, $query);
 });
 
-Router::route('photo', function ($requestList, $query, $fragment) {
-    PhotoPageController::openPage($requestList, $query, $fragment);
+Router::route('photo', function ($requestList, $query) {
+    PhotoPageController::openPage($requestList, $query);
 });
 
-Router::route('compilation', function ($requestList, $query, $fragment) {
-    CompilationPageController::openPage($requestList, $query, $fragment);
+Router::route('compilation', function ($requestList, $query) {
+    CompilationPageController::openPage($requestList, $query);
 });
 
-Router::route('exhibition', function ($requestList, $query, $fragment) {
-    ExhibitionPageController::openPage($requestList, $query, $fragment);
+Router::route('exhibition', function ($requestList, $query) {
+    ExhibitionPageController::openPage($requestList, $query);
 });
 
-Router::route('sign-in', function ($requestList, $query, $fragment) {
-    SignInPageController::openPage($requestList, $query, $fragment);
+Router::route('sign-in', function ($requestList, $query) {
+    SignInPageController::openPage($requestList, $query);
 });
 
-Router::route('sign-up', function ($requestList, $query, $fragment) {
-    SignUpPageController::openPage($requestList, $query, $fragment);
+Router::route('sign-up', function ($requestList, $query) {
+    SignUpPageController::openPage($requestList, $query);
 });
 
 Router::route('404', function () {

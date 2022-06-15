@@ -11,7 +11,7 @@ use Expo\Resources\Views\View;
 
 class ProfilePageController
 {
-    public static function openPage($requestList, $query, $fragment)
+    public static function openPage($requestList, $query)
     {
         if ($requestList) {
             if ('1' == $requestList[0]) {

@@ -11,7 +11,7 @@ use Expo\Resources\Views\View;
 
 class ExhibitionPageController
 {
-    public static function openPage($requestList, $query, $fragment)
+    public static function openPage($requestList, $query)
     {
         View::showView('exhibition');
     }

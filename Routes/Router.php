@@ -40,17 +40,13 @@ class Router
          * main - $requestMain - determines which controller is called next
          * list - $requestList - parsed here into an array, passed further as argument
          * query - $query - parsed here into an array from string $queryString, passed further as argument
-         * fragment - $fragment - passed further as argument
+         * fragment - handled by transfer, not known to server
          */
 
         // remove the preceding '/'
         if ('/' == $requestUri[0]) {
             $requestUri = substr($requestUri, 1);
         }
-
-        // detach and save the fragment
-        // ? Is this supposed to not work? I write fragment into URI, xdebug does not see it...
-        list($requestUri, $fragment) = array_pad(explode('#', $requestUri), 2, '');
 
         // detach and parse the query string
         list($requestUri, $queryString) = array_pad(explode('?', $requestUri), 2, '');
@@ -63,10 +59,10 @@ class Router
         // determine the next controller based on $requestMain
         foreach (self::$routes as $uriMain => $callback) {
             if ($uriMain == $requestMain) {
-                return call_user_func_array($callback, array($requestList, $query, $fragment));
+                return call_user_func_array($callback, array($requestList, $query));
             }
         }
         // page not found, call 404
-        return call_user_func_array(self::$routes['404'], array($requestList, $query, $fragment));
+        return call_user_func_array(self::$routes['404'], array($requestList, $query));
     }
 }
