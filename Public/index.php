@@ -8,7 +8,7 @@ namespace Expo\Pub;
 
 use Expo\App\Http\CompilationPageController;
 use Expo\App\Http\ExhibitionPageController;
-use Expo\App\Http\FrontpageController;
+use Expo\App\Http\FrontPageController;
 use Expo\App\Http\PhotoPageController;
 use Expo\App\Http\ProfilePageController;
 use Expo\App\Http\SignInPageController;
@@ -26,7 +26,7 @@ ini_set('display_startup_errors', '1');
 require __DIR__ . '/../Routes/autoloader.php';
 
 Router::route('', function ($requestList, $query) {
-    FrontpageController::openPage($requestList, $query);
+    FrontPageController::openPage($requestList, $query);
 });
 
 Router::route('profile', function ($requestList, $query) {

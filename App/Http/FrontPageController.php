@@ -9,7 +9,7 @@ namespace Expo\App\Http;
 
 use Expo\Resources\Views\View;
 
-class FrontpageController
+class FrontPageController
 {
     public static function openPage($requestList, $query)
     {

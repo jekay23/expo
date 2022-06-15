@@ -10,7 +10,7 @@ namespace Expo\Resources\Views;
 class View
 {
     private static $requests = array(
-        'frontpage' => 'frontpageTemplate.php',
+        'frontpage' => 'frontPageTemplate.php',
         'profile' => 'profilePageTemplate.php',
         'photo' => 'photoPageTemplate.php',
         'compilation' => 'compilationPageTemplate.php',
