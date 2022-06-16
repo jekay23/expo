@@ -2,6 +2,7 @@
 <html lang="ru">
     <head>
         <title><?php echo $title?></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" type="image/x-icon" href="/image/favicon.ico">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     </head>
