@@ -1,5 +1,5 @@
 <header>
-    <nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top" role="navigation" style="height: 6vh; min-height: 60px">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top" role="navigation" style="height: 6vh; min-height: 60px; background-color: #54b686">
         <div class="collapse navbar-collapse container-md align-self-center">
             <a class="navbar-brand" href="https://www.nsu.ru/n/mathematics-mechanics-department/">
                 <img src="/image/logoMMD.png" alt="Лого ММФ" style="height: 5vh; min-height: 55px">
@@ -33,7 +33,7 @@
     <div>Here you will be able to see the front page of Expo MMD website.</div>
 </main>
 
-<footer class="footer mt-auto py-3 bg-light fixed-bottom">
+<footer class="footer mt-auto py-3 fixed-bottom" style="background-color: #232222">
     <div class="container">
         <ul class="nav justify-content-center">
             <li class="nav-item"><a href="#" class="nav-link px-5 text-muted">Поддержка</a></li>
