@@ -6,13 +6,7 @@
 
 namespace Expo\Pub;
 
-use Expo\App\Http\CompilationPageController;
-use Expo\App\Http\ExhibitionPageController;
-use Expo\App\Http\FrontPageController;
-use Expo\App\Http\PhotoPageController;
-use Expo\App\Http\ProfilePageController;
-use Expo\App\Http\SignInPageController;
-use Expo\App\Http\SignUpPageController;
+use Expo\App\Http\Controllers;
 use Expo\Resources\Views\View;
 use Expo\Routes\Router;
 
@@ -26,31 +20,31 @@ ini_set('display_startup_errors', '1');
 require __DIR__ . '/../Routes/autoloader.php';
 
 Router::route('', function ($requestList, $query) {
-    FrontPageController::openPage($requestList, $query);
+    Controllers\Page\Front::openPage($requestList, $query);
 });
 
 Router::route('profile', function ($requestList, $query) {
-    ProfilePageController::openPage($requestList, $query);
+    Controllers\Page\Profile::openPage($requestList, $query);
 });
 
 Router::route('photo', function ($requestList, $query) {
-    PhotoPageController::openPage($requestList, $query);
+    Controllers\Page\Photo::openPage($requestList, $query);
 });
 
 Router::route('compilation', function ($requestList, $query) {
-    CompilationPageController::openPage($requestList, $query);
+    Controllers\Page\Compilation::openPage($requestList, $query);
 });
 
 Router::route('exhibition', function ($requestList, $query) {
-    ExhibitionPageController::openPage($requestList, $query);
+    Controllers\Page\Exhibition::openPage($requestList, $query);
 });
 
 Router::route('sign-in', function ($requestList, $query) {
-    SignInPageController::openPage($requestList, $query);
+    Controllers\Page\SignIn::openPage($requestList, $query);
 });
 
 Router::route('sign-up', function ($requestList, $query) {
-    SignUpPageController::openPage($requestList, $query);
+    Controllers\Page\SignUp::openPage($requestList, $query);
 });
 
 Router::route('404', function () {

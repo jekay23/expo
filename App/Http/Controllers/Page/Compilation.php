@@ -5,11 +5,11 @@
  * Manages the front page, which is accessed by URL 'IP/'.
  */
 
-namespace Expo\App\Http;
+namespace Expo\App\Http\Controllers\Page;
 
 use Expo\Resources\Views\View;
 
-class CompilationPageController
+class Compilation
 {
     public static function openPage($requestList, $query)
     {
