@@ -1,6 +1,6 @@
 <header>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top" role="navigation"
-         style="height: 6vh; min-height: 60px; background-color: #54b686">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary" role="navigation"
+         style="height: 6vh; min-height: 60px">
         <div class="container-md align-self-center">
             <a class="navbar-brand py-0" href="https://www.nsu.ru/n/mathematics-mechanics-department/">
                 <img src="/image/logoMMD.png" alt="Логотип ММФ" style="height: 5vh; min-height: 55px">
