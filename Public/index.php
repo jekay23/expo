@@ -52,14 +52,6 @@ Router::route('404', function () {
     View::showView('404');
 });
 
-Router::route('image', function ($requestList, $query) {
-    Controllers\Images::showFile($requestList, $query);
-});
-
-Router::route('css', function ($requestList, $query) {
-    Controllers\Css::showFile($requestList, $query);
-});
-
 Router::route('phpinfo', function () {
     phpinfo();
 });
