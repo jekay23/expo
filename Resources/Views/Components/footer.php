@@ -1,4 +1,4 @@
-<footer class="footer mt-5 py-3" style="background-color: #232222">
+<footer class="footer mt-5 py-3 bg-secondary">
     <div class="container">
         <ul class="nav justify-content-center">
             <li class="nav-item px-5"><a href="#" class="nav-link text-muted">Поддержка</a></li>

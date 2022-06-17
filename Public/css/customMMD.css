@@ -1,0 +1,30 @@
+@charset "UTF-8";
+:root {
+    --bs-primary: #54b686;
+    --bs-primary-rgb: 84, 182, 134;
+    --bs-secondary: #232222;
+    --bs-secondary-rgb: 35, 34, 34;
+    --bs-light: #fff;
+    --bs-light-rgb: 255, 255, 255;
+}
+
+.scrolling-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.scrolling-wrapper > .stack {
+    display: inline-block;
+    border-width: 0;
+    margin: 4px;
+}
+
+.scrolling-wrapper > .stack > img{
+    height: 200px;
+}
+
+.scrolling-wrapper > .card {
+    display: inline-block;
+    margin: 4px;
+}
