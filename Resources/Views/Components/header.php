@@ -10,7 +10,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <a class="navbar-brand px-lg-5" href="/" id="navbarSupportedContent">
+                <a class="navbar-brand px-lg-5" href="/">
                     <strong>Выставка фотографов мехмата</strong>
                 </a>
                 <div class="navbar-collapse justify-content-evenly">

@@ -40,7 +40,7 @@ class Router
          * main - $requestMain - determines which controller is called next
          * list - $requestList - parsed here into an array, passed further as argument
          * query - $query - parsed here into an array from string $queryString, passed further as argument
-         * fragment - handled by transfer, not known to server
+         * fragment - handled by browser, not known to server
          */
 
         // remove the preceding '/'
