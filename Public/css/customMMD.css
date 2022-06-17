@@ -8,10 +8,20 @@
     --bs-light-rgb: 255, 255, 255;
 }
 
+h2 {
+    font-size: 100%;
+    font-weight: normal;
+}
+
 .scrolling-wrapper {
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
+
+}
+
+.scrolling-wrapper::-webkit-scrollbar {
+    display: none;
 }
 
 .scrolling-wrapper > .stack {
@@ -20,11 +30,28 @@
     margin: 4px;
 }
 
-.scrolling-wrapper > .stack > img{
+.scrolling-wrapper > .stack > .one-of-stack {
     height: 200px;
+    margin: 20px;
+}
+
+.scrolling-wrapper > .stack > .one-of-stack > img {
+    height: 200px;
+    margin: 10px;
 }
 
 .scrolling-wrapper > .card {
     display: inline-block;
     margin: 4px;
+}
+
+.exhibit-title {
+    font-weight: normal;
+    color: #54b686;
+    margin-right: 1rem;
+}
+
+.exhibit-descr {
+    width: 300px;
+    white-space: pre-wrap;
 }
