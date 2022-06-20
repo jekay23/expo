@@ -6,6 +6,17 @@
     --bs-secondary-rgb: 35, 34, 34;
     --bs-light: #fff;
     --bs-light-rgb: 255, 255, 255;
+    --bs-font-sans-serif: "Averta CY",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+
+@font-face {
+    font-family: 'Averta CY';
+    src: url("fonts/AvertaCY-Regular.eot");
+    src: url('fonts/AvertaCY-Regular.woff2') format('woff2'),
+    url('fonts/AvertaCY-Regular.woff') format('woff'),
+    url('fonts/AvertaCY-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 
 h2 {
