@@ -19,6 +19,16 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Averta CY';
+    src: url("fonts/AvertaCY-Bold.eot");
+    src: url('fonts/AvertaCY-Bold.woff2') format('woff2'),
+    url('fonts/AvertaCY-Bold.woff') format('woff'),
+    url('fonts/AvertaCY-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
 h2 {
     font-size: 100%;
     font-weight: normal;
