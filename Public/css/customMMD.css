@@ -80,3 +80,14 @@ h2 {
         flex-wrap: nowrap;
     }
 }
+
+.scrolling-wrapper > .card {
+    margin: .5rem 1rem;
+    border-width: 3px;
+    border-radius: 20px;
+    border-color: #939292;
+}
+
+.scrolling-wrapper > .card > p {
+    margin: .7rem 1rem;
+}

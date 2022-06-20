@@ -8,6 +8,14 @@
 
     \Expo\Resources\Views\View::renderHeader2('Последние опубликованные');
     require 'Components/smallGrid.php';
+
+    \Expo\Resources\Views\View::renderHeader2('Предыдущая выставка');
+    require 'Components/continuousSlider.php';
+
+    \Expo\Resources\Views\View::renderHeader2('Фотографы мехмата');
+    require 'Components/textSlider.php';
     ?>
+
+
 
 </main>
