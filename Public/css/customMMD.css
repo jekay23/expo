@@ -26,27 +26,26 @@ h2 {
 .scrolling-wrapper > .stack {
     display: inline-block;
     border-width: 0;
-    margin: 4px;
+    margin: .25rem;
 }
 
 .scrolling-wrapper > .stack > .one-of-stack {
-    height: 200px;
-    margin: 20px;
+    height: 11rem;
 }
 
 .scrolling-wrapper > .stack > .one-of-stack > img {
-    height: 200px;
-    margin: 10px;
+    height: 10rem;
+    margin: .75rem;
 }
 
 .scrolling-wrapper > img {
-    height: 160px;
-    margin: 10px;
+    height: 13rem;
+    margin: .75rem;
 }
 
 .scrolling-wrapper > .card {
     display: inline-block;
-    margin: 4px;
+    margin: .25rem;
 }
 
 .exhibit-title {
@@ -56,6 +55,6 @@ h2 {
 }
 
 .exhibit-descr {
-    width: 300px;
+    width: 22rem;
     white-space: pre-wrap;
 }
