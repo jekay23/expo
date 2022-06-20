@@ -17,7 +17,6 @@ h2 {
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
-
 }
 
 .scrolling-wrapper::-webkit-scrollbar {
@@ -37,6 +36,11 @@ h2 {
 
 .scrolling-wrapper > .stack > .one-of-stack > img {
     height: 200px;
+    margin: 10px;
+}
+
+.scrolling-wrapper > img {
+    height: 160px;
     margin: 10px;
 }
 
