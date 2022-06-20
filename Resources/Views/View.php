@@ -51,4 +51,9 @@ class View
             require 'mainTemplate.php';
         }
     }
+
+    public static function renderHeader2($headerText)
+    {
+        echo '<h2 class="pt-3 pb-1 ps-md-5">' . $headerText . '</h2>';
+    }
 }
