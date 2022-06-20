@@ -58,3 +58,25 @@ h2 {
     width: 22rem;
     white-space: pre-wrap;
 }
+
+.small-grid {
+    alignment: center;
+}
+
+.small-grid-triple > img {
+    height: 10vw;
+    width: 15vw;
+    object-fit: cover;
+    margin: .1vw .25vw;
+    flex-wrap: nowrap;
+}
+
+@media screen and (max-width: 950px) {
+    .small-grid-triple > img {
+        height: 20vw;
+        width: 30vw;
+        object-fit: cover;
+        margin: .2vw .4vw;
+        flex-wrap: nowrap;
+    }
+}
