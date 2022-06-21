@@ -14,8 +14,9 @@
 
     \Expo\Resources\Views\View::renderHeader2('Фотографы мехмата');
     require 'Components/textSlider.php';
+
+    \Expo\Resources\Views\View::renderHeader2('Подборка команды мехмата');
+    require 'Components/carousel.php';
     ?>
-
-
 
 </main>

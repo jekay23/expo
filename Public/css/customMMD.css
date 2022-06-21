@@ -129,3 +129,35 @@ h2 {
 .scrolling-wrapper > .card > p {
     margin: .7rem 1rem;
 }
+
+.carousel-item > img {
+    height: 20rem;
+    width: 30rem;
+    object-fit: cover;
+}
+
+.carousel-control-next-icon, .carousel-control-prev-icon {
+    height: 4rem;
+    width: 4rem;
+}
+
+.carousel-control-next, .carousel-control-prev {
+    width: 40%;
+}
+
+@media screen and (max-width: 950px) {
+    .carousel-item > img {
+        height: 43vw;
+        width: 69vw;
+        object-fit: cover;
+    }
+
+    .carousel-control-next-icon, .carousel-control-prev-icon {
+        height: 100%;
+        width: 100%;
+    }
+
+    .carousel-control-next, .carousel-control-prev {
+        width: 10%;
+    }
+}
