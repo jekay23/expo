@@ -48,7 +48,7 @@ class View
 
         if (isset(self::$requests[$requestView])) {
             $template = 'Pages/' . self::$requests[$requestView];
-            require 'mainTemplate.php';
+            require 'html.php';
         }
     }
 
