@@ -5,14 +5,14 @@
  * Manages the front page, which is accessed by URL 'IP/'.
  */
 
-namespace Expo\App\Http\Controllers\Page;
+namespace Expo\App\Http\Controllers\Pages;
 
 use Expo\Resources\Views\View;
 
-class Front
+class SignIn
 {
-    public static function openPage($requestList, $query)
+    public static function renderPage($requestList, $query)
     {
-        View::showView('frontpage');
+        View::renderView('signIn');
     }
 }

@@ -15,36 +15,36 @@ require __DIR__ . '/../Config/errorReporting.php';
 require __DIR__ . '/../Routes/autoloader.php';
 
 Router::route('', function ($requestList, $query) {
-    Controllers\Page\Front::openPage($requestList, $query);
+    Controllers\Pages\Front::renderPage($requestList, $query);
 });
 
 Router::route('profile', function ($requestList, $query) {
-    Controllers\Page\Profile::openPage($requestList, $query);
+    Controllers\Pages\Profile::renderPage($requestList, $query);
 });
 
 Router::route('photo', function ($requestList, $query) {
-    Controllers\Page\Photo::openPage($requestList, $query);
+    Controllers\Pages\Photo::renderPage($requestList, $query);
 });
 
 Router::route('compilation', function ($requestList, $query) {
-    Controllers\Page\Compilation::openPage($requestList, $query);
+    Controllers\Pages\Compilation::renderPage($requestList, $query);
 });
 
 Router::route('exhibition', function ($requestList, $query) {
-    Controllers\Page\Exhibition::openPage($requestList, $query);
+    Controllers\Pages\Exhibition::renderPage($requestList, $query);
 });
 
 Router::route('sign-in', function ($requestList, $query) {
-    Controllers\Page\SignIn::openPage($requestList, $query);
+    Controllers\Pages\SignIn::renderPage($requestList, $query);
 });
 
 Router::route('sign-up', function ($requestList, $query) {
-    Controllers\Page\SignUp::openPage($requestList, $query);
+    Controllers\Pages\SignUp::renderPage($requestList, $query);
 });
 
 Router::route('404', function () {
     // ? Should everything be through view without any exceptions?
-    View::showView('404');
+    View::renderView('404');
 });
 
 Router::route('phpinfo', function () {

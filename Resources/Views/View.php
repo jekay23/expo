@@ -42,7 +42,7 @@ class View
         return $title;
     }
 
-    public static function showView($requestView)
+    public static function renderView($requestView)
     {
         $title = self::makeTitle($requestView);
 
