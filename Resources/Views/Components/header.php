@@ -16,13 +16,13 @@
                 <div class="navbar-collapse justify-content-evenly">
                     <ul class="navbar-nav">
                         <li class="nav-item px-xl-5">
-                            <a class="nav-link active" href="#">Лента</a>
+                            <a class="nav-link active" href="/">Лента</a> <!-- TODO: Properly change active status-->
                         </li>
                         <li class="nav-item px-lg-5">
-                            <a class="nav-link" href="#">Отбор</a>
+                            <a class="nav-link" href="/exhibition">Отбор</a>
                         </li>
                         <li class="nav-item px-xl-5">
-                            <a class="nav-link" href="#">Профиль</a>
+                            <a class="nav-link" href="/sign-up">Профиль</a>
                         </li>
                     </ul>
                 </div>
