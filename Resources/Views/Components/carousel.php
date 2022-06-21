@@ -1,4 +1,4 @@
-<div id="photoCarousel" class="carousel carousel-dark slide" data-bs-ride="false">
+<div id="photoCarousel" class="carousel carousel-dark slide py-2" data-bs-ride="false">
     <div class="carousel-inner">
         <div class="carousel-item active text-center">
             <img src="/uploads/photos/flowers.png" alt="Цветы">

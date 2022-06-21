@@ -10,14 +10,14 @@ namespace Expo\Resources\Views;
 class View
 {
     private static $requests = array(
-        'frontpage' => 'frontPageTemplate.php',
-        'profile' => 'profilePageTemplate.php',
-        'photo' => 'photoPageTemplate.php',
-        'compilation' => 'compilationPageTemplate.php',
-        'exhibition' => 'exhibitionPageTemplate.php',
-        'signIn' => 'signInPageTemplate.php',
-        'signUp' => 'signUpPageTemplate.php',
-        '404' => '404Template.php'
+        'frontpage' => 'front.php',
+        'profile' => 'profile.php',
+        'photo' => 'photo.php',
+        'compilation' => 'compilation.php',
+        'exhibition' => 'exhibition.php',
+        'signIn' => 'signIn.php',
+        'signUp' => 'signUp.php',
+        '404' => '404.php'
     );
 
     private static function makeTitle($requestTitle): string
@@ -47,7 +47,7 @@ class View
         $title = self::makeTitle($requestView);
 
         if (isset(self::$requests[$requestView])) {
-            $template = self::$requests[$requestView];
+            $template = 'Pages/' . self::$requests[$requestView];
             require 'mainTemplate.php';
         }
     }

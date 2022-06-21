@@ -1,23 +1,23 @@
 <main class="container-fluid" role="main" style="padding-top: 70px">
     <?php
     \Expo\Resources\Views\View::renderHeader2('Текущая выставка');
-    require 'Components/exhibitionSlider.php';
+    require __DIR__ . '/../Components/exhibitionSlider.php';
 
     \Expo\Resources\Views\View::renderHeader2('Лучшие фото месяца');
-    require 'Components/continuousSlider.php';
+    require __DIR__ . '/../Components/continuousSlider.php';
 
     \Expo\Resources\Views\View::renderHeader2('Последние опубликованные');
-    require 'Components/smallGrid.php';
+    require __DIR__ . '/../Components/smallGrid.php';
 
     \Expo\Resources\Views\View::renderHeader2('Предыдущая выставка');
-    require 'Components/continuousSlider.php';
+    require __DIR__ . '/../Components/continuousSlider.php';
 
     \Expo\Resources\Views\View::renderHeader2('Фотографы мехмата');
     $sliderText = 'photographers';
     \Expo\App\Http\Controllers\Components\textSlider::renderSlider($sliderText);
 
     \Expo\Resources\Views\View::renderHeader2('Подборка команды мехмата');
-    require 'Components/carousel.php';
+    require __DIR__ . '/../Components/carousel.php';
 
     \Expo\Resources\Views\View::renderHeader2('Фильтры');
     $sliderText = 'filters';
