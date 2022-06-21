@@ -10,12 +10,7 @@ use Expo\App\Http\Controllers;
 use Expo\Resources\Views\View;
 use Expo\Routes\Router;
 
-// display all errors and warnings on the webpage.
-// TODO relocate
-// TODO disable for release
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', '1');
+require __DIR__ . '/../Config/errorReporting.php';
 
 require __DIR__ . '/../Routes/autoloader.php';
 
