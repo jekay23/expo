@@ -37,8 +37,17 @@
     padding: 0.2rem;
 }
 
-.navbar > .container-fluid {
+.mmd-navbar > .container-fluid {
     justify-content: center;
+    padding-left: 3rem;
+    padding-right: 10rem;
+}
+
+@media screen and (max-width: 1400px) {
+    .mmd-navbar > .container-fluid {
+        padding-left: 1rem;
+        padding-right: 2rem;
+    }
 }
 
 h2 {
