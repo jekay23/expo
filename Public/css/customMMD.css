@@ -176,3 +176,13 @@ h2 {
         width: 10%;
     }
 }
+
+.footer > .container > .nav > .nav-item {
+    padding: 0 3rem;
+}
+
+@media screen and (max-width: 1000px) {
+    .footer > .container > .nav > .nav-item {
+        padding: 0 1rem;
+    }
+}
