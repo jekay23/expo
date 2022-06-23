@@ -12,6 +12,8 @@ class Router
     // storage of {pattern => function} pairs
     private static $routes = array();
 
+    private static $idSpecificPages = array();
+
     // ban on construction and cloning
     // ? Can I put these in two lines instead of 6 (put "{}" in the end in spite of PSR-12)?
     private function __construct()
@@ -22,18 +24,21 @@ class Router
     {
     }
 
-    // build a regular-expression version of the pattern, and save the matching callback function
-    public static function route($uriMain, $callback)
+    // save the matching callback function
+    public static function route(string $uriMain, callable $callback, bool $isIdSpecific = false)
     {
+        if ($isIdSpecific) {
+            self::$idSpecificPages[] = $uriMain;
+        }
         self::$routes[$uriMain] = $callback;
     }
 
 
     // check if the requested URI matches a known pattern, if so - call the callback function
-    public static function execute($requestUri)
+    public static function execute(string $requestUri)
     {
         /**
-         * URI structure:
+         * requested URI structure:
          * /profile/18264772/edit?user=8376583#email
          * | main  |    list     |   query    | fragment
          *
@@ -57,6 +62,11 @@ class Router
         $requestMain = array_shift($requestList);
 
         if (isset(self::$routes[$requestMain])) {
+            if (isset(self::$idSpecificPages[$requestMain])) {
+                if (!ctype_digit($requestList[0])) {
+                    return call_user_func_array(self::$routes['404'], array($requestList, $query));
+                }
+            }
             return call_user_func_array(self::$routes[$requestMain], array($requestList, $query));
         }
 

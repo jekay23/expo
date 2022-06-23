@@ -13,14 +13,10 @@ class Photo
 {
     public static function renderPage($requestList, $query)
     {
-        if ($requestList) {
-            if ('1' == $requestList[0]) {
-                View::renderView('photo');
-            } else {
-                View::renderView('404');
-            }
+        if ('1' == $requestList[0]) {
+            View::renderView('photo');
         } else {
-            View::renderView('404'); // TODO duplication now, but will be removed once the DB is connected
+            View::renderView('404');
         }
     }
 }
