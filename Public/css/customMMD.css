@@ -59,7 +59,7 @@ h2 {
 .scrolling-wrapper > .stack {
     display: inline-block;
     border-width: 0;
-    margin: .25rem;
+    margin: .4rem;
 }
 
 .scrolling-wrapper > .stack > .one-of-stack {
@@ -74,11 +74,6 @@ h2 {
 .scrolling-wrapper > img {
     height: 13rem;
     margin: .75rem;
-}
-
-.scrolling-wrapper > .card {
-    display: inline-block;
-    margin: .25rem;
 }
 
 .exhibit-title {
@@ -115,7 +110,8 @@ h2 {
 }
 
 .scrolling-wrapper > .card {
-    margin: .5rem 1rem;
+    display: inline-block;
+    margin: .6rem 1rem;
     border-width: 3px;
     border-radius: 20px;
     border-color: #939292;
