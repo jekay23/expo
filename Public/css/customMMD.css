@@ -38,7 +38,7 @@
 }
 
 .mmd-navbar > .container-fluid {
-    justify-content: center;
+    justify-content: space-between;
     padding-left: 3rem;
     padding-right: 10rem;
 }
@@ -47,6 +47,21 @@
     .mmd-navbar > .container-fluid {
         padding-left: 1rem;
         padding-right: 2rem;
+    }
+}
+
+.mmd-navbar > .container-fluid > .mmd-logo {
+    padding: 0 0 0 3rem;
+}
+
+@media screen and (max-width: 767px) {
+    .mmd-navbar > .container-fluid {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .mmd-navbar > .container-fluid > .mmd-logo {
+        padding-left: .5rem;
     }
 }
 

@@ -1,7 +1,7 @@
 <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary mmd-navbar" role="navigation">
         <div class="container-fluid">
-            <a class="navbar-brand py-0 ps-5" href="https://www.nsu.ru/n/mathematics-mechanics-department/">
+            <a class="navbar-brand mmd-logo" href="https://www.nsu.ru/n/mathematics-mechanics-department/">
                 <img src="/image/logoMMD.png" alt="Логотип ММФ" style="height: 5vh; min-height: 55px">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
