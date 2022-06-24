@@ -15,7 +15,6 @@ class Router
     private static $idSpecificPages = array();
 
     // ban on construction and cloning
-    // ? Can I put these in two lines instead of 6 (put "{}" in the end in spite of PSR-12)?
     private function __construct()
     {
     }
