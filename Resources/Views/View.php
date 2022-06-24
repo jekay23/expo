@@ -20,7 +20,7 @@ class View
         '404' => '404.php'
     );
 
-    private static function makeTitle($requestTitle): string
+    private static function makeTitle(string $requestTitle): string
     {
         $titles = array(
             'frontpage' => 'Выставка фотографов мехмата',
@@ -42,7 +42,7 @@ class View
         return $title;
     }
 
-    public static function renderView($requestView)
+    public static function renderView(string $requestView)
     {
         $title = self::makeTitle($requestView);
 
@@ -52,7 +52,7 @@ class View
         }
     }
 
-    public static function renderHeader2($headerText)
+    public static function renderHeader2(string $headerText)
     {
         echo '<h2 class="pt-3 pb-1 ps-md-5">' . $headerText . '</h2>';
     }

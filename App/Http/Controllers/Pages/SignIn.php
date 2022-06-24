@@ -11,7 +11,7 @@ use Expo\Resources\Views\View;
 
 class SignIn
 {
-    public static function renderPage($requestList, $query)
+    public static function renderPage(array $requestList, array $query)
     {
         View::renderView('signIn');
     }
