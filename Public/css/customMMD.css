@@ -77,8 +77,8 @@ h2 {
 }
 
 .scrolling-wrapper::-webkit-scrollbar {
-    width: 3px;
-    height: 3px;
+    width: .4rem;
+    height: .4rem;
 }
 
 .scrolling-wrapper::-webkit-scrollbar-track {
@@ -86,7 +86,7 @@ h2 {
 }
 
 .scrolling-wrapper::-webkit-scrollbar-thumb {
-    border-radius: 5px;
+    border-radius: .4rem;
     background: #939292;
     opacity: .5;
 }
@@ -149,8 +149,8 @@ h2 {
 .scrolling-wrapper > .card {
     display: inline-block;
     margin: .5rem .8rem;
-    border-width: 3px;
-    border-radius: 20px;
+    border-width: .19rem;
+    border-radius: 1.25rem;
     border-color: #939292;
 }
 
@@ -184,8 +184,8 @@ h2 {
     .carousel-control-next-icon, .carousel-control-prev-icon {
         height: 90%;
         width: 90%;
-        max-height: 64px;
-        max-width: 64px;
+        max-height: 4rem;
+        max-width: 4rem;
     }
 
     .carousel-control-next, .carousel-control-prev {
