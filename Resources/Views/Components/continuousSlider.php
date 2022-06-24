@@ -7,5 +7,5 @@
     <img src="/uploads/photos/library.png" alt="Библиотека">
     <img src="/uploads/photos/sea.png" alt="Море">
     <img src="/uploads/photos/theater.png" alt="Театр">
-    <img src="/uploads/photos/duck.png" alt="Утка">
+    <img src="/uploads/photos/duck.jpg" alt="Утка">
 </div>
