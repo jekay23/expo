@@ -87,8 +87,8 @@ h2 {
 }
 
 .scrolling-wrapper > img {
-    height: 13rem;
-    margin: .75rem;
+    height: 10rem;
+    margin: .5rem;
 }
 
 .exhibit-title {
@@ -133,14 +133,15 @@ h2 {
 
 .scrolling-wrapper > .card {
     display: inline-block;
-    margin: .6rem 1rem;
+    margin: .5rem .8rem;
     border-width: 3px;
     border-radius: 20px;
     border-color: #939292;
 }
 
 .scrolling-wrapper > .card > p {
-    margin: .7rem 1rem;
+    margin: .7rem .8rem;
+    font-size: smaller;
 }
 
 .carousel-item > img {
