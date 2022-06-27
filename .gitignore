@@ -3,3 +3,4 @@
 synced_data/
 Vagrantfile
 .idea/
+/App/Models/DataBaseCredentials.php
