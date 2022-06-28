@@ -5,8 +5,7 @@ require __DIR__ . '/../Components/exhibitionSlider.php';
 \Expo\Resources\Views\View::renderHeader2('Лучшие фото месяца');
 require __DIR__ . '/../Components/continuousSlider.php';
 
-\Expo\Resources\Views\View::renderHeader2('Последние опубликованные');
-require __DIR__ . '/../Components/smallGrid.php';
+\Expo\App\Http\Controllers\Components\ContinuousSlider::renderComponent('Лучшие фото месяца', 'best', 10);
 
 \Expo\App\Http\Controllers\Components\SmallGrid::renderComponent('Последние опубликованные', 'latest', 12);
 
