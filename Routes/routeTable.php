@@ -36,7 +36,3 @@ Router::route('404', function () {
     // ? Should everything be through view without any exceptions?
     View::renderView('404');
 });
-
-Router::route('phpinfo', function () {
-    phpinfo();
-});
