@@ -54,6 +54,6 @@ class View
 
     public static function renderHeader2(string $headerText)
     {
-        echo '<h2 class="pt-3 pb-1 ps-md-5">' . $headerText . '</h2>';
+        echo '<h2>' . $headerText . '</h2>';
     }
 }
