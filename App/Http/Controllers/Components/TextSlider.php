@@ -11,7 +11,7 @@ class TextSlider
         'filters' => array('По дате публикации', 'По поулярности', 'По выставкам')
     );
 
-    public static function renderSlider($sliderText)
+    public static function renderComponent($sliderText)
     {
         $renderText = array();
         if (isset(self::$sliderTextTypes[$sliderText])) {

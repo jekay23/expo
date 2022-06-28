@@ -10,11 +10,11 @@
 
 \Expo\Resources\Views\View::renderHeader2('Фотографы мехмата');
 $sliderText = 'photographers';
-\Expo\App\Http\Controllers\Components\TextSlider::renderSlider($sliderText);
+\Expo\App\Http\Controllers\Components\TextSlider::renderComponent($sliderText);
 
 \Expo\Resources\Views\View::renderHeader2('Подборка команды мехмата');
 require __DIR__ . '/../Components/carousel.php';
 
 \Expo\Resources\Views\View::renderHeader2('Фильтры');
 $sliderText = 'filters';
-\Expo\App\Http\Controllers\Components\TextSlider::renderSlider($sliderText);
+\Expo\App\Http\Controllers\Components\TextSlider::renderComponent($sliderText);
