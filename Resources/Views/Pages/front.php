@@ -1,9 +1,6 @@
 <?php
-\Expo\Resources\Views\View::renderHeader2('Текущая выставка');
-require __DIR__ . '/../Components/exhibitionSlider.php';
 
-\Expo\Resources\Views\View::renderHeader2('Лучшие фото месяца');
-require __DIR__ . '/../Components/continuousSlider.php';
+\Expo\App\Http\Controllers\Components\ExhibitionSlider::renderComponent('Текущая выставка', 1, 10);
 
 \Expo\App\Http\Controllers\Components\ContinuousSlider::renderComponent('Лучшие фото месяца', 'best', 10);
 

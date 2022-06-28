@@ -45,12 +45,15 @@ class DataBaseConnection
         } elseif ('best' == $type) {
             $query .= " ORDER BY likes DESC, uploadTime DESC";
         } elseif ('compilation' == $type) {
-            if (isset($args['compilationID'])) {
-                $query .= "";
+            if (isset($args['exhibitionNumber'])) {
+                $exhibitionNumber = $args['exhibitionNumber'];
+                $query .= " RIGHT JOIN CompilationItems CI ON Photos.photoID = CI.photoID";
+                $query .= " WHERE compilationID = $exhibitionNumber";
             }
         }
-
         $query .= " LIMIT $quantity";
+
+        // TODO: now if none of the conditions are met, the query just asks for $quantity photos, have to think about it
 
         $statement = self::$connection->prepare($query);
         $statement->execute();
@@ -58,5 +61,24 @@ class DataBaseConnection
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         $photos = $statement->fetchAll();
         return array(true, $photos);
+    }
+
+    public static function requireExhibitionDetails(int $exhibitionNumber): array
+    {
+        if (null == self::$connection) {
+            $connectionAttempt = self::open();
+            if (!$connectionAttempt[0]) {
+                return array(false, null);
+            }
+        }
+
+        $query = "SELECT name, description FROM Compilations WHERE exhibitNumber=$exhibitionNumber";
+
+        $statement = self::$connection->prepare($query);
+        $statement->execute();
+
+        $statement->setFetchMode(PDO::FETCH_ASSOC);
+        $exhibitions = $statement->fetchAll();
+        return array(true, $exhibitions[0]);
     }
 }
