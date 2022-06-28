@@ -8,8 +8,9 @@ require __DIR__ . '/../Components/continuousSlider.php';
 \Expo\Resources\Views\View::renderHeader2('Последние опубликованные');
 require __DIR__ . '/../Components/smallGrid.php';
 
-\Expo\Resources\Views\View::renderHeader2('Предыдущая выставка');
-require __DIR__ . '/../Components/continuousSlider.php';
+\Expo\App\Http\Controllers\Components\SmallGrid::renderComponent('Последние опубликованные', 'latest', 12);
+
+\Expo\App\Http\Controllers\Components\ContinuousSlider::renderComponent('Предыдущая выставка', 'latest', 10);
 
 \Expo\Resources\Views\View::renderHeader2('Фотографы мехмата');
 $sliderText = 'photographers';

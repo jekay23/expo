@@ -9,7 +9,7 @@ class DataBaseConnection
 {
     private static $connection = null;
 
-    public static function open()
+    public static function open(): array
     {
         list($host, $dbname, $username, $password) = DataBaseCredentials::getCredentials();
         if (null != self::$connection) {
@@ -30,7 +30,7 @@ class DataBaseConnection
         self::$connection = null;
     }
 
-    public static function requirePhotos(string $type, int $quantity, array $args = null)
+    public static function requirePhotos(string $type, int $quantity, array $args = null): array
     {
         if (null == self::$connection) {
             $connectionAttempt = self::open();
@@ -39,7 +39,7 @@ class DataBaseConnection
             }
         }
 
-        $query = "SELECT location FROM Photos";
+        $query = "SELECT location, altText FROM Photos";
         if ('latest' == $type) {
             $query .= " ORDER BY uploadTime DESC";
         } elseif ('best' == $type) {
