@@ -32,7 +32,6 @@ Router::saveCallback('sign-up', function (array $requestList, array $requestQuer
     Controllers\Pages\SignUp::assemble($requestList, $requestQuery);
 });
 
-Router::route('404', function () {
-    // ? Should everything be through view without any exceptions?
-    View::renderView('404');
+Router::saveCallback('404', function () {
+    Controllers\Pages\Error404::assemble();
 });

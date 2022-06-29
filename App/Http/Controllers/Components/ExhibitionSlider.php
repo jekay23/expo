@@ -9,9 +9,13 @@ use Expo\Resources\Views;
 
 class ExhibitionSlider
 {
-    public static function assemble(string $headerText, int $compilationID, int $quantity)
+    public static function assemble(string $headerText, string $type, int $quantity, int $compilationID = null)
     {
-        $args = array('compilationID' => $compilationID);
+        if ('compilation' == $type) {
+            $args = array('compilationID' => $compilationID);
+        } else {
+            $args = null;
+        }
         list($status, $photos) = DataBaseConnection::requirePhotos('compilation', $quantity, $args);
         if ($status) {
             list($status, $compilation) = DataBaseConnection::requireCompilationDetails($compilationID);

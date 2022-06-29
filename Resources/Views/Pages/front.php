@@ -1,19 +1,22 @@
 <?php
 
-\Expo\App\Models\DataBaseConnection::open();
+use Expo\App\Models\DataBaseConnection;
+use Expo\App\Http\Controllers;
 
-\Expo\App\Http\Controllers\Components\ExhibitionSlider::assemble('Текущая выставка', 1, 10);
+DataBaseConnection::open();
 
-\Expo\App\Http\Controllers\Components\ContinuousSlider::assemble('Лучшие фото месяца', 'best', 10);
+Controllers\Components\ExhibitionSlider::assemble('Текущая выставка', 'compilation', 10, 1);
 
-\Expo\App\Http\Controllers\Components\SmallGrid::assemble('Последние опубликованные', 'latest', 12);
+Controllers\Components\ContinuousSlider::assemble('Лучшие фото месяца', 'best', 10);
 
-\Expo\App\Http\Controllers\Components\ContinuousSlider::assemble('Предыдущая выставка', 'latest', 10);
+Controllers\Components\SmallGrid::assemble('Последние опубликованные', 'latest', 12);
 
-\Expo\App\Http\Controllers\Components\TextSlider::assemble('Фотографы мехмата', 'latest', 10);
+Controllers\Components\ContinuousSlider::assemble('Предыдущая выставка', 'latest', 10);
 
-\Expo\App\Http\Controllers\Components\Carousel::assemble('Подборка команды мехмата', 2, 5);
+Controllers\Components\TextSlider::assemble('Фотографы мехмата', 'latest', 10);
 
-\Expo\App\Http\Controllers\Components\TextSlider::assemble('Фильтры', 'filters', 3);
+Controllers\Components\Carousel::assemble('Подборка команды мехмата', 'compilation', 5, 2);
 
-\Expo\App\Models\DataBaseConnection::close();
+Controllers\Components\TextSlider::assemble('Фильтры', 'filters', 3);
+
+DataBaseConnection::close();
