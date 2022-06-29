@@ -12,8 +12,7 @@
 $sliderText = 'photographers';
 \Expo\App\Http\Controllers\Components\TextSlider::renderComponent($sliderText);
 
-\Expo\Resources\Views\View::renderHeader2('Подборка команды мехмата');
-require __DIR__ . '/../Components/carousel.php';
+\Expo\App\Http\Controllers\Components\Carousel::renderComponent('Подборка команды мехмата', 2, 5);
 
 \Expo\Resources\Views\View::renderHeader2('Фильтры');
 $sliderText = 'filters';

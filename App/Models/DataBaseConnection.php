@@ -45,10 +45,10 @@ class DataBaseConnection
         } elseif ('best' == $type) {
             $query .= " ORDER BY likes DESC, uploadTime DESC";
         } elseif ('compilation' == $type) {
-            if (isset($args['exhibitionNumber'])) {
-                $exhibitionNumber = $args['exhibitionNumber'];
+            if (isset($args['compilationID'])) {
+                $compilationID = $args['compilationID'];
                 $query .= " RIGHT JOIN CompilationItems CI ON Photos.photoID = CI.photoID";
-                $query .= " WHERE compilationID = $exhibitionNumber";
+                $query .= " WHERE compilationID = $compilationID";
             }
         }
         $query .= " LIMIT $quantity";
@@ -63,7 +63,7 @@ class DataBaseConnection
         return array(true, $photos);
     }
 
-    public static function requireExhibitionDetails(int $exhibitionNumber): array
+    public static function requireCompilationDetails(int $compilationID): array
     {
         if (null == self::$connection) {
             $connectionAttempt = self::open();
@@ -72,7 +72,7 @@ class DataBaseConnection
             }
         }
 
-        $query = "SELECT name, description FROM Compilations WHERE exhibitNumber=$exhibitionNumber";
+        $query = "SELECT name, description FROM Compilations WHERE compilationID=$compilationID";
 
         $statement = self::$connection->prepare($query);
         $statement->execute();

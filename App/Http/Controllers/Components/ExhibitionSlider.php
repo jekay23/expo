@@ -9,14 +9,19 @@ use Expo\Resources\Views;
 
 class ExhibitionSlider
 {
-    public static function renderComponent(string $headerText, int $exhibitionNumber, int $quantity)
+    public static function renderComponent(string $headerText, int $compilationID, int $quantity)
     {
-        $args = array('exhibitionNumber' => $exhibitionNumber);
+        $args = array('compilationID' => $compilationID);
         list($status, $photos) = DataBaseConnection::requirePhotos('compilation', $quantity, $args);
         if ($status) {
-            list($status, $exhibition) = DataBaseConnection::requireExhibitionDetails($exhibitionNumber);
+            list($status, $compilation) = DataBaseConnection::requireCompilationDetails($compilationID);
             if ($status) {
-                Views\Components\ExhibitionSlider::renderComponent($headerText, $photos, $exhibition['name'], $exhibition['description']);
+                Views\Components\ExhibitionSlider::renderComponent(
+                    $headerText,
+                    $photos,
+                    $compilation['name'],
+                    $compilation['description']
+                );
             }
         }
     }
