@@ -1,7 +1,7 @@
 <div class="scrolling-wrapper">
-    <?php foreach ($renderText as $cardText) {?>
+    <?php foreach ($textFields as $textField) {?>
         <div class="card">
-            <p><?= $cardText?></p>
+            <p><?= $textField['name'] ?></p>
         </div>
     <?php } ?>
 </div>

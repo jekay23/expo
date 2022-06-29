@@ -81,4 +81,45 @@ class DataBaseConnection
         $exhibitions = $statement->fetchAll();
         return array(true, $exhibitions[0]);
     }
+
+    public static function requireText(string $type, int $quantity, array $args = null): array
+    {
+        if ('filters' == $type) {
+            $filters = array(
+                array('name' => 'По дате публикации'),
+                array('name' => 'По поулярности'),
+                array('name' => 'По выставкам')
+            );
+            return array(true, $filters);
+        }
+        if (null == self::$connection) {
+            $connectionAttempt = self::open();
+            if (!$connectionAttempt[0]) {
+                return array(false, null);
+            }
+        }
+
+        $query = "SELECT name FROM Users";
+        if ('latest' == $type) {
+            $query .= " ORDER BY signUpDate DESC";
+        } elseif ('best' == $type) {
+            $query .= " ORDER BY likes DESC, uploadTime DESC";
+        } elseif ('compilation' == $type) {
+            if (isset($args['compilationID'])) {
+                $compilationID = $args['compilationID'];
+                $query .= " RIGHT JOIN CompilationItems CI ON Photos.photoID = CI.photoID";
+                $query .= " WHERE compilationID = $compilationID";
+            }
+        }
+        $query .= " LIMIT $quantity";
+
+        // TODO: now if none of the conditions are met, the query just asks for $quantity photos, have to think about it
+
+        $statement = self::$connection->prepare($query);
+        $statement->execute();
+
+        $statement->setFetchMode(PDO::FETCH_ASSOC);
+        $users = $statement->fetchAll();
+        return array(true, $users);
+    }
 }

@@ -2,21 +2,16 @@
 
 namespace Expo\App\Http\Controllers\Components;
 
+use Expo\App\Models\DataBaseConnection;
+use Expo\Resources\Views;
+
 class TextSlider
 {
-    private static $sliderTextTypes = array(
-        'photographers' => array('Платон Антониу', 'Юлий Цезарь', 'Денис Коцюба', 'Слава Муравлёв',
-                                 'Платон Антониу', 'Юлий Цезарь', 'Денис Коцюба', 'Слава Муравлёв',
-                                 'Платон Антониу', 'Юлий Цезарь', 'Денис Коцюба', 'Слава Муравлёв'),
-        'filters' => array('По дате публикации', 'По поулярности', 'По выставкам')
-    );
-
-    public static function renderComponent($sliderText)
+    public static function renderComponent(string $headerText, string $type, int $quantity)
     {
-        $renderText = array();
-        if (isset(self::$sliderTextTypes[$sliderText])) {
-            $renderText = self::$sliderTextTypes[$sliderText];
+        list($status, $textFields) = DataBaseConnection::requireText($type, $quantity);
+        if ($status) {
+            Views\Components\TextSlider::renderComponent($headerText, $textFields);
         }
-        require __DIR__ . '/../../../../Resources/Views/Components/textSlider.php';
     }
 }
