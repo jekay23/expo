@@ -4,7 +4,7 @@ namespace Expo\Resources\Views\Components;
 
 class SmallGrid
 {
-    public static function renderComponent(string $headerText, array $photos)
+    public static function render(string $headerText, array $photos)
     {
         if (0 == count($photos) % 6) {
             $numOfTriples = count($photos) / 3;

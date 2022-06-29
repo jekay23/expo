@@ -9,32 +9,19 @@ namespace Expo\Routes;
 
 class Router
 {
-    // storage of {pattern => function} pairs
-    private static $routes = array();
+    private static $callbacks = array();
 
     private static $idSpecificPages = array();
 
-    // ban on construction and cloning
-    private function __construct()
-    {
-    }
-
-    private function __clone()
-    {
-    }
-
-    // save the matching callback function
-    public static function route(string $uriMain, callable $callback, bool $isIdSpecific = false)
+    public static function saveCallback(string $uriMain, callable $callback, bool $isIdSpecific = false)
     {
         if ($isIdSpecific) {
             self::$idSpecificPages[] = $uriMain;
         }
-        self::$routes[$uriMain] = $callback;
+        self::$callbacks[$uriMain] = $callback;
     }
 
-
-    // check if the requested URI matches a known pattern, if so - call the callback function
-    public static function execute(string $requestUri)
+    public static function callback(string $requestUri)
     {
         /**
          * requested URI structure:
@@ -43,33 +30,45 @@ class Router
          *
          * main - $requestMain - determines which controller is called next
          * list - $requestList - parsed here into an array, passed further as argument
-         * query - $query - parsed here into an array from string $queryString, passed further as argument
+         * query - $requestQuery - parsed here into an array from string $queryString, passed further as argument
          * fragment - handled by browser, not known to server
          */
 
-        // remove the preceding '/'
-        if ('/' == $requestUri[0]) {
-            $requestUri = substr($requestUri, 1);
-        }
+        list($requestMain, $requestList, $requestQuery) = self::parse($requestUri);
 
-        // detach and parse the query string
-        list($requestUri, $queryString) = array_pad(explode('?', $requestUri), 2, '');
-        parse_str($queryString, $query);
-
-        // parse the remaining part into main (string) and list (array of strings)
-        $requestList = explode('/', $requestUri);
-        $requestMain = array_shift($requestList);
-
-        if (isset(self::$routes[$requestMain])) {
+        if (isset(self::$callbacks[$requestMain])) {
             if (isset(self::$idSpecificPages[$requestMain])) {
                 if (!ctype_digit($requestList[0])) {
-                    return call_user_func_array(self::$routes['404'], array($requestList, $query));
+                    return call_user_func_array(self::$callbacks['404'], array($requestList, $requestQuery));
                 }
             }
-            return call_user_func_array(self::$routes[$requestMain], array($requestList, $query));
+            return call_user_func_array(self::$callbacks[$requestMain], array($requestList, $requestQuery));
         }
 
-        // page not found, call 404
-        return call_user_func_array(self::$routes['404'], array($requestList, $query));
+        return call_user_func_array(self::$callbacks['404'], array($requestList, $requestQuery));
+    }
+
+    private static function parse(string $uri): array
+    {
+        if ('/' == $uri[0]) {
+            $uri = substr($uri, 1);
+        }
+
+        list($uri, $queryString) = array_pad(explode('?', $uri), 2, '');
+        parse_str($queryString, $query);
+
+        $list = explode('/', $uri);
+        $main = array_shift($list);
+
+        return array($main, $list, $query);
+    }
+
+    // ban on construction and cloning
+    private function __construct()
+    {
+    }
+
+    private function __clone()
+    {
     }
 }

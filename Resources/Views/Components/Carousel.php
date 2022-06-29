@@ -4,7 +4,7 @@ namespace Expo\Resources\Views\Components;
 
 class Carousel
 {
-    public static function renderComponent(string $headerText, array $photos)
+    public static function render(string $headerText, array $photos)
     {
         // bootstrap carousel needs one of its items to be active
         foreach ($photos as &$photo) {

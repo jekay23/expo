@@ -7,12 +7,12 @@ use Expo\Resources\Views;
 
 class Carousel
 {
-    public static function renderComponent(string $headerText, int $compilationID, int $quantity)
+    public static function assemble(string $headerText, int $compilationID, int $quantity)
     {
         $args = array('compilationID' => $compilationID);
         list($status, $photos) = DataBaseConnection::requirePhotos('compilation', $quantity, $args);
         if ($status) {
-            Views\Components\Carousel::renderComponent($headerText, $photos);
+            Views\Components\Carousel::render($headerText, $photos);
         }
     }
 }

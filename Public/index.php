@@ -14,4 +14,4 @@ require __DIR__ . '/../Routes/autoloader.php';
 
 require __DIR__ . '/../Routes/routeTable.php';
 
-Router::execute($_SERVER['REQUEST_URI']);
+Router::callback($_SERVER['REQUEST_URI']);

@@ -11,7 +11,7 @@ use Expo\Resources\Views\View;
 
 class SignUp
 {
-    public static function renderPage(array $requestList, array $query)
+    public static function assemble(array $requestList, array $requestQuery)
     {
         View::renderView('signUp');
     }

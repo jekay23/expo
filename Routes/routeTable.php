@@ -4,32 +4,32 @@ use Expo\App\Http\Controllers;
 use Expo\Resources\Views\View;
 use Expo\Routes\Router;
 
-Router::route('', function (array $requestList, array $query) {
-    Controllers\Pages\Front::renderPage($requestList, $query);
+Router::saveCallback('', function (array $requestList, array $requestQuery) {
+    Controllers\Pages\Front::assemble($requestList, $requestQuery);
 }, false);
 
-Router::route('profile', function (array $requestList, array $query) {
-    Controllers\Pages\Profile::renderPage($requestList, $query);
+Router::saveCallback('profile', function (array $requestList, array $requestQuery) {
+    Controllers\Pages\Profile::assemble($requestList, $requestQuery);
 }, true);
 
-Router::route('photo', function (array $requestList, array $query) {
-    Controllers\Pages\Photo::renderPage($requestList, $query);
+Router::saveCallback('photo', function (array $requestList, array $requestQuery) {
+    Controllers\Pages\Photo::assemble($requestList, $requestQuery);
 }, true);
 
-Router::route('compilation', function (array $requestList, array $query) {
-    Controllers\Pages\Compilation::renderPage($requestList, $query);
+Router::saveCallback('compilation', function (array $requestList, array $requestQuery) {
+    Controllers\Pages\Compilation::assemble($requestList, $requestQuery);
 }, true);
 
-Router::route('exhibition', function (array $requestList, array $query) {
-    Controllers\Pages\Exhibition::renderPage($requestList, $query);
+Router::saveCallback('exhibition', function (array $requestList, array $requestQuery) {
+    Controllers\Pages\Exhibition::assemble($requestList, $requestQuery);
 }, false);
 
-Router::route('sign-in', function (array $requestList, array $query) {
-    Controllers\Pages\SignIn::renderPage($requestList, $query);
+Router::saveCallback('sign-in', function (array $requestList, array $requestQuery) {
+    Controllers\Pages\SignIn::assemble($requestList, $requestQuery);
 }, false);
 
-Router::route('sign-up', function (array $requestList, array $query) {
-    Controllers\Pages\SignUp::renderPage($requestList, $query);
+Router::saveCallback('sign-up', function (array $requestList, array $requestQuery) {
+    Controllers\Pages\SignUp::assemble($requestList, $requestQuery);
 });
 
 Router::route('404', function () {

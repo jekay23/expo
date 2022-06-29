@@ -11,7 +11,7 @@ use Expo\Resources\Views\View;
 
 class Profile
 {
-    public static function renderPage(array $requestList, array $query)
+    public static function assemble(array $requestList, array $requestQuery)
     {
         if ('1' == $requestList[0]) {
             View::renderView('profile');

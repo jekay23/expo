@@ -4,7 +4,7 @@ namespace Expo\Resources\Views\Components;
 
 class ExhibitionSlider
 {
-    public static function renderComponent(string $headerText, array $photos, string $exhibitionName, string $exhibitionDescription)
+    public static function render(string $headerText, array $photos, string $exhibitionName, string $exhibitionDesc)
     {
         if (0 == count($photos) % 2) {
             $rowLength = count($photos) / 2;

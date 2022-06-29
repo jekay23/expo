@@ -7,11 +7,11 @@ use Expo\Resources\Views;
 
 class ContinuousSlider
 {
-    public static function renderComponent(string $headerText, string $type, int $quantity)
+    public static function assemble(string $headerText, string $type, int $quantity)
     {
         list($status, $photos) = DataBaseConnection::requirePhotos($type, $quantity);
         if ($status) {
-            Views\Components\ContinuousSlider::renderComponent($headerText, $photos);
+            Views\Components\ContinuousSlider::render($headerText, $photos);
         }
     }
 }

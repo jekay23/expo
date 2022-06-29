@@ -9,14 +9,14 @@ use Expo\Resources\Views;
 
 class ExhibitionSlider
 {
-    public static function renderComponent(string $headerText, int $compilationID, int $quantity)
+    public static function assemble(string $headerText, int $compilationID, int $quantity)
     {
         $args = array('compilationID' => $compilationID);
         list($status, $photos) = DataBaseConnection::requirePhotos('compilation', $quantity, $args);
         if ($status) {
             list($status, $compilation) = DataBaseConnection::requireCompilationDetails($compilationID);
             if ($status) {
-                Views\Components\ExhibitionSlider::renderComponent(
+                Views\Components\ExhibitionSlider::render(
                     $headerText,
                     $photos,
                     $compilation['name'],

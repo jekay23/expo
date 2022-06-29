@@ -51,9 +51,4 @@ class View
             require 'html.php';
         }
     }
-
-    public static function renderHeader2(string $headerText)
-    {
-        echo '<h2>' . $headerText . '</h2>';
-    }
 }

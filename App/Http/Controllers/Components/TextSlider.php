@@ -7,11 +7,11 @@ use Expo\Resources\Views;
 
 class TextSlider
 {
-    public static function renderComponent(string $headerText, string $type, int $quantity)
+    public static function assemble(string $headerText, string $type, int $quantity)
     {
         list($status, $textFields) = DataBaseConnection::requireText($type, $quantity);
         if ($status) {
-            Views\Components\TextSlider::renderComponent($headerText, $textFields);
+            Views\Components\TextSlider::render($headerText, $textFields);
         }
     }
 }
