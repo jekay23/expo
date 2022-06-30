@@ -219,19 +219,14 @@ h2 {
 .mmd-sign-in > .row {
     align-items: baseline;
     justify-content: center;
+    margin: 0 0 .7rem 0;
 }
 
 .mmd-sign-in > div > p {
     margin-bottom: .25rem;
     padding: 0;
     justify-content: end;
-    width: 8rem;
-}
-
-@media screen and (max-width: 471px) {
-    .mmd-sign-in > div > p {
-        justify-content: center;
-    }
+    width: 6rem;
 }
 
 .mmd-sign-in > div > .mmd-input-wrap {
@@ -240,13 +235,63 @@ h2 {
     max-width: 30rem;
 }
 
-.mmd-sign-in > div > .mmd-input-wrap > input {
-    width: 100%;
+@media screen and (max-width: 463px) {
+    .mmd-sign-in > div > p {
+        justify-content: center;
+    }
+
+    .mmd-sign-in > div > .mmd-input-wrap {
+        justify-content: center;
+    }
+}
+
+.mmd-sign-in > div > .mmd-input-wrap > input, .mmd-select {
     height: 2.5rem;
+    background-color: white;
     border-color: #54b686;
     border-width: .19rem;
     border-radius: 1.25rem;
+    border-style: solid;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
     font-weight: bold;
-    padding: .8rem;
-    margin: 0 0 .5rem 0;
+    font-size: larger;
+    padding: 0 .8rem;
+    margin: 0;
+}
+
+.mmd-sign-in > div > .mmd-input-wrap > input {
+    width: 100%;
+}
+
+.mmd-select {
+    width: 30%;
+    max-width: 6.5rem;
+    cursor: pointer;
+    background-size: 1.25rem 1rem;
+}
+
+.mmd-sign-in > div > .mmd-input-wrap > input:focus, .mmd-select:focus {
+    background-color: rgba(84, 182, 134, 0.34);
+}
+
+.mmd-sign-in > button {
+    background-color: #54b686;
+    color: white;
+    border: none;
+    height: 2.5rem;
+    border-radius: 1.25rem;
+    padding: 0 1.7rem;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    margin: 1.2rem 0 .5rem 0;
+}
+
+.mmd-sign-in > p {
+    margin-bottom: .25rem;
+}
+
+a {
+    color: #54b686;
 }
