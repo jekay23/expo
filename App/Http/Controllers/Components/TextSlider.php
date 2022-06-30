@@ -9,8 +9,8 @@ class TextSlider
 {
     public static function assemble(string $headerText, string $type, int $quantity, int $compilationID = null)
     {
-        if ('compilation' == $type) {
-            $args = array('compilationID' => $compilationID);
+        if ('compilation' === $type) {
+            $args = ['compilationID' => $compilationID];
         } else {
             $args = null;
         }

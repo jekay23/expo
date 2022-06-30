@@ -9,28 +9,30 @@ namespace Expo\Resources\Views;
 
 class View
 {
-    private static $requests = array(
-        'frontpage' => 'front.php',
-        'profile' => 'profile.php',
-        'photo' => 'photo.php',
-        'compilation' => 'compilation.php',
-        'exhibition' => 'exhibition.php',
-        'signIn' => 'signIn.php',
-        'signUp' => 'signUp.php',
-        '404' => '404.php'
-    );
+    private static $requests = [
+        'frontpage' => 'Front',
+        'profile' => 'Profile',
+        'photo' => 'Photo',
+        'compilation' => 'Compilation',
+        'exhibition' => 'Exhibition',
+        'signIn' => 'SignIn',
+        'signUp' => 'SignUp',
+        '404' => '404' // move to smth like $requestsStatic
+    ];
 
-    private static $navbarLinks = array(
+    private static $navbarLinks = [
         'frontpage' => 'feed',
         'profile' => 'profile',
         'signIn' => 'profile',
         'signUp' => 'profile',
         'exhibition' => 'selection'
-    );
+    ];
+
+    private static $staticPages = ['404', 'contacts', 'license'];
 
     private static function makeTitle(string $requestTitle): string
     {
-        $titles = array(
+        $titles = [
             'frontpage' => 'Выставка фотографов мехмата',
             'profile' => 'Платон Антониу',
             'photo' => 'Фото',
@@ -39,7 +41,7 @@ class View
             'signIn' => 'Вход',
             'signUp' => 'Регистрация',
             '404' => 'Страница не найдена'
-        );
+        ];
 
         $title = $titles[$requestTitle]; // TODO add isset() just in case the page is not caught into 404
 

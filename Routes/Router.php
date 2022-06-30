@@ -9,9 +9,9 @@ namespace Expo\Routes;
 
 class Router
 {
-    private static $callbacks = array();
+    private static $callbacks = [];
 
-    private static $idSpecificPages = array();
+    private static $idSpecificPages = [];
 
     public static function saveCallback(string $uriMain, callable $callback, bool $isIdSpecific = false)
     {
@@ -39,18 +39,18 @@ class Router
         if (isset(self::$callbacks[$requestMain])) {
             if (isset(self::$idSpecificPages[$requestMain])) {
                 if (!ctype_digit($requestList[0])) {
-                    return call_user_func_array(self::$callbacks['404'], array($requestList, $requestQuery));
+                    return call_user_func_array(self::$callbacks['404'], [$requestList, $requestQuery]);
                 }
             }
-            return call_user_func_array(self::$callbacks[$requestMain], array($requestList, $requestQuery));
+            return call_user_func_array(self::$callbacks[$requestMain], [$requestList, $requestQuery]);
         }
 
-        return call_user_func_array(self::$callbacks['404'], array($requestList, $requestQuery));
+        return call_user_func_array(self::$callbacks['404'], [$requestList, $requestQuery]);
     }
 
     private static function parse(string $uri): array
     {
-        if ('/' == $uri[0]) {
+        if ('/' === $uri[0]) {
             $uri = substr($uri, 1);
         }
 
@@ -60,7 +60,7 @@ class Router
         $list = explode('/', $uri);
         $main = array_shift($list);
 
-        return array($main, $list, $query);
+        return [$main, $list, $query];
     }
 
     // ban on construction and cloning

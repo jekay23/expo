@@ -13,7 +13,7 @@ class Compilation
 {
     public static function assemble(array $requestList, array $requestQuery)
     {
-        if ('1' == $requestList[0]) {
+        if ('1' === $requestList[0]) {
             View::renderView('compilation');
         } else {
             View::renderView('404');

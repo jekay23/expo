@@ -6,11 +6,11 @@ class Header
 {
     public static function render(string $currentNavbarLink = null)
     {
-        $navbarLinksExtraClass = array(
+        $navbarLinksExtraClass = [
             'feed' => '',
             'selection' => '',
             'profile' => ''
-        );
+        ];
         if (isset($currentNavbarLink) && isset($navbarLinksExtraClass[$currentNavbarLink])) {
             $navbarLinksExtraClass[$currentNavbarLink] .= ' active';
         }
