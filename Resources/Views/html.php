@@ -14,7 +14,7 @@
         <?php $stickFooter = false ?>
         <?php \Expo\Resources\Views\Components\Header::render($currentNavbarLink); ?>
         <main class="container-fluid" role="main">
-            <?php require $template; ?>
+            <?php ('Expo\\Resources\\Views\\Pages\\' . $templateClass)::render($stickFooter); ?>
         </main>
         <?php \Expo\Resources\Views\Components\Footer::render($stickFooter); ?>
         <script crossorigin="anonymous"

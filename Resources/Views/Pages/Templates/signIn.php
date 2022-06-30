@@ -1,4 +1,3 @@
-<?php $stickFooter = true; ?>
 <div class="text-center pt-5 pb-3">
     <h1><strong>Войдите в ваш аккаунт</strong></h1>
 </div>

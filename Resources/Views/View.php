@@ -7,6 +7,8 @@
 
 namespace Expo\Resources\Views;
 
+use Expo\Resources\Views\Pages;
+
 class View
 {
     private static $requests = [
@@ -14,7 +16,7 @@ class View
         'profile' => 'Profile',
         'photo' => 'Photo',
         'compilation' => 'Compilation',
-        'exhibition' => 'Exhibition',
+        'exhibition' => 'Compilation', // TODO check if it'll work
         'signIn' => 'SignIn',
         'signUp' => 'SignUp',
         '404' => '404' // move to smth like $requestsStatic
@@ -56,10 +58,14 @@ class View
     {
         $title = self::makeTitle($requestView);
 
-        $currentNavbarLink = self::$navbarLinks[$requestView];
+        if (isset(self::$navbarLinks[$requestView])) {
+            $currentNavbarLink = self::$navbarLinks[$requestView];
+        } else {
+            $currentNavbarLink = null;
+        }
 
         if (isset(self::$requests[$requestView])) {
-            $template = 'Pages/' . self::$requests[$requestView];
+            $templateClass = self::$requests[$requestView];
             require 'html.php';
         }
     }
