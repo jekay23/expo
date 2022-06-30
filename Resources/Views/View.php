@@ -20,6 +20,14 @@ class View
         '404' => '404.php'
     );
 
+    private static $navbarLinks = array(
+        'frontpage' => 'feed',
+        'profile' => 'profile',
+        'signIn' => 'profile',
+        'signUp' => 'profile',
+        'exhibition' => 'selection'
+    );
+
     private static function makeTitle(string $requestTitle): string
     {
         $titles = array(
@@ -45,6 +53,8 @@ class View
     public static function renderView(string $requestView)
     {
         $title = self::makeTitle($requestView);
+
+        $currentNavbarLink = self::$navbarLinks[$requestView];
 
         if (isset(self::$requests[$requestView])) {
             $template = 'Pages/' . self::$requests[$requestView];

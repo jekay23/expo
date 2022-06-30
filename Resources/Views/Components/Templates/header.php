@@ -4,7 +4,9 @@
             <a class="navbar-brand mmd-logo" href="https://www.nsu.ru/n/mathematics-mechanics-department/">
                 <img src="/image/logoMMD.png" alt="Логотип ММФ" style="height: 5vh; min-height: 55px">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -13,13 +15,13 @@
                 </a>
                 <ul class="navbar-nav">
                     <li class="nav-item px-xl-5">
-                        <a class="nav-link active" href="/">Лента</a> <!-- TODO: Properly change active status-->
+                        <a class="nav-link<?= $navbarLinksExtraClass['feed'] ?>" href="/">Лента</a>
                     </li>
                     <li class="nav-item px-lg-5">
-                        <a class="nav-link" href="/exhibition">Отбор</a>
+                        <a class="nav-link<?= $navbarLinksExtraClass['selection'] ?>" href="/exhibition">Отбор</a>
                     </li>
                     <li class="nav-item px-xl-5 pe-5">
-                        <a class="nav-link" href="/sign-up">Профиль</a>
+                        <a class="nav-link<?= $navbarLinksExtraClass['profile'] ?>" href="/sign-up">Профиль</a>
                     </li>
                 </ul>
             </div>

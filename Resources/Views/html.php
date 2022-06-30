@@ -8,11 +8,12 @@
         <link href="/css/customMMD.css" rel="stylesheet">
     </head>
     <body>
-        <?php require 'Components/Templates/header.php'; ?>
-        <main class="container-fluid" role="main" style="padding-top: 70px">
+        <?php $stickFooter = false ?>
+        <?php \Expo\Resources\Views\Components\Header::render($currentNavbarLink); ?>
+        <main class="container-fluid" role="main">
             <?php require $template; ?>
         </main>
-        <?php require 'Components/Templates/footer.php'; ?>
+        <?php \Expo\Resources\Views\Components\Footer::render($stickFooter); ?>
         <script crossorigin="anonymous"
                 integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
                 src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
