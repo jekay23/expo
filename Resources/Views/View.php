@@ -57,11 +57,7 @@ class View
     {
         $title = self::makeTitle($requestView);
 
-        if (isset(self::$navbarLinks[$requestView])) {
-            $currentNavbarLink = self::$navbarLinks[$requestView];
-        } else {
-            $currentNavbarLink = null;
-        }
+        $currentNavbarLink = self::$navbarLinks[$requestView] ?? null;
 
         if (isset(self::$requests[$requestView])) {
             $templateClass = self::$requests[$requestView];
