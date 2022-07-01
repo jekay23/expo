@@ -24,7 +24,5 @@ class Front
         Controllers\Components\Carousel::assemble('Подборка команды мехмата', 'compilation', 5, 2);
 
         Controllers\Components\TextSlider::assemble('Фильтры', 'filters', 3);
-
-        DataBaseConnection::close();
     }
 }

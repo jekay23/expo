@@ -37,8 +37,8 @@ class Router
         list($requestMain, $requestList, $requestQuery) = self::parse($requestUri);
 
         if (isset(self::$callbacks[$requestMain])) {
-            if (isset(self::$idSpecificPages[$requestMain])) {
-                if (!ctype_digit($requestList[0])) {
+            if (in_array($requestMain, self::$idSpecificPages)) {
+                if (!isset($requestList[0]) || !ctype_digit($requestList[0])) {
                     return call_user_func_array(self::$callbacks['404'], [$requestList, $requestQuery]);
                 }
             }

@@ -11,10 +11,9 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap" rel="stylesheet">
     </head>
     <body>
-        <?php $stickFooter = false ?>
         <?php \Expo\Resources\Views\Components\Header::render($currentNavbarLink); ?>
         <main class="container-fluid" role="main">
-            <?php ('Expo\\Resources\\Views\\Pages\\' . $templateClass)::render($stickFooter); ?>
+            <?php \Expo\Resources\Views\Html::render($templateClass, $page, $stickFooter); ?>
         </main>
         <?php \Expo\Resources\Views\Components\Footer::render($stickFooter); ?>
         <script crossorigin="anonymous"

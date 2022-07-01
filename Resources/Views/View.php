@@ -16,10 +16,9 @@ class View
         'profile' => 'Profile',
         'photo' => 'Photo',
         'compilation' => 'Compilation',
-        'exhibition' => 'Compilation', // TODO check if it'll work
+        'exhibition' => 'Compilation',
         'signIn' => 'SignIn',
-        'signUp' => 'SignUp',
-        '404' => '404' // move to smth like $requestsStatic
+        'signUp' => 'SignUp'
     ];
 
     private static $navbarLinks = [
@@ -66,7 +65,10 @@ class View
 
         if (isset(self::$requests[$requestView])) {
             $templateClass = self::$requests[$requestView];
-            require 'html.php';
+            Html::requireDynamic($title, $templateClass, $currentNavbarLink);
+        } elseif (in_array($requestView, self::$staticPages)) {
+            $page = $requestView;
+            Html::requireStatic($title, $page);
         }
     }
 }
