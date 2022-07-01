@@ -2,6 +2,8 @@
 
 namespace Expo\Resources\Views\Components;
 
+use Expo\Resources\Views\View;
+
 class TextField
 {
     public static function render(string $textFieldLabel, array $inputAttributes = null)
@@ -17,6 +19,6 @@ class TextField
                 $inputAttributeString .= ' type="password"';
             }
         }
-        require 'Templates/textField.php';
+        View::requireTemplate('textField', 'Component', compact('textFieldLabel', 'inputAttributeString'));
     }
 }

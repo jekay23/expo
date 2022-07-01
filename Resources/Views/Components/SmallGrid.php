@@ -2,6 +2,8 @@
 
 namespace Expo\Resources\Views\Components;
 
+use Expo\Resources\Views\View;
+
 class SmallGrid
 {
     public static function render(string $headerText, array $photos)
@@ -12,7 +14,7 @@ class SmallGrid
             for ($i = 0; $i < $numOfTriples; $i++) {
                 $triples[$i] = [$photos[3 * $i], $photos[3 * $i + 1], $photos[3 * $i + 2]];
             }
-            require 'Templates/smallGrid.php';
+            View::requireTemplate('smallGrid', 'Component', compact('headerText', 'triples'));
         }
     }
 }

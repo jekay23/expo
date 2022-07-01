@@ -2,11 +2,13 @@
 
 namespace Expo\Resources\Views\Pages;
 
+use Expo\Resources\Views\View;
+
 class SignIn
 {
     public static function render(&$stickFooter)
     {
         $stickFooter = true;
-        require 'Templates/signIn.php';
+        View::requireTemplate('signIn', 'Page');
     }
 }

@@ -2,10 +2,12 @@
 
 namespace Expo\Resources\Views\Pages;
 
+use Expo\Resources\Views\View;
+
 class Compilation
 {
     public static function render()
     {
-        require 'Templates/compilation.php';
+        View::requireTemplate('compilation', 'Page');
     }
 }

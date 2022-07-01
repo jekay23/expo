@@ -2,10 +2,12 @@
 
 namespace Expo\Resources\Views\Pages;
 
+use Expo\Resources\Views\View;
+
 class Profile
 {
     public static function render()
     {
-        require 'Templates/profile.php';
+        View::requireTemplate('profile', 'Page');
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Expo\Resources\Views\Components;
 
+use Expo\Resources\Views\View;
+
 class ExhibitionSlider
 {
     public static function render(string $headerText, array $photos, string $exhibitionName, string $exhibitionDesc)
@@ -13,7 +15,11 @@ class ExhibitionSlider
                 $rows[0][] = $photos[$i];
                 $rows[1][] = $photos[$rowLength + $i];
             }
-            require 'Templates/exhibitionSlider.php';
+            View::requireTemplate(
+                'exhibitionSlider',
+                'Component',
+                compact('headerText', 'exhibitionName', 'exhibitionDesc', 'rows')
+            );
         }
     }
 }

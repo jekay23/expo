@@ -2,10 +2,12 @@
 
 namespace Expo\Resources\Views\Pages;
 
+use Expo\Resources\Views\View;
+
 class Photo
 {
     public static function render()
     {
-        require 'Templates/photo.php';
+        View::requireTemplate('photo', 'Page');
     }
 }

@@ -3,12 +3,13 @@
 namespace Expo\Resources\Views\Pages;
 
 use Expo\Resources\Views\Components\TextField;
+use Expo\Resources\Views\View;
 
 class SignUp
 {
     public static function render(&$stickFooter)
     {
         $stickFooter = true;
-        require 'Templates/signUp.php';
+        View::requireTemplate('signUp', 'Page');
     }
 }

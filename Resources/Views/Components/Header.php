@@ -2,6 +2,8 @@
 
 namespace Expo\Resources\Views\Components;
 
+use Expo\Resources\Views\View;
+
 class Header
 {
     public static function render(string $currentNavbarLink = null)
@@ -14,6 +16,6 @@ class Header
         if (isset($currentNavbarLink) && isset($navbarLinksExtraClass[$currentNavbarLink])) {
             $navbarLinksExtraClass[$currentNavbarLink] .= ' active';
         }
-        require 'Templates/header.php';
+        View::requireTemplate('header', 'Component', compact('navbarLinksExtraClass'));
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Expo\Resources\Views\Components;
 
+use Expo\Resources\Views\View;
+
 class Carousel
 {
     public static function render(string $headerText, array $photos)
@@ -11,6 +13,6 @@ class Carousel
             $photo['carouselStatus'] = '';
         }
         $photos[0]['carouselStatus'] = 'active';
-        require 'Templates/carousel.php';
+        View::requireTemplate('carousel', 'Component', compact('headerText', 'photos'));
     }
 }

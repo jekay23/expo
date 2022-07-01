@@ -2,6 +2,8 @@
 
 namespace Expo\Resources\Views\Components;
 
+use Expo\Resources\Views\View;
+
 class Footer
 {
     public static function render(bool $stickFooter = false)
@@ -10,6 +12,6 @@ class Footer
         if ($stickFooter) {
             $footerExtraClass .= ' fixed-bottom';
         }
-        require 'Templates/footer.php';
+        View::requireTemplate('footer', 'Component', compact('footerExtraClass'));
     }
 }
