@@ -13,6 +13,6 @@ class Exhibition
 {
     public static function assemble(array $requestList, array $requestQuery)
     {
-        View::renderView('exhibition');
+        View::render('exhibition');
     }
 }

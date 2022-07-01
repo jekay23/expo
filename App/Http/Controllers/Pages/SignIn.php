@@ -13,6 +13,6 @@ class SignIn
 {
     public static function assemble(array $requestList, array $requestQuery)
     {
-        View::renderView('signIn');
+        View::render('signIn');
     }
 }

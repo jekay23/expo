@@ -54,7 +54,7 @@ class View
         return $title;
     }
 
-    public static function renderView(string $requestView)
+    public static function render(string $requestView)
     {
         $title = self::makeTitle($requestView);
 

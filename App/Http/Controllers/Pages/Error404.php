@@ -8,6 +8,6 @@ class Error404
 {
     public static function assemble()
     {
-        View::renderView('404');
+        View::render('404');
     }
 }

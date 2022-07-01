@@ -13,6 +13,6 @@ class Front
 {
     public static function assemble(array $requestList, array $requestQuery)
     {
-        View::renderView('frontpage');
+        View::render('frontpage');
     }
 }
