@@ -32,6 +32,10 @@ Router::saveCallback('sign-up', function (array $requestList, array $requestQuer
     Controllers\Pages\SignUp::assemble($requestList, $requestQuery);
 });
 
+Router::saveCallback('api', function (array $requestList, array $requestQuery) {
+    Controllers\Api::execute($requestList, $requestQuery);
+});
+
 Router::saveCallback('404', function () {
     Controllers\Pages\Error404::assemble();
 });

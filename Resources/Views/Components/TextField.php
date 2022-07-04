@@ -10,12 +10,20 @@ class TextField
     {
         $inputAttributeString = '';
         if (isset($inputAttributes)) {
+            if (!isset($inputAttributes['required'])) {
+                $inputAttributes['required'] = true;
+            }
+
             foreach ($inputAttributes as $attribute => $value) {
-                $inputAttributeString .= " $attribute=\"$value\"";
+                if (true === $value) {
+                    $inputAttributeString .= " $attribute";
+                } else {
+                    $inputAttributeString .= " $attribute=\"$value\"";
+                }
             }
         }
         if ('Пароль' === $textFieldLabel) {
-            if (!isset($inputAttributes['type']) && 'password' != $inputAttributes['type']) {
+            if (!isset($inputAttributes['type']) || 'password' != $inputAttributes['type']) {
                 $inputAttributeString .= ' type="password"';
             }
         }
