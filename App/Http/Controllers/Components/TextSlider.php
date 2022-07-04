@@ -2,7 +2,7 @@
 
 namespace Expo\App\Http\Controllers\Components;
 
-use Expo\App\Models\DataBaseConnection;
+use Expo\App\Models\QueryBuilder;
 use Expo\Resources\Views;
 
 class TextSlider
@@ -14,7 +14,7 @@ class TextSlider
         } else {
             $args = null;
         }
-        list($status, $textFields) = DataBaseConnection::requireText($type, $quantity);
+        list($status, $textFields) = QueryBuilder::requireText($type, $quantity);
         if ($status) {
             Views\Components\TextSlider::render($headerText, $textFields);
         }

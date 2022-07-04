@@ -2,7 +2,7 @@
 
 namespace Expo\App\Http\Controllers\Components;
 
-use Expo\App\Models\DataBaseConnection;
+use Expo\App\Models\QueryBuilder;
 use Expo\Resources\Views;
 
 class ContinuousSlider
@@ -14,7 +14,7 @@ class ContinuousSlider
         } else {
             $args = null;
         }
-        list($status, $photos) = DataBaseConnection::requirePhotos($type, $quantity, $args);
+        list($status, $photos) = QueryBuilder::requirePhotos($type, $quantity, $args);
         if ($status) {
             Views\Components\ContinuousSlider::render($headerText, $photos);
         }

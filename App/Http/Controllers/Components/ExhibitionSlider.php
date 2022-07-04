@@ -2,7 +2,7 @@
 
 namespace Expo\App\Http\Controllers\Components;
 
-use Expo\App\Models\DataBaseConnection;
+use Expo\App\Models\QueryBuilder;
 use Expo\Resources\Views;
 
 // TODO: rename controller classes and extend the namespace here and in other View Components classes
@@ -16,9 +16,9 @@ class ExhibitionSlider
         } else {
             $args = null;
         }
-        list($status, $photos) = DataBaseConnection::requirePhotos('compilation', $quantity, $args);
+        list($status, $photos) = QueryBuilder::requirePhotos('compilation', $quantity, $args);
         if ($status) {
-            list($status, $compilation) = DataBaseConnection::requireCompilationDetails($compilationID);
+            list($status, $compilation) = QueryBuilder::requireCompilationDetails($compilationID);
             if ($status) {
                 Views\Components\ExhibitionSlider::render(
                     $headerText,
