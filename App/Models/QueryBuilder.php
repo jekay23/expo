@@ -2,6 +2,8 @@
 
 namespace Expo\App\Models;
 
+use Expo\App\Models\QueryObject as QO;
+
 class QueryBuilder
 {
     public static function requirePhotos(string $type, int $quantity, array $args = null): array
@@ -10,24 +12,32 @@ class QueryBuilder
             return [false, null];
         }
 
-        $query = "SELECT location, altText FROM Photos";
+        $query = QO::select()->table('Photos')->columns('location', 'altText');
+
+//        $query = "SELECT location, altText FROM Photos";
         if ('latest' === $type) {
-            $query .= " ORDER BY uploadTime DESC";
+            $query->orderBy(['uploadTime', 'DESC']);
         } elseif ('compilation' === $type) {
             if (isset($args['compilationID'])) {
                 $compilationID = $args['compilationID'];
-                $query .= " RIGHT JOIN CompilationItems CI ON Photos.photoID = CI.photoID";
-                $query .= " WHERE compilationID = $compilationID";
+                $query->join('RIGHT', 'CompilationItems', 'photoID');
+                $query->where(['compilationID', $compilationID]);
             }
         } elseif ('best' === $type) {
-            $query = 'SELECT location, altText, COUNT(userID) AS likes, uploadTime ' .
-                'FROM Photos P RIGHT JOIN Likes L ON P.photoID = L.photoID GROUP BY P.photoID ORDER BY likes DESC';
+            $query->addColumns(QO::count('userID', 'likes'), 'uploadTime');
+            $query->join('RIGHT', 'Likes', 'photoID');
+            $query->groupBy('photoID')->orderBy(['likes', 'DESC']);
+//            $query = 'SELECT location, altText, COUNT(userID) AS likes, uploadTime ' .
+//                'FROM Photos P RIGHT JOIN Likes L ON P.photoID = L.photoID GROUP BY P.photoID ORDER BY likes DESC';
         }
-        $query .= " LIMIT $quantity";
+        $query->limit($quantity);
+//        $query .= " LIMIT $quantity";
 
         // TODO: now if none of the conditions are met, the query just asks for $quantity photos, have to think about it
-
-        $statement = DataBaseConnection::executeStatement($query);
+        ob_start();
+        echo $query;
+        $querySting = ob_get_clean();
+        $statement = DataBaseConnection::executeStatement($querySting);
         $photos = $statement->fetchAll();
         return [true, $photos];
     }

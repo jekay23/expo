@@ -22,33 +22,29 @@ class QueryObject
     {
         $this->action = $action;
         $this->query = '';
-        $this->table = null;
+        $this->table = '';
         $this->columns = ['*'];
-        $this->where = null;
-        $this->groupBy = null;
-        $this->orderBy = null;
-        $this->limit = null;
-        $this->offset = null;
+        $this->where = '';
+        $this->groupBy = '';
+        $this->orderBy = array();
+        $this->limit = 0;
+        $this->offset = 0;
         $this->numOfJoins = 0;
         $this->grouppable = false;
     }
 
     public function __toString(): string
     {
-        $actions = [
-            'select' => 'QueryObject::composeSelect',
-            'insert' => 'QueryObject::composeInsert',
-            'update' => 'QueryObject::composeUpdate'
-        ];
-        if (isset($actions[$this->action])) {
-            $this->query = $actions[$this->action](
+        if ('select' == $this->action) {
+            $this->query = self::composeSelect(
                 $this->table,
                 $this->columns,
                 $this->where,
                 $this->groupBy,
                 $this->orderBy,
                 $this->limit,
-                $this->offset
+                $this->offset,
+                $this->numOfJoins
             );
         }
         return $this->query;
@@ -81,7 +77,7 @@ class QueryObject
 
     public static function count(string $column = '*', string $alias = null): string
     {
-        if (isset($alias)) {
+        if (!empty($alias)) {
             return "COUNT($column) AS $alias";
         } else {
             return "COUNT($column)";
@@ -95,24 +91,33 @@ class QueryObject
         $groupBy,
         $orderBy,
         $limit,
-        $offset
+        $offset,
+        int $numOfJoins = 0
     ): string {
         $queryString = 'SELECT ';
         $queryString .= implode(', ', $columns);
         $queryString .= " FROM $table";
-        if (isset($where)) {
+        if (!empty($where)) {
             $queryString .= " WHERE $where";
         }
-        if (isset($groupBy)) {
+        if (!empty($groupBy)) {
+            if ($numOfJoins > 0) {
+                $groupBy = "TL$numOfJoins.$groupBy";
+            }
             $queryString .= " GROUP BY $groupBy";
         }
-        if (isset($orderBy)) {
-            $queryString .= ' ' . implode(', ', $orderBy);
+        if (!empty($orderBy)) {
+            if ($numOfJoins > 0) {
+                foreach ($orderBy as &$order) {
+                    $order = "TL$numOfJoins.$order";
+                }
+            }
+            $queryString .= ' ORDER BY ' . implode(', ', $orderBy);
         }
-        if (isset($limit)) {
+        if (!empty($limit)) {
             $queryString .= " LIMIT $limit";
         }
-        if (isset($offset)) {
+        if (!empty($offset)) {
             $queryString .= " OFFSET $offset";
         }
         $queryString .= ';';
@@ -121,7 +126,7 @@ class QueryObject
 
     public function table($table): QueryObject
     {
-        if (isset($this->table)) {
+        if (!empty($this->table)) {
             throw new Exception('Incorrect query formation: using two tables without joining them');
         }
         if ('string' == gettype($table)) {
@@ -145,7 +150,7 @@ class QueryObject
         if (!in_array($type, $types)) {
             throw new Exception('Incorrect query formation: unknown join type');
         }
-        if (!isset($this->table)) {
+        if (!!empty($this->table)) {
             throw new Exception('Incorrect query formation: first table of the join hasn`t been specified');
         }
         if ('select' != $this->action) {
@@ -165,7 +170,7 @@ class QueryObject
                 throw new Exception('Incorrect query formation: using composed table for other purpose than selection');
             }
         }
-        if (isset($conditions)) {
+        if (!empty($conditions)) {
             if (1 == count($conditions)) {
                 $conditions[1] = $conditions[0];
             }
@@ -193,9 +198,23 @@ class QueryObject
         return $this;
     }
 
+    public function addColumns(string ...$columns): QueryObject
+    {
+        if (!$this->grouppable) {
+            foreach ($columns as $column) {
+                if ('COUNT' == substr($column, 0, 5)) {
+                    $this->grouppable = true;
+                    break;
+                }
+            }
+        }
+        $this->columns = array_merge($this->columns, $columns);
+        return $this;
+    }
+
     public function where(array ...$conditions): QueryObject
     {
-        if (isset($this->where)) {
+        if (!empty($this->where)) {
             throw new Exception('Incorrect query formation: rewriting the WHERE statement');
         }
         $conditionStrings = array();
@@ -211,7 +230,7 @@ class QueryObject
 
     public function limit(int $limit): QueryObject
     {
-        if (isset($this->limit)) {
+        if (!empty($this->limit)) {
             throw new Exception('Incorrect query formation: rewriting the LIMIT statement');
         }
         if ($limit > 0) {
@@ -224,10 +243,10 @@ class QueryObject
 
     public function offset(int $offset): QueryObject
     {
-        if (isset($this->offset)) {
+        if (!empty($this->offset)) {
             throw new Exception('Incorrect query formation: rewriting the OFFSET statement');
         }
-        if ($offset >= 0) {
+        if ($offset > 0) {
             $this->offset = $offset;
         } else {
             throw new Exception('Incorrect query formation: negative offset setting');
@@ -240,7 +259,7 @@ class QueryObject
         if (!$this->grouppable) {
             throw new Exception('Incorrect query formation: grouping ungrouppable statement');
         }
-        if (isset($this->groupBy)) {
+        if (!empty($this->groupBy)) {
             throw new Exception('Incorrect query formation: rewriting the GROUP BY statement');
         }
         $this->groupBy = $column;
@@ -249,13 +268,13 @@ class QueryObject
 
     public function orderBy(array ...$orders): QueryObject
     {
-        if (isset($this->orderBy)) {
+        if (!empty($this->orderBy)) {
             throw new Exception('Incorrect query formation: rewriting the ORDER BY statement');
         }
         $orderBy = array();
         $orderTypes = ['DESC', 'ASC'];
         foreach ($orders as $order) {
-            if (isset($order[1])) {
+            if (!empty($order[1])) {
                 if (!in_array($order[1], $orderTypes)) {
                     throw new Exception('Incorrect query formation: unknown order type');
                 }
