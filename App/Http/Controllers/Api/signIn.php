@@ -4,7 +4,7 @@ namespace Expo\App\Http\Controllers\Api;
 
 use Expo\App\Http\Controllers\PasswordHandler;
 
-$hash = PasswordHandler::getHash($_POST['password']);
+$hash = PasswordHandler::getHash($_POST['password'], $_POST['email']);
 $post = $_POST;
 unset($post['password']);
 $post['passwordHash'] = $hash;
