@@ -32,12 +32,7 @@ class QueryBuilder
         }
         $query->limit($quantity);
 
-        // TODO: now if none of the conditions are met, the query just asks for $quantity photos, have to think about it
-        ob_start();
-        echo $query;
-        $querySting = ob_get_clean();
-        $statement = DataBaseConnection::executeStatement($querySting);
-        $photos = $statement->fetchAll();
+        $photos = self::executeQuery($query);
         return [true, $photos];
     }
 
@@ -53,12 +48,7 @@ class QueryBuilder
         $query = QO::select()->table('Compilations')->columns('name', 'description');
         $query->where(['compilationID', $compilationID]);
 
-        ob_start();
-        echo $query;
-        $querySting = ob_get_clean();
-
-        $statement = DataBaseConnection::executeStatement($querySting);
-        $exhibitions = $statement->fetchAll();
+        $exhibitions = self::executeQuery($query);
         return [true, $exhibitions[0]];
     }
 
@@ -98,7 +88,7 @@ class QueryBuilder
         echo $query;
         $querySting = ob_get_clean();
 
-        $statement = DataBaseConnection::executeStatement($querySting);
+        $statement = DataBaseConnection::executeQuery($querySting);
         $users = $statement->fetchAll();
         return [true, $users];
     }
@@ -114,12 +104,7 @@ class QueryBuilder
 
         $query = QO::select()->table('Users')->columns('userID')->where(['email', "$email"]);
 
-        ob_start();
-        echo $query;
-        $querySting = ob_get_clean();
-
-        $statement = DataBaseConnection::executeStatement($querySting);
-        $user = $statement->fetchAll();
+        $user = self::executeQuery($query);
         if (!empty($user)) {
             $userID = $user[0]['userID'];
             return [true, $userID];
@@ -141,24 +126,46 @@ class QueryBuilder
             $credentials['pronoun']
         );
 
-        ob_start();
-        echo $query;
-        $querySting = ob_get_clean();
-
-        DataBaseConnection::executeStatement($querySting);
+        self::executeQuery($query, false);
 
         $email = $credentials['email'];
         $query = QO::select()->table('Users')->columns('userID')->where(['email', "$email"]);
-        ob_start();
-        echo $query;
-        $querySting = ob_get_clean();
-        $statement = DataBaseConnection::executeStatement($querySting);
-        $user = $statement->fetchAll();
+        $user = self::executeQuery($query);
         if (isset($user[0])) {
             $userID = $user[0]['userID'];
             return [true, $userID];
         } else {
             throw new \Exception('Unknown error: user created, but ID inaccessible.');
+        }
+    }
+
+    public static function authenticate(int $userID, string $passwordHash)
+    {
+        $query = QO::select()->table('Users')->columns('passwordHash')->where(['userID', $userID]);
+
+        $user = self::executeQuery($query);
+        if (isset($user[0])) {
+            if ($passwordHash == $user[0]['passwordHash']) {
+                return [true, null];
+            } else {
+                return [false, 'Please check the email-password combination again, there`s no match in the system.'];
+            }
+        } else {
+            throw new \Exception('Unknown error: user exists, but inaccessible.');
+        }
+    }
+
+    private static function executeQuery(QueryObject $query, bool $yields = true)
+    {
+        ob_start();
+        echo $query;
+        $querySting = ob_get_clean();
+
+        $statement = DataBaseConnection::executeQuery($querySting);
+        if ($yields) {
+            return $statement->fetchAll();
+        } else {
+            return 0;
         }
     }
 }

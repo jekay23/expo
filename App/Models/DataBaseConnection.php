@@ -41,7 +41,7 @@ class DataBaseConnection
         return true;
     }
 
-    public static function executeStatement(string $query): \PDOStatement
+    public static function executeQuery(string $query): \PDOStatement
     {
         $statement = DataBaseConnection::$connection->prepare($query);
         $statement->execute();
