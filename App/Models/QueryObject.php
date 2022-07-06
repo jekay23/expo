@@ -3,6 +3,7 @@
 namespace Expo\App\Models;
 
 use Exception;
+use Expo\App\Models\QueryConverter as QC;
 
 class QueryObject
 {
@@ -17,6 +18,7 @@ class QueryObject
     private int $offset;
     private int $numOfJoins;
     private bool $grouppable;
+    private array $values;
 
     private function __construct(string $action)
     {
@@ -31,12 +33,13 @@ class QueryObject
         $this->offset = 0;
         $this->numOfJoins = 0;
         $this->grouppable = false;
+        $this->values = array();
     }
 
     public function __toString(): string
     {
         if ('select' == $this->action) {
-            $this->query = self::composeSelect(
+            $this->query = QC::composeSelect(
                 $this->table,
                 $this->columns,
                 $this->where,
@@ -46,18 +49,21 @@ class QueryObject
                 $this->offset,
                 $this->numOfJoins
             );
+        } elseif ('insert' == $this->action) {
+            $this->query = QC::composeInsert(
+                $this->table,
+                $this->columns,
+                $this->values
+            );
+        } elseif ('update' == $this->action) {
+            $this->query = QC::composeUpdate(
+                $this->table,
+                $this->columns,
+                $this->values,
+                $this->where
+            );
         }
         return $this->query;
-    }
-
-    public function getAction(): string
-    {
-        return $this->action;
-    }
-
-    public function getNumOfJoins(): string
-    {
-        return $this->numOfJoins;
     }
 
     public static function select(): QueryObject
@@ -84,46 +90,9 @@ class QueryObject
         }
     }
 
-    private static function composeSelect(
-        string $table,
-        array $columns,
-        $where,
-        $groupBy,
-        $orderBy,
-        $limit,
-        $offset,
-        int $numOfJoins = 0
-    ): string {
-        $queryString = 'SELECT ';
-        $queryString .= implode(', ', $columns);
-        $queryString .= " FROM $table";
-        if (!empty($where)) {
-            $queryString .= " WHERE $where";
-        }
-        if (!empty($groupBy)) {
-            if ($numOfJoins > 0) {
-                $groupBy = "TL$numOfJoins.$groupBy";
-            }
-            $queryString .= " GROUP BY $groupBy";
-        }
-        if (!empty($orderBy)) {
-            if ($numOfJoins > 0) {
-                foreach ($orderBy as &$order) {
-                    $order = "TL$numOfJoins.$order";
-                }
-            }
-            $queryString .= ' ORDER BY ' . implode(', ', $orderBy);
-        }
-        if (!empty($limit)) {
-            $queryString .= " LIMIT $limit";
-        }
-        if (!empty($offset)) {
-            $queryString .= " OFFSET $offset";
-        }
-        $queryString .= ';';
-        return $queryString;
-    }
-
+    /**
+     * @throws Exception
+     */
     public function table($table): QueryObject
     {
         if (!empty($this->table)) {
@@ -144,6 +113,9 @@ class QueryObject
         return $this;
     }
 
+    /**
+     * @throws Exception
+     */
     public function join(string $type, $table, ...$conditions): QueryObject
     {
         $types = ['RIGHT', 'LEFT', 'INNER', 'FULL'];
@@ -186,8 +158,14 @@ class QueryObject
         return $this;
     }
 
+    /**
+     * @throws Exception
+     */
     public function columns(string ...$columns): QueryObject
     {
+        if ('update' == $this->action && count($columns) != 1) {
+            throw new Exception('Incorrect query formation: selecting more than 1 column for update');
+        }
         foreach ($columns as $column) {
             if ('COUNT' == substr($column, 0, 5)) {
                 $this->grouppable = true;
@@ -212,6 +190,9 @@ class QueryObject
         return $this;
     }
 
+    /**
+     * @throws Exception
+     */
     public function where(array ...$conditions): QueryObject
     {
         if (!empty($this->where)) {
@@ -228,6 +209,9 @@ class QueryObject
         return $this;
     }
 
+    /**
+     * @throws Exception
+     */
     public function limit(int $limit): QueryObject
     {
         if (!empty($this->limit)) {
@@ -241,6 +225,9 @@ class QueryObject
         return $this;
     }
 
+    /**
+     * @throws Exception
+     */
     public function offset(int $offset): QueryObject
     {
         if (!empty($this->offset)) {
@@ -254,6 +241,9 @@ class QueryObject
         return $this;
     }
 
+    /**
+     * @throws Exception
+     */
     public function groupBy(string $column): QueryObject
     {
         if (!$this->grouppable) {
@@ -266,6 +256,9 @@ class QueryObject
         return $this;
     }
 
+    /**
+     * @throws Exception
+     */
     public function orderBy(array ...$orders): QueryObject
     {
         if (!empty($this->orderBy)) {
@@ -283,6 +276,24 @@ class QueryObject
         }
 
         $this->orderBy = $orderBy;
+        return $this;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function values(array $values): QueryObject
+    {
+        if ('select' == $this->action) {
+            throw new Exception('Incorrect query formation: using VALUES statement while selecting');
+        }
+        if ('update' == $this->action && count($values) != 1) {
+            throw new Exception('Incorrect query formation: selecting more than 1 value for update');
+        }
+        if (count($this->columns) != count($values)) {
+            throw new Exception('Incorrect query formation: number of inserted values doesn`t match number of columns');
+        }
+        $this->values = $values;
         return $this;
     }
 }
