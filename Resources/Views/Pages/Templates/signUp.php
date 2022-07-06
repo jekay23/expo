@@ -1,5 +1,5 @@
 <div class="text-center pt-5 pb-3">
-    <h1><strong>Зарегестрируйтесь</strong></h1>
+    <h1><strong>Зарегистрируйтесь</strong></h1>
 </div>
 <form class="container-fluid text-center mmd-sign-in" method="post" target="_self" action="/api/sign-up.php">
     <?php Expo\Resources\Views\Components\TextField::render('Email', ['name' => 'email']) ?>
@@ -17,7 +17,7 @@
         <p class="d-inline-flex"> </p>
     </div>
     <button type="submit">
-        Зарегестрироваться
+        Зарегистрироваться
     </button>
     <p><a href="/sign-in">У меня есть профиль</a></p>
 </form>
