@@ -203,6 +203,9 @@ class QueryObject
             if (2 != count($condition)) {
                 throw new Exception('Incorrect query formation: wrong where condition format');
             }
+            if (gettype($condition[1]) != 'integer') {
+                $condition[1] = "'$condition[1]'";
+            }
             $conditionStrings[] = "$condition[0] = $condition[1]";
         }
         $this->where = implode(' AND ', $conditionStrings);
@@ -282,7 +285,7 @@ class QueryObject
     /**
      * @throws Exception
      */
-    public function values(array $values): QueryObject
+    public function values(...$values): QueryObject
     {
         if ('select' == $this->action) {
             throw new Exception('Incorrect query formation: using VALUES statement while selecting');
@@ -292,6 +295,11 @@ class QueryObject
         }
         if (count($this->columns) != count($values)) {
             throw new Exception('Incorrect query formation: number of inserted values doesn`t match number of columns');
+        }
+        foreach ($values as &$value) {
+            if (gettype($value) != 'integer') {
+                $value = "'$value'";
+            }
         }
         $this->values = $values;
         return $this;

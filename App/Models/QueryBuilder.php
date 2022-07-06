@@ -102,4 +102,63 @@ class QueryBuilder
         $users = $statement->fetchAll();
         return [true, $users];
     }
+
+    /**
+     * @throws \Exception
+     */
+    public static function checkEmailInDB(string $email): array
+    {
+        if (!DataBaseConnection::makeSureConnectionIsOpen()) {
+            throw new \Exception('Unable to connect to server. Please try again later or contact support.');
+        }
+
+        $query = QO::select()->table('Users')->columns('userID')->where(['email', "$email"]);
+
+        ob_start();
+        echo $query;
+        $querySting = ob_get_clean();
+
+        $statement = DataBaseConnection::executeStatement($querySting);
+        $user = $statement->fetchAll();
+        if (!empty($user)) {
+            $userID = $user[0]['userID'];
+            return [true, $userID];
+        } else {
+            return [false, null];
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public static function createUser(array $credentials): array
+    {
+        $query = QO::insert()->table('Users')->columns('email', 'passwordHash', 'name', 'pronoun');
+        $query->values(
+            $credentials['email'],
+            $credentials['passwordHash'],
+            $credentials['name'],
+            $credentials['pronoun']
+        );
+
+        ob_start();
+        echo $query;
+        $querySting = ob_get_clean();
+
+        DataBaseConnection::executeStatement($querySting);
+
+        $email = $credentials['email'];
+        $query = QO::select()->table('Users')->columns('userID')->where(['email', "$email"]);
+        ob_start();
+        echo $query;
+        $querySting = ob_get_clean();
+        $statement = DataBaseConnection::executeStatement($querySting);
+        $user = $statement->fetchAll();
+        if (isset($user[0])) {
+            $userID = $user[0]['userID'];
+            return [true, $userID];
+        } else {
+            throw new \Exception('Unknown error: user created, but ID inaccessible.');
+        }
+    }
 }
