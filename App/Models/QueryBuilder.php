@@ -148,7 +148,7 @@ class QueryBuilder
             if ($passwordHash == $user[0]['passwordHash']) {
                 return [true, null];
             } else {
-                return [false, 'Please check the email-password combination again, there`s no match in the system.'];
+                return [false, 'Неверная комбинация email и пароля'];
             }
         } else {
             throw new \Exception('Unknown error: user exists, but inaccessible.');

@@ -1,7 +1,6 @@
 <?php
 
 use Expo\App\Http\Controllers;
-use Expo\Resources\Views\View;
 use Expo\Routes\Router;
 
 Router::saveCallback('', function (array $requestList, array $requestQuery) {
