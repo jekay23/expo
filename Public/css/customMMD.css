@@ -65,8 +65,8 @@
     }
 }
 
-main {
-    padding-top: 4.3rem;
+.mmd-main {
+    padding: 3.84rem 0 0;
 }
 
 h2 {

@@ -13,6 +13,9 @@ class SignIn
 {
     public static function assemble(array $requestList, array $requestQuery)
     {
+        if (!empty($requestList)) {
+            View::render('404');
+        }
         View::render('signIn');
     }
 }

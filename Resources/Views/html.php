@@ -12,7 +12,8 @@
     </head>
     <body>
         <?php \Expo\Resources\Views\Components\Header::render($currentNavbarLink); ?>
-        <main class="container-fluid" role="main">
+        <main class="container-fluid mmd-main" role="main">
+            <?php \Expo\App\Http\Controllers\Components\Announcement::render(); ?>
             <?php \Expo\Resources\Views\Html::render($templateClass, $page, $stickFooter); ?>
         </main>
         <?php \Expo\Resources\Views\Components\Footer::render($stickFooter); ?>

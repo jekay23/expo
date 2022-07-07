@@ -27,4 +27,14 @@ class UserInputHandler
         }
         return [true, null];
     }
+
+    public static function processUriQuery(array $uriQuery): bool
+    {
+        foreach ($uriQuery as $key => $value) {
+            if (htmlspecialchars($key) != $key || htmlspecialchars($value) != $value) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
