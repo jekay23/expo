@@ -43,6 +43,8 @@ class DataBaseConnection
 
     public static function executeQuery(string $query): \PDOStatement
     {
+        self::makeSureConnectionIsOpen();
+
         $statement = DataBaseConnection::$connection->prepare($query);
         $statement->execute();
 

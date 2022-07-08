@@ -53,7 +53,7 @@ class View
         return $title;
     }
 
-    public static function render(string $requestView)
+    public static function render(string $requestView, array $data = null)
     {
         $title = self::makeTitle($requestView);
 
@@ -61,7 +61,7 @@ class View
 
         if (isset(self::$requests[$requestView])) {
             $templateClass = self::$requests[$requestView];
-            Html::requireDynamic($title, $templateClass, $currentNavbarLink);
+            Html::requireDynamic($title, $templateClass, $data, $currentNavbarLink);
         } elseif (in_array($requestView, self::$staticPages)) {
             $page = $requestView;
             Html::requireStatic($title, $page);

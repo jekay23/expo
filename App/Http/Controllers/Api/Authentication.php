@@ -3,6 +3,7 @@
 namespace Expo\App\Http\Controllers\Api;
 
 use Exception;
+use Expo\App\Http\Controllers\HashHandler;
 use Expo\App\Models\QueryBuilder as QB;
 
 class Authentication
@@ -17,6 +18,7 @@ class Authentication
             if ($emailIsNew) {
                 list($userCreated, $userID) = QB::createUser($credentials);
                 if ($userCreated) {
+                    setcookie('authenticatedUserIDHash', HashHandler::getIDHash($userID), time() + 10 * 24 * 3600, '/');
                     return [true, $userID];
                 } else {
                     throw new Exception('Unknown error: ID accessible, but user not set as created.');
@@ -39,6 +41,7 @@ class Authentication
             if ($emailInDB) {
                 list($authenticated, $error) = QB::authenticate($userID, $credentials['passwordHash']);
                 if ($authenticated) {
+                    setcookie('authenticatedUserIDHash', HashHandler::getIDHash($userID), time() + 10 * 24 * 3600, '/');
                     return [true, $userID];
                 } else {
                     return [false, $error];

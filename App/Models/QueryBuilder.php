@@ -155,6 +155,36 @@ class QueryBuilder
         }
     }
 
+    public static function getProfileData(int $userID): array
+    {
+        $query = QO::select()->table('Users')->columns('name', 'pronoun', 'bio', 'contact', 'avatarLocation');
+        $query->where(['userID', $userID]);
+
+        $user = self::executeQuery($query);
+
+        $query = QO::select()->table('Photos')->columns(QO::count('photoID', 'numOfPhotos'));
+        $query->where(['addedBy', $userID]);
+
+        $result = self::executeQuery($query);
+        $numOfPhotos = $result[0]['numOfPhotos'];
+
+        $result = self::executeQuery($query);
+        $numOfPhotos = $result[0]['numOfPhotos'];
+
+        $query = QO::select()->table('Photos')->columns('location, altText')->where(['addedBy', $userID]);
+        $query->orderBy(['uploadTime', 'DESC'])->limit(12);
+
+        $photos = self::executeQuery($query);
+
+        if (isset($user[0])) {
+            $user[0]['numOfPhotos'] = $numOfPhotos;
+            $user[0]['photos'] = $photos;
+            return [true, $user[0]];
+        } else {
+            return [false, null];
+        }
+    }
+
     private static function executeQuery(QueryObject $query, bool $yields = true)
     {
         ob_start();

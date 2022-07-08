@@ -6,7 +6,7 @@ use Expo\App\Models\DataBaseConnection;
 
 class Html
 {
-    public static function requireDynamic(string $title, string $templateClass, string $currentNavbarLink = null)
+    public static function requireDynamic(string $title, string $templateClass, $data, string $currentNavbarLink = null)
     {
         $stickFooter = false;
         $templateClass = 'Expo\\Resources\\Views\\Pages\\' . $templateClass;
@@ -22,10 +22,10 @@ class Html
         require 'html.php';
     }
 
-    public static function render($templateClass, $page, bool &$stickFooter)
+    public static function render($templateClass, $page, bool &$stickFooter, $data)
     {
         if (isset($templateClass)) {
-            $templateClass::render($stickFooter);
+            $templateClass::render($stickFooter, $data);
         } elseif (isset($page)) {
             require $page;
         }

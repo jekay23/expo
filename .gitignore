@@ -4,4 +4,4 @@ synced_data/
 Vagrantfile
 .idea/
 /App/Models/DataBaseCredentials.php
-/App/Http/Controllers/PasswordHandler.php
+/App/Http/Controllers/HashHandler.php
