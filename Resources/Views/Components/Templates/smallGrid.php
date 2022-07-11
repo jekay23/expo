@@ -1,3 +1,4 @@
+<hr>
 <h2><?= $headerText ?></h2>
 <div class="container-fluid small-grid text-center mb-2">
     <?php foreach ($triples as $triple) : ?>

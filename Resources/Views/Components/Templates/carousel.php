@@ -1,3 +1,4 @@
+<hr>
 <h2><?= $headerText ?></h2>
 <div id="photoCarousel" class="carousel carousel-dark slide py-2" data-bs-ride="false">
     <div class="carousel-inner">

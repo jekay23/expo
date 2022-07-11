@@ -69,6 +69,13 @@
     padding: 3.84rem 0 0 0;
 }
 
+hr {
+    border-top: .25rem solid #54b686;
+    opacity: 1;
+    border-radius: .25rem;
+    margin-bottom: 0;
+}
+
 h2 {
     font-size: 100%;
     font-weight: normal;
