@@ -11,7 +11,7 @@ use Expo\Resources\Views\View;
 
 class Compilation
 {
-    public static function assemble(array $requestList, array $requestQuery)
+    public static function prepare(array $requestList, array $requestQuery)
     {
         if ('1' === $requestList[0]) {
             View::render('compilation');

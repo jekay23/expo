@@ -11,7 +11,7 @@ use Expo\Resources\Views\View;
 
 class Front
 {
-    public static function assemble(array $requestList, array $requestQuery)
+    public static function prepare(array $requestList, array $requestQuery)
     {
         View::render('frontpage');
     }

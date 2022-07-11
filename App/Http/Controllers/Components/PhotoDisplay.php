@@ -7,7 +7,7 @@ use Expo\Resources\Views;
 
 class PhotoDisplay
 {
-    public static function assemble(
+    public static function prepare(
         string $appearanceType,
         string $headerText,
         string $dataType,

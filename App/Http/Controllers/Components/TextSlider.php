@@ -7,7 +7,7 @@ use Expo\Resources\Views;
 
 class TextSlider
 {
-    public static function assemble(string $headerText, string $type, int $quantity, int $compilationID = null)
+    public static function prepare(string $headerText, string $type, int $quantity, int $compilationID = null)
     {
         if ('compilation' === $type) {
             $args = ['compilationID' => $compilationID];

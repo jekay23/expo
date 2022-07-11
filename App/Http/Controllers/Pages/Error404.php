@@ -6,7 +6,7 @@ use Expo\Resources\Views\View;
 
 class Error404
 {
-    public static function assemble()
+    public static function prepare()
     {
         View::render('404');
     }

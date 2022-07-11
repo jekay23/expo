@@ -13,7 +13,7 @@ use Expo\Resources\Views\View;
 
 class Profile
 {
-    public static function assemble(array $requestList, array $requestQuery)
+    public static function prepare(array $requestList, array $requestQuery)
     {
         $userID = $requestList[0];
         list($status, $user) = QueryBuilder::getProfileData($userID);
