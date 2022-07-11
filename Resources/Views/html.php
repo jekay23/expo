@@ -14,7 +14,9 @@
         <?php \Expo\Resources\Views\Components\Header::render($userID, $currentNavbarLink); ?>
         <main class="container-fluid mmd-main" role="main">
             <?php \Expo\App\Http\Controllers\Components\Announcement::render(); ?>
-            <?php \Expo\Resources\Views\Html::render($templateClass, $page, $stickFooter, $data); ?>
+            <div style="padding: 0 1vw">
+                <?php \Expo\Resources\Views\Html::render($templateClass, $page, $stickFooter, $data); ?>
+            </div>
         </main>
         <?php \Expo\Resources\Views\Components\Footer::render($stickFooter); ?>
         <script crossorigin="anonymous"
