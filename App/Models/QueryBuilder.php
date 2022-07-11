@@ -157,7 +157,7 @@ class QueryBuilder
 
     public static function getProfileData(int $userID): array
     {
-        $query = QO::select()->table('Users')->columns('name', 'pronoun', 'bio', 'contact', 'avatarLocation');
+        $query = QO::select()->table('Users')->columns('userID', 'name', 'pronoun', 'bio', 'contact', 'avatarLocation');
         $query->where(['userID', $userID]);
 
         $user = self::executeQuery($query);
@@ -172,7 +172,7 @@ class QueryBuilder
         $numOfPhotos = $result[0]['numOfPhotos'];
 
         $query = QO::select()->table('Photos')->columns('location, altText')->where(['addedBy', $userID]);
-        $query->orderBy(['uploadTime', 'DESC'])->limit(12);
+        $query->orderBy(['uploadTime', 'DESC'])->limit(24);
 
         $photos = self::executeQuery($query);
 

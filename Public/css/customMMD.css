@@ -66,15 +66,13 @@
 }
 
 .mmd-main {
-    padding: 3.84rem 0 0;
+    padding: 3.84rem 1vw 0 1vw;
 }
 
 h2 {
     font-size: 100%;
     font-weight: normal;
-    padding-top: 1rem;
-    padding-bottom: .25rem;
-    padding-left: 3rem;
+    padding: 1rem 3rem .25rem;
 }
 
 @media screen and (max-width: 767px) {
@@ -138,18 +136,18 @@ h2 {
 }
 
 .small-grid {
-    alignment: center;
+    padding: 0;
 }
 
 .small-grid-triple > img {
-    height: 10vw;
-    width: 15vw;
+    height: 10.33vw;
+    width: 15.5vw;
     object-fit: cover;
     margin: .1vw .25vw;
     flex-wrap: nowrap;
 }
 
-@media screen and (max-width: 950px) {
+@media screen and (max-width: 960px) {
     .small-grid-triple > img {
         height: 20vw;
         width: 30vw;

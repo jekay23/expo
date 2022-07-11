@@ -18,7 +18,7 @@ class Authentication
             if ($emailIsNew) {
                 list($userCreated, $userID) = QB::createUser($credentials);
                 if ($userCreated) {
-                    setcookie('authenticatedUserIDHash', HashHandler::getIDHash($userID), time() + 10 * 24 * 3600, '/');
+                    self::saveHashToCookie($userID);
                     return [true, $userID];
                 } else {
                     throw new Exception('Unknown error: ID accessible, but user not set as created.');
@@ -41,7 +41,7 @@ class Authentication
             if ($emailInDB) {
                 list($authenticated, $error) = QB::authenticate($userID, $credentials['passwordHash']);
                 if ($authenticated) {
-                    setcookie('authenticatedUserIDHash', HashHandler::getIDHash($userID), time() + 10 * 24 * 3600, '/');
+                    self::saveHashToCookie($userID);
                     return [true, $userID];
                 } else {
                     return [false, $error];
@@ -52,6 +52,22 @@ class Authentication
         } else {
             throw new Exception('Insufficient information for sign-in.');
         }
+    }
+
+    private static function saveHashToCookie(int $userID)
+    {
+        setcookie('authenticatedUserIDHash', HashHandler::getIDHash($userID), time() + 10 * 24 * 3600, '/');
+        setcookie('userID', $userID, time() + 10 * 24 * 3600, '/');
+    }
+
+    public static function getUserIdFromCookie(): int
+    {
+        if (isset($_COOKIE['userID']) && isset($_COOKIE['authenticatedUserIDHash']) && $_COOKIE['userID'] > 0) {
+            if (HashHandler::getIDHash($_COOKIE['userID']) == $_COOKIE['authenticatedUserIDHash']) {
+                return $_COOKIE['userID'];
+            }
+        }
+        return 0;
     }
 
     private static function checkEmailIsNew(string $email): bool

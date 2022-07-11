@@ -21,7 +21,7 @@
                         <a class="nav-link<?= $navbarLinksExtraClass['selection'] ?>" href="/exhibition">Отбор</a>
                     </li>
                     <li class="nav-item px-xl-5 pe-5">
-                        <a class="nav-link<?= $navbarLinksExtraClass['profile'] ?>" href="/sign-up">Профиль</a>
+                        <a class="nav-link<?= $navbarLinksExtraClass['profile'] ?>" href="/<?= $navbarLink3['href'] ?>"><?= $navbarLink3['name'] ?></a>
                     </li>
                 </ul>
             </div>

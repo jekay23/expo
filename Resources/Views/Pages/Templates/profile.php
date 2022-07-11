@@ -5,8 +5,11 @@
                 <div style="width: 12rem">
                     <img src="<?= $avatarLocation ?>" alt="Аватар пользвателя <?= $profileName ?>">
                 </div>
-                <div class="col d-flex align-items-center">
-                    <h1 style="font-size: xx-large;font-weight: bold"><?= $profileName ?></h1>
+                <div class="col d-flex flex-wrap align-content-center">
+                    <h1 style="font-size: xx-large; font-weight: bold; margin-bottom: 0; width: 100%"><?= $profileName ?></h1>
+                    <?php if ($ownProfile['status']) :?>
+                        <p style="margin-bottom: 0"><a href="<?= $ownProfile['editLink'] ?>">Редактироавть профиль</a></p>
+                    <?php endif; ?>
                 </div>
             </div>
             <div>
@@ -31,7 +34,7 @@
                 </div>
             </div>
             <div class="text-center">
-                <button class="mmd-button mt-5"><p class="my-3 mx-3" style=""><?= $buttonName ?></p></button>
+                <button class="mmd-button mt-5" type="button" onclick="location.href='<?= $button['href'] ?>'"><p class="my-3 mx-3" style=""><?= $button['name'] ?></p></button>
             </div>
         </div>
     </div>

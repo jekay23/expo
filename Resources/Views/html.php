@@ -11,7 +11,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap" rel="stylesheet">
     </head>
     <body>
-        <?php \Expo\Resources\Views\Components\Header::render($currentNavbarLink); ?>
+        <?php \Expo\Resources\Views\Components\Header::render($userID, $currentNavbarLink); ?>
         <main class="container-fluid mmd-main" role="main">
             <?php \Expo\App\Http\Controllers\Components\Announcement::render(); ?>
             <?php \Expo\Resources\Views\Html::render($templateClass, $page, $stickFooter, $data); ?>

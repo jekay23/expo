@@ -7,6 +7,7 @@
 
 namespace Expo\Resources\Views;
 
+use Expo\App\Http\Controllers\Api\Authentication;
 use Expo\Resources\Views\Pages;
 
 class View
@@ -57,14 +58,16 @@ class View
     {
         $title = self::makeTitle($requestView);
 
+        $userID = Authentication::getUserIdFromCookie();
+
         $currentNavbarLink = self::$navbarLinks[$requestView] ?? null;
 
         if (isset(self::$requests[$requestView])) {
             $templateClass = self::$requests[$requestView];
-            Html::requireDynamic($title, $templateClass, $data, $currentNavbarLink);
+            Html::requireDynamic($title, $templateClass, $data, $userID, $currentNavbarLink);
         } elseif (in_array($requestView, self::$staticPages)) {
             $page = $requestView;
-            Html::requireStatic($title, $page);
+            Html::requireStatic($title, $page, $userID);
         }
     }
 
