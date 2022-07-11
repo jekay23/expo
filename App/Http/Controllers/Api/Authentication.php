@@ -8,10 +8,37 @@ use Expo\App\Models\QueryBuilder as QB;
 
 class Authentication
 {
+    public static function authenticate(string $type)
+    {
+        $hash = HashHandler::getPasswordHash($_POST['password'], $_POST['email']);
+        $post = $_POST;
+        unset($post['password']);
+        $post['passwordHash'] = $hash;
+        list($inputStatus, $error) = UserInputHandler::processPost($post);
+        if ($inputStatus) {
+            $authStatus = false;
+            $data = null;
+            if ('sign-in' == $type) {
+                list($authStatus, $data) = self::signIn($post);
+            } elseif ('sign-up' == $type) {
+                list($authStatus, $data) = self::signUp($post);
+            }
+            if ($authStatus) {
+                header("Location: /profile/$data");
+            } else {
+                $uriQuery = http_build_query(['message' => $data, 'color' => 'red']);
+                header("Location: /$type?$uriQuery");
+            }
+        } else {
+            $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
+            header("Location: /$type?$uriQuery");
+        }
+    }
+
     /**
      * @throws Exception
      */
-    public static function signUp(array $credentials): array
+    private static function signUp(array $credentials): array
     {
         if (isset($credentials['email'], $credentials['name'], $credentials['passwordHash'])) {
             $emailIsNew = self::checkEmailIsNew($credentials['email']);
@@ -34,7 +61,7 @@ class Authentication
     /**
      * @throws Exception
      */
-    public static function singIn(array $credentials): array
+    private static function signIn(array $credentials): array
     {
         if (isset($credentials['email'], $credentials['passwordHash'])) {
             list($emailInDB, $userID) = QB::checkEmailInDB($credentials['email']);
