@@ -19,7 +19,7 @@ class PhotoDisplay
         } else {
             $args = null;
         }
-        list($status, $photos) = QueryBuilder::requirePhotos($dataType, $quantity, $args);
+        list($status, $photos) = QueryBuilder::getPhotos($dataType, $quantity, $args);
         if ($status) {
             switch ($appearanceType) {
                 case 'carousel':

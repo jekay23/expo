@@ -16,9 +16,9 @@ class ExhibitionSlider
         } else {
             $args = null;
         }
-        list($status, $photos) = QueryBuilder::requirePhotos('compilation', $quantity, $args);
+        list($status, $photos) = QueryBuilder::getPhotos('compilation', $quantity, $args);
         if ($status) {
-            list($status, $compilation) = QueryBuilder::requireCompilationDetails($compilationID);
+            list($status, $compilation) = QueryBuilder::getCompilationDetails($compilationID);
             if ($status) {
                 Views\Components\ExhibitionSlider::render(
                     $headerText,

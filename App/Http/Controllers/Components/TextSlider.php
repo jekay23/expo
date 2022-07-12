@@ -14,7 +14,7 @@ class TextSlider
         } else {
             $args = null;
         }
-        list($status, $textFields) = QueryBuilder::requireText($type, $quantity);
+        list($status, $textFields) = QueryBuilder::getText($type, $quantity);
         if ($status) {
             Views\Components\TextSlider::render($headerText, $textFields);
         }

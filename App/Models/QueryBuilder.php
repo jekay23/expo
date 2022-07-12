@@ -9,7 +9,7 @@ class QueryBuilder
     /**
      * @throws \Exception
      */
-    public static function requirePhotos(string $type, int $quantity, array $args = null): array
+    public static function getPhotos(string $type, int $quantity, array $args = null): array
     {
         if (!DataBaseConnection::makeSureConnectionIsOpen()) {
             return [false, null];
@@ -43,7 +43,7 @@ class QueryBuilder
     /**
      * @throws \Exception
      */
-    public static function requireCompilationDetails(int $compilationID): array
+    public static function getCompilationDetails(int $compilationID): array
     {
         if (!DataBaseConnection::makeSureConnectionIsOpen()) {
             return [false, null];
@@ -59,7 +59,7 @@ class QueryBuilder
     /**
      * @throws \Exception
      */
-    public static function requireText(string $type, int $quantity, array $args = null): array
+    public static function getText(string $type, int $quantity, array $args = null): array
     {
         if ('filters' === $type) {
             $filters = [

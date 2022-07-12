@@ -51,7 +51,7 @@ class Authentication
                     throw new Exception('Unknown error: ID accessible, but user not set as created.');
                 }
             } else {
-                return [false, 'Email уже зарегестрирован. Пожалуйста, воспользуйтесь формой входа.'];
+                return [false, 'Email уже зарегистрирован. Пожалуйста, воспользуйтесь формой входа.'];
             }
         } else {
             throw new Exception('Insufficient information for sign-up.');
@@ -74,7 +74,7 @@ class Authentication
                     return [false, $error];
                 }
             } else {
-                return [false, 'Email не зарегестрирован. Пожалуйста, воспользуйтесь формой регистрации.'];
+                return [false, 'Email не зарегистрирован. Пожалуйста, воспользуйтесь формой регистрации.'];
             }
         } else {
             throw new Exception('Insufficient information for sign-in.');
