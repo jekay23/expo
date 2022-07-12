@@ -15,15 +15,18 @@ class Announcement
             $validUriQuery = UserInputHandler::processUriQuery($uriQuery);
             if ($validUriQuery) {
                 $message = '';
-                $color = '#fff';
+                $color = '#939292';
                 if (isset($uriQuery['message'])) {
                     $message = $uriQuery['message'];
                 }
                 if (isset($uriQuery['color'])) {
-                    if ('red' == $uriQuery['color']) {
-                        $color = '#ff8f81';
-                    } elseif ('green' == $uriQuery['color']) {
-                        $color = '#BCDDCD';
+                    switch ($uriQuery['color']) {
+                        case 'red':
+                            $color = '#ff8f81';
+                            break;
+                        case 'green':
+                            $color = '#BCDDCD';
+                            break;
                     }
                 }
                 View::requireTemplate('announcementBar', 'Component', compact('message', 'color'));

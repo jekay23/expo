@@ -17,18 +17,22 @@ class QueryBuilder
 
         $query = QO::select()->table('Photos')->columns('location', 'altText');
 
-        if ('latest' === $type) {
-            $query->orderBy(['uploadTime', 'DESC']);
-        } elseif ('compilation' === $type) {
-            if (isset($args['compilationID'])) {
-                $compilationID = $args['compilationID'];
-                $query->join('RIGHT', 'CompilationItems', 'photoID');
-                $query->where(['compilationID', $compilationID]);
-            }
-        } elseif ('best' === $type) {
-            $query->addColumns(QO::count('userID', 'likes'), 'uploadTime');
-            $query->join('RIGHT', 'Likes', 'photoID');
-            $query->groupBy('photoID')->orderBy(['likes', 'DESC']);
+        switch ($type) {
+            case 'latest':
+                $query->orderBy(['uploadTime', 'DESC']);
+                break;
+            case 'compilation':
+                if (isset($args['compilationID'])) {
+                    $compilationID = $args['compilationID'];
+                    $query->join('RIGHT', 'CompilationItems', 'photoID');
+                    $query->where(['compilationID', $compilationID]);
+                }
+                break;
+            case 'best':
+                $query->addColumns(QO::count('userID', 'likes'), 'uploadTime');
+                $query->join('RIGHT', 'Likes', 'photoID');
+                $query->groupBy('photoID')->orderBy(['likes', 'DESC']);
+                break;
         }
         $query->limit($quantity);
 
@@ -72,15 +76,19 @@ class QueryBuilder
 
         $query = QO::select()->table('Users')->columns('name');
 
-        if ('latest' === $type) {
-            $query->orderBy(['signUpDate', 'DESC']);
-        } elseif ('compilation' === $type) {
-            if (isset($args['compilationID'])) {
-                $compilationID = $args['compilationID'];
+        switch ($type) {
+            case 'latest':
+                $query->orderBy(['signUpDate', 'DESC']);
+                break;
+            case 'compilation':
+                if (isset($args['compilationID'])) {
+                    $compilationID = $args['compilationID'];
+                    $query .= ''; // TODO
+                }
+                break;
+            case 'best':
                 $query .= ''; // TODO
-            }
-        } elseif ('best' === $type) {
-            $query .= ''; // TODO
+                break;
         }
         $query->limit($quantity);
 
