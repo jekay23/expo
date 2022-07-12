@@ -193,6 +193,17 @@ class QueryBuilder
         }
     }
 
+    public static function addPhoto(int $userID, string $location)
+    {
+        $query = QO::select()->table('Users')->columns('name')->where(['userID', $userID]);
+        $users = self::executeQuery($query);
+        $name = $users[0]['name'];
+
+        $query = QO::insert()->table('Photos')->columns('location', 'addedBy', 'altText');
+        $query->values($location, $userID, "Фото пользователя $name");
+        self::executeQuery($query, false);
+    }
+
     private static function executeQuery(QueryObject $query, bool $yields = true)
     {
         ob_start();

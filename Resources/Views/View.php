@@ -40,7 +40,8 @@ class View
             'exhibition' => 'Текущая выставка',
             'signIn' => 'Вход',
             'signUp' => 'Регистрация',
-            '404' => 'Страница не найдена'
+            '404' => 'Страница не найдена',
+            'upload' => 'Загрузка снимков'
         ];
 
         $title = $titles[$requestTitle]; // TODO add isset() just in case the page is not caught into 404

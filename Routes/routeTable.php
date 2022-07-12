@@ -35,6 +35,10 @@ Router::saveCallback('api', function (array $requestList, array $requestQuery) {
     Controllers\Api::execute($requestList, $requestQuery);
 });
 
+Router::saveCallback('upload', function (array $requestList, array $requestQuery) {
+    Controllers\Pages\Upload::prepare($requestList, $requestQuery);
+});
+
 Router::saveCallback('404', function () {
     Controllers\Pages\Error404::prepare();
 });

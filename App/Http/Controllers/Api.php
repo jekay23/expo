@@ -12,6 +12,8 @@ class Api
             require self::$prefix . 'signIn.php';
         } elseif ('sign-up' == $requestList[0]) {
             require self::$prefix . 'signUp.php';
+        } elseif ('upload' == $requestList[0]) {
+            require self::$prefix . 'upload.php';
         }
     }
 }
