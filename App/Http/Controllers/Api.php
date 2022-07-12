@@ -8,9 +8,9 @@ class Api
 
     public static function execute(array $requestList, array $requestQuery)
     {
-        if ('sign-in.php' === $requestList[0]) {
+        if ('sign-in' == $requestList[0]) {
             require self::$prefix . 'signIn.php';
-        } elseif ('sign-up.php' === $requestList[0]) {
+        } elseif ('sign-up' == $requestList[0]) {
             require self::$prefix . 'signUp.php';
         }
     }

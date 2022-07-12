@@ -16,7 +16,7 @@ class Html
 
     public static function requireStatic(string $title, string $page, int $userID = 0, string $currentNavbarLink = null)
     {
-        $stickFooter = false;
+        $stickFooter = true;
         $templateClass = null;
         $page = 'Pages/Templates/' . $page . '.php';
         $data = null;

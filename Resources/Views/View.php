@@ -17,9 +17,7 @@ class View
         'profile' => 'Profile',
         'photo' => 'Photo',
         'compilation' => 'Compilation',
-        'exhibition' => 'Compilation',
-        'signIn' => 'SignIn',
-        'signUp' => 'SignUp'
+        'exhibition' => 'Compilation'
     ];
 
     private static $navbarLinks = [
@@ -30,7 +28,7 @@ class View
         'exhibition' => 'selection'
     ];
 
-    private static $staticPages = ['404', 'contacts', 'license'];
+    private static $staticPages = ['404', 'upload', 'signIn', 'signUp', 'contacts', 'license'];
 
     private static function makeTitle(string $requestTitle): string
     {

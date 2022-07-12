@@ -1,7 +1,7 @@
 <div class="text-center pt-5 pb-3">
     <h1><strong>Зарегистрируйтесь</strong></h1>
 </div>
-<form class="container-fluid text-center mmd-sign-in" method="post" target="_self" action="/api/sign-up.php">
+<form class="container-fluid text-center mmd-sign-in" method="post" target="_self" action="/api/sign-up">
     <?php Expo\Resources\Views\Components\TextField::render('Email', ['name' => 'email']) ?>
     <?php Expo\Resources\Views\Components\TextField::render('Имя', ['name' => 'name']) ?>
     <?php Expo\Resources\Views\Components\TextField::render('Пароль', ['type' => 'password', 'name' => 'password']) ?>
