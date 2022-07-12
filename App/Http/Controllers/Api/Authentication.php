@@ -10,7 +10,7 @@ class Authentication
 {
     public static function authenticate(string $type)
     {
-        $hash = HashHandler::getPasswordHash($_POST['password'], $_POST['email']);
+        $hash = HashHandler::getHash('password', $_POST['password'], $_POST['email']);
         $post = $_POST;
         unset($post['password']);
         $post['passwordHash'] = $hash;
@@ -83,14 +83,14 @@ class Authentication
 
     private static function saveHashToCookie(int $userID)
     {
-        setcookie('authenticatedUserIDHash', HashHandler::getIDHash($userID), time() + 10 * 24 * 3600, '/');
+        setcookie('authenticatedUserIDHash', HashHandler::getHash('id', $userID), time() + 10 * 24 * 3600, '/');
         setcookie('userID', $userID, time() + 10 * 24 * 3600, '/');
     }
 
     public static function getUserIdFromCookie(): int
     {
         if (isset($_COOKIE['userID']) && isset($_COOKIE['authenticatedUserIDHash']) && $_COOKIE['userID'] > 0) {
-            if (HashHandler::getIDHash($_COOKIE['userID']) == $_COOKIE['authenticatedUserIDHash']) {
+            if (HashHandler::getHash('id', $_COOKIE['userID']) == $_COOKIE['authenticatedUserIDHash']) {
                 return $_COOKIE['userID'];
             }
         }
