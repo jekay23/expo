@@ -63,9 +63,9 @@ class QueryBuilder
     {
         if ('filters' === $type) {
             $filters = [
-                ['name' => 'По дате публикации', 'link' => ''],
-                ['name' => 'По поулярности', 'link' => ''],
-                ['name' => 'По выставкам', 'link' => '']
+                ['name' => 'По дате публикации', 'href' => ''],
+                ['name' => 'По поулярности', 'href' => ''],
+                ['name' => 'По выставкам', 'href' => '']
             ];
             return [true, $filters];
         }
@@ -74,7 +74,7 @@ class QueryBuilder
             return [false, null];
         }
 
-        $query = QO::select()->table('Users')->columns('name');
+        $query = QO::select()->table('Users')->columns('name', 'userID');
 
         switch ($type) {
             case 'latest':

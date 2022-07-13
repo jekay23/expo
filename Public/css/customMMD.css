@@ -164,7 +164,12 @@ h2 {
     }
 }
 
-.scrolling-wrapper > .card {
+.scrolling-wrapper > a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.scrolling-wrapper > a > .card {
     display: inline-block;
     margin: .5rem .8rem;
     border-width: .19rem;
@@ -172,7 +177,7 @@ h2 {
     border-color: #939292;
 }
 
-.scrolling-wrapper > .card > p {
+.scrolling-wrapper > a > .card > p {
     margin: .7rem .8rem;
     font-size: smaller;
 }

@@ -16,6 +16,12 @@ class TextSlider
         }
         list($status, $textFields) = QueryBuilder::getText($type, $quantity);
         if ($status) {
+            if ('filters' != $type) {
+                foreach ($textFields as &$textField) {
+                    $textField['href'] = '/profile/' . $textField['userID'];
+                    unset($textField['userID']);
+                }
+            }
             Views\Components\TextSlider::render($headerText, $textFields);
         }
     }
