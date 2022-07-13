@@ -17,13 +17,21 @@ class Profile
     {
         $userID = $requestList[0];
         list($status, $user) = QueryBuilder::getProfileData($userID);
-        if ($userID == Authentication::getUserIdFromCookie()) {
-            $user['isProfileOwner'] = true;
-        } else {
-            $user['isProfileOwner'] = false;
-        }
         if ($status) {
-            View::render('profile', $user, $user['name']);
+            if ($userID == Authentication::getUserIdFromCookie()) {
+                $user['isProfileOwner'] = true;
+            } else {
+                $user['isProfileOwner'] = false;
+            }
+            if (isset($requestList[1])) {
+                if ('edit' == $requestList[1] && $user['isProfileOwner'] = true) {
+                    View::render('editProfile', $user);
+                } else {
+                    View::render('404');
+                }
+            } else {
+                View::render('profile', $user, $user['name']);
+            }
         } else {
             View::render('404');
         }

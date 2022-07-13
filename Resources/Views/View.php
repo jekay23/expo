@@ -12,15 +12,16 @@ use Expo\Resources\Views\Pages;
 
 class View
 {
-    private static $requests = [
+    private static array $requests = [
         'frontpage' => 'Front',
         'profile' => 'Profile',
         'photo' => 'Photo',
         'compilation' => 'Compilation',
-        'exhibition' => 'Compilation'
+        'exhibition' => 'Compilation',
+        'editProfile' => 'EditProfile'
     ];
 
-    private static $navbarLinks = [
+    private static array $navbarLinks = [
         'frontpage' => 'feed',
         'profile' => 'profile',
         'signIn' => 'profile',
@@ -28,23 +29,24 @@ class View
         'exhibition' => 'selection'
     ];
 
-    private static $staticPages = ['404', 'upload', 'signIn', 'signUp', 'contacts', 'license'];
+    private static array $staticPages = ['404', 'upload', 'signIn', 'signUp', 'contacts', 'license'];
+
+    private static array $titles = [
+        'frontpage' => 'Выставка фотографов мехмата',
+        'profile' => 'Платон Антониу',
+        'photo' => 'Фото',
+        'compilation' => 'Подборка &quot;Лето в Академгородке&quot;',
+        'exhibition' => 'Текущая выставка',
+        'signIn' => 'Вход',
+        'signUp' => 'Регистрация',
+        '404' => 'Страница не найдена',
+        'upload' => 'Загрузка снимков',
+        'editProfile' => 'Настройки профиля'
+    ];
 
     private static function makeTitle(string $requestTitle, $override = null): string
     {
-        $titles = [
-            'frontpage' => 'Выставка фотографов мехмата',
-            'profile' => 'Платон Антониу',
-            'photo' => 'Фото',
-            'compilation' => 'Подборка &quot;Лето в Академгородке&quot;',
-            'exhibition' => 'Текущая выставка',
-            'signIn' => 'Вход',
-            'signUp' => 'Регистрация',
-            '404' => 'Страница не найдена',
-            'upload' => 'Загрузка снимков'
-        ];
-
-        $title = $override ?? $titles[$requestTitle];
+        $title = $override ?? self::$titles[$requestTitle];
 
         if ($requestTitle != 'frontpage') {
             $title = $title . ' | Выставка фотографов мехмата';
