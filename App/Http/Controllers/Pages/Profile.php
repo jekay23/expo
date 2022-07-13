@@ -23,7 +23,7 @@ class Profile
             $user['isProfileOwner'] = false;
         }
         if ($status) {
-            View::render('profile', $user);
+            View::render('profile', $user, $user['name']);
         } else {
             View::render('404');
         }

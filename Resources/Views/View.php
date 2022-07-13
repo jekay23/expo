@@ -30,7 +30,7 @@ class View
 
     private static $staticPages = ['404', 'upload', 'signIn', 'signUp', 'contacts', 'license'];
 
-    private static function makeTitle(string $requestTitle): string
+    private static function makeTitle(string $requestTitle, $override = null): string
     {
         $titles = [
             'frontpage' => 'Выставка фотографов мехмата',
@@ -44,18 +44,18 @@ class View
             'upload' => 'Загрузка снимков'
         ];
 
-        $title = $titles[$requestTitle]; // TODO add isset() just in case the page is not caught into 404
+        $title = $override ?? $titles[$requestTitle];
 
-        if ($requestTitle !== 'frontpage') {
+        if ($requestTitle != 'frontpage') {
             $title = $title . ' | Выставка фотографов мехмата';
         }
 
         return $title;
     }
 
-    public static function render(string $requestView, array $data = null)
+    public static function render(string $requestView, array $data = null, string $title = null)
     {
-        $title = self::makeTitle($requestView);
+        $title = self::makeTitle($requestView, $title);
 
         $userID = Authentication::getUserIdFromCookie();
 

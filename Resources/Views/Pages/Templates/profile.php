@@ -8,7 +8,7 @@
                 <div class="col d-flex flex-wrap align-content-center">
                     <h1 style="font-size: xx-large; font-weight: bold; margin-bottom: 0; width: 100%"><?= $profileName ?></h1>
                     <?php if ($ownProfile['status']) :?>
-                        <p style="margin-bottom: 0"><a href="<?= $ownProfile['editLink'] ?>">Редактироавть профиль</a></p>
+                        <p style="margin-bottom: 0"><a href="<?= $ownProfile['editLink'] ?>">Редактировать профиль</a></p>
                     <?php endif; ?>
                 </div>
             </div>
