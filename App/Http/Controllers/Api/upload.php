@@ -6,6 +6,12 @@ use Expo\App\Http\Controllers\HashHandler;
 use Expo\App\Models\QueryBuilder;
 
 $numOfFiles = count($_FILES['files']['name']);
+if (0 === $numOfFiles || (1 === $numOfFiles && '' === $_FILES['files']['name'][0])) {
+    $message = 'Вы не выбрали ни одного фото';
+    $uriQuery = http_build_query(['message' => $message, 'color' => 'red']);
+    header("Location: /upload?$uriQuery");
+    exit;
+}
 $files = $_FILES['files'];
 $userID = Authentication::getUserIdFromCookie();
 for ($i = 0; $i < $numOfFiles; $i++) {
