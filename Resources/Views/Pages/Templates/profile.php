@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="text-center">
-                <button class="mmd-button mt-5" type="button" onclick="location.href='<?= $button['href'] ?>'"><p class="my-3 mx-3" style=""><?= $button['name'] ?></p></button>
+                <button class="mmd-button mt-5" type="button" onclick="location.href='<?= $button['href'] ?>'"><p class="m-0"><?= $button['name'] ?></p></button>
             </div>
         </div>
     </div>
