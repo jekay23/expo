@@ -2,7 +2,7 @@
     <div class="col-12 col-lg-5">
         <div class="row">
             <div style="width: 12rem">
-                <img src="/uploads/photos/<?= $avatarLocation ?>" alt="Аватар пользвателя <?= $profileName ?>">
+                <img src="<?= $avatarLocation ?>" alt="Аватар пользвателя <?= $profileName ?>">
             </div>
             <div class="col d-flex flex-wrap align-content-center">
                 <h1 style="font-size: xx-large; font-weight: bold; margin-bottom: 0; width: 100%"><?= $profileName ?></h1>

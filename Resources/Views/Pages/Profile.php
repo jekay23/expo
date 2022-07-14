@@ -14,7 +14,11 @@ class Profile
         $varNames = null;
         if (isset($user)) {
             $profileName = $user['name'];
-            $avatarLocation = $user['avatarLocation'] ?? '/image/defaultAvatar.jpg';
+            if (isset($user['avatarLocation'])) {
+                $avatarLocation = '/uploads/photos/' . $user['avatarLocation'];
+            } else {
+                $avatarLocation = '/image/defaultAvatar.jpg';
+            }
             $pronoun = $user['pronoun'];
             $bio = $user['bio'];
             $numOfPhotos = $user['numOfPhotos'];
