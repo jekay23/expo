@@ -26,6 +26,10 @@ class Profile
             if (isset($requestList[1])) {
                 if ('edit' == $requestList[1] && $user['isProfileOwner'] = true) {
                     View::render('editProfile', $user);
+                } elseif ('change-avatar' == $requestList[1] && $user['isProfileOwner'] = true) {
+                    View::render('changeAvatar', $user);
+                } elseif ('change-password' == $requestList[1] && $user['isProfileOwner'] = true) {
+                    View::render('changePassword', $user);
                 } else {
                     View::render('404');
                 }

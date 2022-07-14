@@ -16,7 +16,7 @@
         </div>
         <p class="d-inline-flex"> </p>
     </div>
-    <button type="submit">
+    <button class="mmd-thin-button" type="submit">
         Зарегистрироваться
     </button>
     <p><a href="/sign-in">У меня есть профиль</a></p>

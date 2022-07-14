@@ -245,17 +245,17 @@ h2 {
     max-width: 30rem;
 }
 
-@media screen and (max-width: 463px) {
+@media screen and (max-width: 448px) {
     .mmd-sign-in > div > p {
         justify-content: center;
     }
 
-    .mmd-sign-in > div > .mmd-input-wrap {
+    .mmd-input-wrap {
         justify-content: center;
     }
 }
 
-.mmd-sign-in > div > .mmd-input-wrap > input, .mmd-select {
+.mmd-input-wrap > input, .mmd-select {
     height: 2.5rem;
     background-color: white;
     border-color: #54b686;
@@ -270,22 +270,22 @@ h2 {
     margin: 0;
 }
 
-.mmd-sign-in > div > .mmd-input-wrap > input {
+.mmd-input-wrap > input {
     width: 100%;
 }
 
-.mmd-select {
+.mmd-input-wrap > .mmd-select {
     width: 30%;
     max-width: 6.5rem;
     cursor: pointer;
     background-size: 1.25rem 1rem;
 }
 
-.mmd-sign-in > div > .mmd-input-wrap > input:focus, .mmd-select:focus {
+.mmd-input-wrap > input:focus, .mmd-select:focus {
     background-color: rgba(84, 182, 134, 0.34);
 }
 
-.mmd-sign-in > button {
+.mmd-thin-button {
     background-color: #54b686;
     color: white;
     border: none;
@@ -318,7 +318,7 @@ a {
     color: #54b686;
 }
 
-.mmd-profile > div > div > div > div > img {
+.mmd-profile > div > div > div > img {
     height: 8rem;
     width: 8rem;
     object-fit: cover;
@@ -327,11 +327,122 @@ a {
     margin: 1rem;
 }
 
-.mmd-profile > .row {
+.mmd-profile {
     align-items: baseline;
 }
 
-.mmd-profile > div > div > p {
+.mmd-profile > div > p {
     margin: 0 1rem;
     max-width: 43.5rem;
+}
+
+.mmd-edit-profile > form {
+    margin-bottom: .3rem;
+}
+
+.mmd-edit-profile > div > div > img {
+    height: 12rem;
+    width: 12rem;
+    object-fit: cover;
+    border: .5rem solid #54b686;
+    border-radius: 2rem;
+    margin: 1rem;
+}
+
+.mmd-edit-profile > form > div > .mmd-input-wrap {
+    width: 24rem;
+}
+
+.mmd-edit-profile > form > .row {
+    align-items: baseline;
+    justify-content: center;
+    margin: 0 0 .7rem 0;
+}
+
+.mmd-edit-profile > form > div > div > p {
+    margin-bottom: .25rem;
+    padding: 0;
+}
+
+@media screen and (max-width: 575px) {
+    .mmd-edit-profile > form > div > div > p {
+        margin-bottom: 0;
+    }
+    .mmd-edit-profile > form > div > div > .mmd-small-note {
+        margin-bottom: .5rem;
+    }
+}
+
+textarea {
+    height: 12rem;
+    background-color: white;
+    border-color: #54b686;
+    border-width: .19rem;
+    border-radius: 1.25rem;
+    border-style: solid;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    font-weight: bold;
+    font-size: larger;
+    padding: 0 .8rem;
+    margin: 0;
+    width: 100%;
+}
+
+.mmd-small-note {
+    font-size: smaller;
+    font-weight: bold;
+    color: #939292;
+    line-height: 1.2;
+    align-self: center;
+}
+
+.mmd-edit-profile > div > p {
+    margin-bottom: .25rem;
+}
+
+.mmd-sign-in > div > .mmd-edit-wrap {
+    min-width: 20rem;
+    width: 28vw;
+    max-width: 30rem;
+}
+
+@media screen and (max-width: 463px) {
+    .mmd-edit-wrap {
+        justify-content: center;
+    }
+}
+
+.mmd-edit-wrap > input, .mmd-select {
+    height: 2.5rem;
+    background-color: white;
+    border-color: #54b686;
+    border-width: .19rem;
+    border-radius: 1.25rem;
+    border-style: solid;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    font-weight: bold;
+    font-size: larger;
+    padding: 0 .8rem;
+    margin: 0;
+}
+
+.mmd-edit-wrap > input {
+    width: 100%;
+}
+
+.mmd-edit-wrap > .mmd-select {
+    cursor: pointer;
+    background-size: 1.25rem 1rem;
+}
+
+@media screen and (min-width: 576px) {
+    .mmd-edit-wrap > .mmd-select {
+        max-width: 6.5rem;
+    }
+}
+
+.mmd-edit-wrap > input:focus, .mmd-select:focus {
+    background-color: rgba(84, 182, 134, 0.34);
 }

@@ -165,7 +165,8 @@ class QueryBuilder
 
     public static function getProfileData(int $userID): array
     {
-        $query = QO::select()->table('Users')->columns('userID', 'name', 'pronoun', 'bio', 'contact', 'avatarLocation');
+        $query = QO::select()->table('Users');
+        $query->columns('userID', 'name', 'email', 'pronoun', 'bio', 'contact', 'avatarLocation');
         $query->where(['userID', $userID]);
 
         $user = self::executeQuery($query);
@@ -201,6 +202,25 @@ class QueryBuilder
 
         $query = QO::insert()->table('Photos')->columns('location', 'addedBy', 'altText');
         $query->values($location, $userID, "Фото пользователя $name");
+        self::executeQuery($query, false);
+    }
+
+    public static function updateProfileData(array $user)
+    {
+        $fields = ['name', 'email', 'pronoun', 'bio', 'contact'];
+        foreach ($fields as $field) {
+            if (isset($user[$field])) {
+                $query = QO::update()->table('Users')->columns($field)->values($user[$field]);
+                $query->where(['userID', $user['userID']]);
+                self::executeQuery($query, false);
+            }
+        }
+    }
+
+    public static function updateAvatar(int $userID, string $location)
+    {
+        $query = QO::update()->table('Users')->columns('avatarLocation')->values($location);
+        $query->where(['userID', $userID]);
         self::executeQuery($query, false);
     }
 

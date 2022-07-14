@@ -4,7 +4,7 @@
 <form class="container-fluid text-center mmd-sign-in" method="post" target="_self" action="/api/sign-in">
     <?php Expo\Resources\Views\Components\TextField::render('Email', ['name' => 'email']) ?>
     <?php Expo\Resources\Views\Components\TextField::render('Пароль', ['type' => 'password', 'name' => 'password']) ?>
-    <button type="submit">
+    <button class="mmd-thin-button" type="submit">
         Войти
     </button>
     <p><a href="/">Восстановить пароль</a></p>

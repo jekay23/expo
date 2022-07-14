@@ -26,6 +26,12 @@ class UserInputHandler
                 return [false, 'Неизвестное обращение'];
             }
         }
+        if (isset($post['bio'])) {
+            $post['bio'] = htmlspecialchars($post['bio']);
+        }
+        if (isset($post['contact'])) {
+            $post['contact'] = htmlspecialchars($post['contact']);
+        }
         return [true, null];
     }
 
