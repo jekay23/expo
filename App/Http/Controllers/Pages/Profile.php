@@ -31,7 +31,7 @@ class Profile
                 } elseif ('change-password' == $requestList[1] && $user['isProfileOwner'] = true) {
                     View::render('changePassword', $user);
                 } else {
-                    View::render('404');
+                    View::render('403');
                 }
             } else {
                 View::render('profile', $user, $user['name']);

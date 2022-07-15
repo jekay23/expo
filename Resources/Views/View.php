@@ -31,7 +31,7 @@ class View
         'exhibition' => 'selection'
     ];
 
-    private static array $staticPages = ['404', 'upload', 'signIn', 'signUp', 'contacts', 'license', 'changeAvatar'];
+    private static array $staticPages = ['404', '403', 'upload', 'signIn', 'signUp', 'contacts', 'license', 'changeAvatar'];
 
     private static array $titles = [
         'frontpage' => 'Выставка фотографов мехмата',
@@ -42,6 +42,7 @@ class View
         'signIn' => 'Вход',
         'signUp' => 'Регистрация',
         '404' => 'Страница не найдена',
+        '403' => 'Доступ запрещён',
         'upload' => 'Загрузка снимков',
         'editProfile' => 'Настройки профиля',
         'changeAvatar' => 'Смена аватара',
