@@ -15,21 +15,21 @@ class Announcement
             $validUriQuery = UserInputHandler::processUriQuery($uriQuery);
             if ($validUriQuery) {
                 $message = '';
-                $color = '#939292';
+                $bgClass = 'bg-info';
                 if (isset($uriQuery['message'])) {
                     $message = $uriQuery['message'];
                 }
                 if (isset($uriQuery['color'])) {
                     switch ($uriQuery['color']) {
                         case 'red':
-                            $color = '#ff8f81';
+                            $bgClass = 'bg-warning';
                             break;
                         case 'green':
-                            $color = '#BCDDCD';
+                            $bgClass = 'bg-success';
                             break;
                     }
                 }
-                View::requireTemplate('announcementBar', 'Component', compact('message', 'color'));
+                View::requireTemplate('announcementBar', 'Component', compact('message', 'bgClass'));
             }
         }
     }
