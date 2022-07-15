@@ -61,20 +61,22 @@ class Authentication
     /**
      * @throws Exception
      */
-    private static function signIn(array $credentials): array
+    private static function signIn(array $credentials, bool $saveCookie = true): array
     {
         if (isset($credentials['email'], $credentials['passwordHash'])) {
             list($emailInDB, $userID) = QB::checkEmailInDB($credentials['email']);
             if ($emailInDB) {
                 list($authenticated, $error) = QB::authenticate($userID, $credentials['passwordHash']);
                 if ($authenticated) {
-                    self::saveHashToCookie($userID);
+                    if ($saveCookie) {
+                        self::saveHashToCookie($userID);
+                    }
                     return [true, $userID];
                 } else {
                     return [false, $error];
                 }
             } else {
-                return [false, 'Email не зарегистрирован. Пожалуйста, воспользуйтесь формой регистрации.'];
+                return [false, 'Неверная комбинация email и пароля'];
             }
         } else {
             throw new Exception('Insufficient information for sign-in.');
@@ -114,5 +116,82 @@ class Authentication
     {
         list($emailInDB,) = QB::checkEmailInDB($email);
         return !$emailInDB;
+    }
+
+    public static function changePasswordEmail()
+    {
+        $post = $_POST;
+        $userID = Authentication::getUserIdFromCookie();
+        list($postStatus, $error) = UserInputHandler::processPost($post);
+        if (!$postStatus) {
+            $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
+            header("Location: /profile/$userID/change-password-email?$uriQuery");
+            exit;
+        }
+        list($status, $user) = QB::getProfileData($userID);
+        if (!$status) {
+            $uriQuery = http_build_query(['message' => 'Пользователь не существует', 'color' => 'red']);
+            header("Location: /?$uriQuery");
+            exit;
+        }
+        $oldEmail = $user['email'];
+        $oldHash = HashHandler::getHash('password', $post['oldPassword'], $oldEmail);
+        list($status, $error) = self::signIn(['email' => $oldEmail, 'passwordHash' => $oldHash], false);
+        if (!$status) {
+            $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
+            header("Location: /profile/$userID/change-password-email?$uriQuery");
+            exit;
+        }
+        if ($oldEmail == $post['email']) {
+            if (empty($post['newPassword']) && empty($post['newPasswordAgain'])) {
+                $uriQuery = http_build_query(['message' => 'Вы ничего не изменили', 'color' => 'red']);
+                header("Location: /profile/$userID/change-password-email?$uriQuery");
+                exit;
+            } elseif ($post['newPassword'] == $post['newPasswordAgain']) {
+                $newHash = HashHandler::getHash('password', $post['newPassword'], $post['email']);
+                $user = [
+                    'userID' => $userID,
+                    'passwordHash' => $newHash
+                ];
+                QB::updateProfileData($user);
+                $uriQuery = http_build_query(['message' => 'Пароль изменён', 'color' => 'green']);
+                header("Location: /profile/$userID?$uriQuery");
+                exit;
+            } else {
+                $uriQuery = http_build_query(['message' => 'Пароли не совпадают', 'color' => 'red']);
+                header("Location: /profile/$userID/change-password-email?$uriQuery");
+                exit;
+            }
+        } elseif (QB::checkEmailInDB($post['email'])) {
+            $uriQuery = http_build_query(['message' => 'Профиль с данным email уже существует', 'color' => 'red']);
+            header("Location: /profile/$userID/change-password-email?$uriQuery");
+            exit;
+        } elseif (empty($post['newPassword']) && empty($post['newPasswordAgain'])) {
+            $newHash = HashHandler::getHash('password', $post['oldPassword'], $post['email']);
+            $user = [
+                'userID' => $userID,
+                'email' => $post['email'],
+                'passwordHash' => $newHash
+            ];
+            QB::updateProfileData($user);
+            $uriQuery = http_build_query(['message' => 'Email изменён', 'color' => 'green']);
+            header("Location: /profile/$userID?$uriQuery");
+            exit;
+        } elseif ($post['newPassword'] == $post['newPasswordAgain']) {
+            $newHash = HashHandler::getHash('password', $post['newPassword'], $post['email']);
+            $user = [
+                'userID' => $userID,
+                'email' => $post['email'],
+                'passwordHash' => $newHash
+            ];
+            QB::updateProfileData($user);
+            $uriQuery = http_build_query(['message' => 'Email и пароль изменены', 'color' => 'green']);
+            header("Location: /profile/$userID?$uriQuery");
+            exit;
+        } else {
+            $uriQuery = http_build_query(['message' => 'Пароли не совпадают', 'color' => 'red']);
+            header("Location: /profile/$userID/change-password-email?$uriQuery");
+            exit;
+        }
     }
 }

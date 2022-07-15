@@ -371,9 +371,6 @@ a {
 }
 
 @media screen and (max-width: 575px) {
-    .mmd-edit-profile > form > div > div > p {
-        margin-bottom: 0;
-    }
     .mmd-edit-profile > form > div > div > .mmd-small-note {
         margin-bottom: .5rem;
     }

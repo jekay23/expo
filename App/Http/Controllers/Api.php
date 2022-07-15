@@ -26,8 +26,8 @@ class Api
             case 'change-avatar':
                 require self::$prefix . 'changeAvatar.php';
                 break;
-            case 'change-password':
-                require self::$prefix . 'changePassword.php';
+            case 'change-password-email':
+                Authentication::changePasswordEmail();
                 break;
             case 'sign-out':
                 Authentication::signOut();

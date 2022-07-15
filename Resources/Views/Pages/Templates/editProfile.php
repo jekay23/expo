@@ -18,7 +18,7 @@
         </div>
         <div class="row justify-content-center justify-content-sm-start">
             <div class="col-12 col-sm-2 text-center text-sm-end mt-2 px-0 align-self-start"><p>Email</p></div>
-            <div class="col-10 col-sm-8 mmd-edit-wrap p-0 px-sm-3"><input name="email" value="<?= $email ?>"></div>
+            <div class="col-10 col-sm-8 mmd-edit-wrap p-0 px-sm-3"><input class="text-info" name="email" value="<?= $email ?>" disabled></div>
         </div>
         <div class="row justify-content-center justify-content-sm-start">
             <div class="col-12 col-sm-2 text-center text-sm-end mt-2 px-0 align-self-start"><p>Обращение</p></div>
@@ -30,7 +30,7 @@
                 </select>
             </div>
             <div class="col-12 col-sm-5 text-center text-sm-end pt-4 pb-3 py-sm-0 pe-sm-3">
-                <a href="/profile/<?= $userID ?>">Изменить пароль</a>
+                <a href="/profile/<?= $userID ?>/change-password-email">Изменить пароль и email</a>
             </div>
         </div>
         <div class="row justify-content-center justify-content-sm-start">

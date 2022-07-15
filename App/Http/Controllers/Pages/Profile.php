@@ -32,8 +32,8 @@ class Profile
                         case 'change-avatar':
                             View::render('changeAvatar', $user);
                             break;
-                        case 'change-password':
-                            View::render('changePassword', $user);
+                        case 'change-password-email':
+                            View::render('changePasswordEmail', $user);
                             break;
                         default:
                             View::render('404');

@@ -212,7 +212,7 @@ class QueryBuilder
 
     public static function updateProfileData(array $user)
     {
-        $fields = ['name', 'email', 'pronoun', 'bio', 'contact'];
+        $fields = ['name', 'pronoun', 'bio', 'contact', 'email', 'passwordHash'];
         foreach ($fields as $field) {
             if (isset($user[$field])) {
                 $query = QO::update()->table('Users')->columns($field)->values($user[$field]);

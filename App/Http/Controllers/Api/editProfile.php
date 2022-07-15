@@ -11,7 +11,6 @@ if (!$postStatus) {
 $user = [
     'userID' => $userID,
     'name' => $post['name'],
-    'email' => $post['email'],
     'pronoun' => $post['pronoun'],
     'bio' => $post['bio'],
     'contact' => $post['contact']
