@@ -14,7 +14,7 @@ class EditProfile
             $userID = $user['userID'];
             $profileName = $user['name'];
             $email = $user['email'];
-            $avatarLocation = $user['avatarLocation'] ?? '/image/defaultAvatar.jpg';
+            $avatarLocation = $user['avatarLocation'];
             $pronounSelector = ['none' => '', 'he' => '', 'she' => ''];
             $pronounSelector[$user['pronoun']] = 'selected';
             $bio = $user['bio'];

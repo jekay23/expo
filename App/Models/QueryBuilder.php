@@ -188,6 +188,11 @@ class QueryBuilder
         if (isset($user[0])) {
             $user[0]['numOfPhotos'] = $numOfPhotos;
             $user[0]['photos'] = $photos;
+            if (isset($user[0]['avatarLocation'])) {
+                $user[0]['avatarLocation'] = '/uploads/photos/' . $user[0]['avatarLocation'];
+            } else {
+                $user[0]['avatarLocation'] = '/image/defaultAvatar.jpg';
+            }
             return [true, $user[0]];
         } else {
             return [false, null];

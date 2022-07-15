@@ -81,6 +81,19 @@ class Authentication
         }
     }
 
+    public static function signOut()
+    {
+        if (isset($_COOKIE['authenticatedUserIDHash'])) {
+            unset($_COOKIE['authenticatedUserIDHash']);
+            setcookie('authenticatedUserIDHash', '', 1, '/');
+        }
+        if (isset($_COOKIE['userID'])) {
+            unset($_COOKIE['userID']);
+            setcookie('userID', '', 1, '/');
+        }
+        header("Location: /");
+    }
+
     private static function saveHashToCookie(int $userID)
     {
         setcookie('authenticatedUserIDHash', HashHandler::getHash('id', $userID), time() + 10 * 24 * 3600, '/');

@@ -24,12 +24,21 @@ class Profile
                 $user['isProfileOwner'] = false;
             }
             if (isset($requestList[1])) {
-                if ('edit' == $requestList[1] && $user['isProfileOwner'] = true) {
-                    View::render('editProfile', $user);
-                } elseif ('change-avatar' == $requestList[1] && $user['isProfileOwner'] = true) {
-                    View::render('changeAvatar', $user);
-                } elseif ('change-password' == $requestList[1] && $user['isProfileOwner'] = true) {
-                    View::render('changePassword', $user);
+                if ($user['isProfileOwner']) {
+                    switch ($requestList[1]) {
+                        case 'edit':
+                            View::render('editProfile', $user);
+                            break;
+                        case 'change-avatar':
+                            View::render('changeAvatar', $user);
+                            break;
+                        case 'change-password':
+                            View::render('changePassword', $user);
+                            break;
+                        default:
+                            View::render('404');
+                            break;
+                    }
                 } else {
                     View::render('403');
                 }

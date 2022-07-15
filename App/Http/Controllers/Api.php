@@ -2,6 +2,8 @@
 
 namespace Expo\App\Http\Controllers;
 
+use Expo\App\Http\Controllers\Api\Authentication;
+
 class Api
 {
     private static $prefix = 'Api/';
@@ -10,10 +12,10 @@ class Api
     {
         switch ($requestList[0]) {
             case 'sign-in':
-                require self::$prefix . 'signIn.php';
+                Authentication::authenticate('sign-in');
                 break;
             case 'sign-up':
-                require self::$prefix . 'signUp.php';
+                Authentication::authenticate('sign-up');
                 break;
             case 'upload':
                 require self::$prefix . 'upload.php';
@@ -26,6 +28,9 @@ class Api
                 break;
             case 'change-password':
                 require self::$prefix . 'changePassword.php';
+                break;
+            case 'sign-out':
+                Authentication::signOut();
                 break;
         }
     }

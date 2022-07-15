@@ -1,11 +1,14 @@
 <div class="row pt-3 justify-content-center mmd-edit-profile">
     <div class="col-12 col-lg-3 text-center">
         <div>
-            <img src="/uploads/photos/<?= $avatarLocation ?>" alt="Аватар пользвателя <?= $profileName ?>">
+            <img src="<?= $avatarLocation ?>" alt="Аватар пользвателя <?= $profileName ?>">
         </div>
         <p><a href="/profile/<?= $userID ?>/change-avatar">Обновить фото профиля</a></p>
         <div>
             <p class="mmd-small-note">обратите внимание, что на данный момент сайт не поддерживает обрезку фотографий</p>
+        </div>
+        <div class="justify-content-center">
+            <button class="mmd-thin-button mt-0 bg-info" type="button" onclick="location.href='/api/sign-out'">Выйти</button>
         </div>
     </div>
     <form class="mt-3 col-12 col-lg-7" method="post" target="_self" action="/api/edit-profile">
