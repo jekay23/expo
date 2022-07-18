@@ -462,7 +462,7 @@ textarea {
     text-decoration: none;
 }
 
-.mmd-photo-page > div > div > div > a > img {
+.mmd-photo-author > a > img {
     height: 5rem;
     width: 5rem;
     object-fit: cover;
@@ -470,8 +470,18 @@ textarea {
     border-radius: 1rem;
 }
 
-.mmd-photo-page > div > div > div > a > p {
+.mmd-photo-author > a > p {
     margin: 0;
     font-weight: bold;
     font-size: larger;
+}
+.mmd-photo-like > a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.mmd-photo-like > a > p {
+    margin: 0;
+    padding-top: .2rem;
+    padding-left: 1rem;
 }

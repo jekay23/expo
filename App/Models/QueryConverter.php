@@ -69,4 +69,11 @@ class QueryConverter
         $queryString .= ';';
         return $queryString;
     }
+
+    public static function composeDelete(string $table, string $where): string
+    {
+        $queryString = "DELETE FROM $table WHERE $where";
+        $queryString .= ';';
+        return $queryString;
+    }
 }

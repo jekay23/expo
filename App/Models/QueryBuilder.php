@@ -2,6 +2,7 @@
 
 namespace Expo\App\Models;
 
+use Expo\App\Http\Controllers\Api\Authentication;
 use Expo\App\Models\QueryObject as QO;
 
 class QueryBuilder
@@ -49,7 +50,7 @@ class QueryBuilder
             throw new \Exception('Unable to connect to server. Please try again later or contact support.');
         }
 
-        $query = QO::select()->table('Photos')->columns('location', 'altText', 'addedBy');
+        $query = QO::select()->table('Photos')->columns('photoID', 'location', 'altText', 'addedBy');
         $query->where(['photoID', $photoID]);
 
         $photos = self::executeQuery($query);
@@ -64,6 +65,23 @@ class QueryBuilder
             $photo['authorAvatarLocation'] = '/uploads/photos/' . $users[0]['avatarLocation'];
         } else {
             $photo['authorAvatarLocation'] = '/image/defaultAvatar.jpg';
+        }
+
+        $userID = Authentication::getUserIdFromCookie();
+        switch ($userID) {
+            case 0:
+                $photo['likeStatus'] = 'notSignedIn';
+                break;
+            case $photo['authorID']:
+                $photo['likeStatus'] = 'author';
+                break;
+            default:
+                $likeSet = self::checkLike($userID, $photoID);
+                if ($likeSet) {
+                    $photo['likeStatus'] = 'liked';
+                } else {
+                    $photo['likeStatus'] = 'notLiked';
+                }
         }
 
         return [true, $photo];
@@ -268,6 +286,32 @@ class QueryBuilder
     {
         $query = QO::update()->table('Users')->columns('avatarLocation')->values($location);
         $query->where(['userID', $userID]);
+        self::executeQuery($query, false);
+    }
+
+    public static function checkLike($userID, $photoID): bool
+    {
+        $query = QO::select()->table('Likes')->columns('likeID')->where(['userID', $userID], ['photoID', $photoID]);
+        $likes = self::executeQuery($query);
+
+        if (1 == count($likes)) {
+            return true;
+        } elseif (0 == count($likes)) {
+            return false;
+        } else {
+            throw new \Exception("More than one like on photo $photoID by user $userID");
+        }
+    }
+
+    public static function addLike($userID, $photoID)
+    {
+        $query = QO::insert()->table('Likes')->columns('userID', 'photoID')->values($userID, $photoID);
+        self::executeQuery($query, false);
+    }
+
+    public static function removeLike($userID, $photoID)
+    {
+        $query = QO::delete()->table('Likes')->where(['userID', $userID], ['photoID', $photoID]);
         self::executeQuery($query, false);
     }
 

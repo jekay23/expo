@@ -32,6 +32,12 @@ class Api
             case 'sign-out':
                 Authentication::signOut();
                 break;
+            case 'like':
+                require self::$prefix . 'addLike.php';
+                break;
+            case 'dislike':
+                require self::$prefix . 'removeLike.php';
+                break;
         }
     }
 }

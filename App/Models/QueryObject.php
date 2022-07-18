@@ -62,6 +62,11 @@ class QueryObject
                 $this->values,
                 $this->where
             );
+        } elseif ('delete' == $this->action) {
+            $this->query = QC::composeDelete(
+                $this->table,
+                $this->where
+            );
         }
         return $this->query;
     }
@@ -79,6 +84,11 @@ class QueryObject
     public static function update(): QueryObject
     {
         return new QueryObject('update');
+    }
+
+    public static function delete(): QueryObject
+    {
+        return new QueryObject('delete');
     }
 
     public static function count(string $column = '*', string $alias = null): string
