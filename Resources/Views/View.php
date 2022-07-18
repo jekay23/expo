@@ -31,7 +31,7 @@ class View
         'exhibition' => 'selection'
     ];
 
-    private static array $staticPages = ['404', '403', 'upload', 'signIn', 'signUp',
+    private static array $staticPages = ['404', '403', '503', 'upload', 'signIn', 'signUp',
                                          'contacts', 'license', 'changeAvatar'];
 
     private static array $titles = [

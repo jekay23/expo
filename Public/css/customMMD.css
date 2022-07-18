@@ -80,6 +80,7 @@ hr {
     opacity: 1;
     border-radius: .25rem;
     margin-bottom: 0;
+    background-color: transparent;
 }
 
 h2 {
