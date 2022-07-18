@@ -52,8 +52,21 @@ class QueryBuilder
         $query = QO::select()->table('Compilations')->columns('name', 'description');
         $query->where(['compilationID', $compilationID]);
 
-        $exhibitions = self::executeQuery($query);
-        return [true, $exhibitions[0]];
+        $compilations = self::executeQuery($query);
+        return [true, $compilations[0]];
+    }
+
+    public static function getCurrentExhibition(): array
+    {
+        if (!DataBaseConnection::makeSureConnectionIsOpen()) {
+            return [false, null];
+        }
+
+        $query = QO::select()->table('Compilations')->columns('compilationID');
+        $query->orderBy(['exhibitNumber', 'DESC'])->limit(1);
+
+        $compilations = self::executeQuery($query);
+        return [true, $compilations[0]['compilationID']];
     }
 
     /**

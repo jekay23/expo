@@ -28,7 +28,9 @@ class View
         'signIn' => 'profile',
         'signUp' => 'profile',
         'editProfile' => 'profile',
-        'exhibition' => 'selection'
+        'changeAvatar' => 'profile',
+        'changePasswordEmail' => 'profile',
+        'compilation' => 'selection'
     ];
 
     private static array $staticPages = ['404', '403', '503', 'upload', 'signIn', 'signUp',
