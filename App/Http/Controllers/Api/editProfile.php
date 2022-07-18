@@ -16,3 +16,5 @@ $user = [
     'contact' => $post['contact']
 ];
 \Expo\App\Models\QueryBuilder::updateProfileData($user);
+$uriQuery = http_build_query(['message' => 'Данные профиля обновлены', 'color' => 'green']);
+header("Location: /profile/$userID?$uriQuery");

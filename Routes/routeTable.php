@@ -17,7 +17,7 @@ Router::saveCallback('photo', function (array $requestList, array $requestQuery)
 
 Router::saveCallback('compilation', function (array $requestList, array $requestQuery) {
     Controllers\Pages\Compilation::prepare($requestList, $requestQuery);
-}, true);
+}, false);
 
 Router::saveCallback('exhibition', function (array $requestList, array $requestQuery) {
     Controllers\Pages\Exhibition::prepare($requestList, $requestQuery);

@@ -14,11 +14,15 @@ class Exhibition
 {
     public static function prepare(array $requestList, array $requestQuery)
     {
-        list($status, $compilationID) = QueryBuilder::getCurrentExhibition();
-        if ($status) {
-            Compilation::prepare([$compilationID], []);
+        if (!empty($requestList)) {
+            View::render('404');
         } else {
-            View::render('503');
+            list($status, $compilationID) = QueryBuilder::getCurrentExhibition();
+            if ($status) {
+                Compilation::prepare([$compilationID], $requestQuery);
+            } else {
+                View::render('503');
+            }
         }
     }
 }
