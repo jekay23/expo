@@ -4,7 +4,7 @@
     <div class="carousel-inner">
         <?php foreach ($photos as $photo) : ?>
             <div class="carousel-item <?= $photo['carouselStatus'] ?> text-center">
-                <img src=<?= '/uploads/photos/' . $photo['location'] ?> alt="<?= $photo['altText'] ?>">
+                <a href="/photo/<?= $photo['photoID'] ?>"><img src=<?= '/uploads/photos/' . $photo['location'] ?> alt="<?= $photo['altText'] ?>"></a>
             </div>
         <?php endforeach; ?>
     </div>

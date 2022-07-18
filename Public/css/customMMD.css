@@ -126,7 +126,7 @@ h2 {
     height: 11rem;
 }
 
-.scrolling-wrapper > img {
+.scrolling-wrapper > a > img {
     height: 10rem;
     margin: .5rem;
 }
@@ -142,7 +142,7 @@ h2 {
     white-space: pre-wrap;
 }
 
-.mmd-exhibition > .one-of-stack > img {
+.mmd-exhibition > .one-of-stack > a > img {
     height: 10rem;
     width: 15rem;
     object-fit: cover;
@@ -153,7 +153,7 @@ h2 {
     padding: 0;
 }
 
-.small-grid-triple > img {
+.small-grid-triple > a >img {
     height: 10.33vw;
     width: 15.5vw;
     object-fit: cover;
@@ -162,7 +162,7 @@ h2 {
 }
 
 @media screen and (max-width: 960px) {
-    .small-grid-triple > img {
+    .small-grid-triple > a > img {
         height: 20vw;
         width: 30vw;
         object-fit: cover;
@@ -189,7 +189,7 @@ h2 {
     font-size: smaller;
 }
 
-.carousel-item > img {
+.carousel-item > a >img {
     height: 28rem;
     width: 42rem;
     object-fit: cover;
@@ -449,4 +449,29 @@ textarea {
 
 .mmd-edit-wrap > input:focus, .mmd-select:focus {
     background-color: rgba(84, 182, 134, 0.34);
+}
+
+.mmd-photo-page > div > img {
+    max-width: 90%;
+    max-height: 34rem;
+    margin: 1rem;
+}
+
+.mmd-photo-page > div > div > div > a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.mmd-photo-page > div > div > div > a > img {
+    height: 5rem;
+    width: 5rem;
+    object-fit: cover;
+    border: .4rem solid #54b686;
+    border-radius: 1rem;
+}
+
+.mmd-photo-page > div > div > div > a > p {
+    margin: 0;
+    font-weight: bold;
+    font-size: larger;
 }

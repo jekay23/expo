@@ -7,16 +7,20 @@
 
 namespace Expo\App\Http\Controllers\Pages;
 
+use Expo\App\Models\QueryBuilder;
 use Expo\Resources\Views\View;
 
 class Photo
 {
     public static function prepare(array $requestList, array $requestQuery)
     {
-        if ('1' === $requestList[0]) {
-            View::render('photo');
+        $photoID = $requestList[0];
+
+        list($status, $photo) = QueryBuilder::getPhotoDetails($photoID);
+        if (!$status) {
+            View::render('503');
         } else {
-            View::render('404');
+            View::render('photo', $photo, 'Фото пользователя ' . $photo['authorName']);
         }
     }
 }

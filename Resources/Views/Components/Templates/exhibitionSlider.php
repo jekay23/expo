@@ -7,7 +7,7 @@
         <?php foreach ($rows as $row) : ?>
             <div class="one-of-stack d-flex justify-content-evenly">
                 <?php foreach ($row as $photo) : ?>
-                    <img src= <?= '/uploads/photos/' . $photo['location'] ?> alt="<?= $photo['altText'] ?>">
+                    <a href="/photo/<?= $photo['photoID'] ?>"><img src= <?= '/uploads/photos/' . $photo['location'] ?> alt="<?= $photo['altText'] ?>"></a>
                 <?php endforeach; ?>
             </div>
         <?php endforeach; ?>

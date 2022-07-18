@@ -6,8 +6,14 @@ use Expo\Resources\Views\View;
 
 class Photo
 {
-    public static function render()
+    public static function render(bool &$stickFooter, $photo)
     {
-        View::requireTemplate('photo', 'Page');
+        $varNames = null;
+        $stickFooter = true;
+
+        if (isset($photo)) {
+            $varNames = ['photo'];
+            View::requireTemplate('photo', 'Page', compact($varNames));
+        }
     }
 }

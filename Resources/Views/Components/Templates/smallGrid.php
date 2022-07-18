@@ -4,7 +4,7 @@
     <?php foreach ($blocks as $block) : ?>
         <div class="small-grid-triple d-inline-flex">
             <?php foreach ($block as $photo) : ?>
-                <img src="<?= '/uploads/photos/' . $photo['location'] ?>" alt="<?= $photo['altText'] ?>">
+                <a href="/photo/<?= $photo['photoID'] ?>"><img src="<?= '/uploads/photos/' . $photo['location'] ?>" alt="<?= $photo['altText'] ?>"></a>
             <?php endforeach; ?>
         </div>
     <?php endforeach; ?>

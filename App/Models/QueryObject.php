@@ -143,6 +143,11 @@ class QueryObject
             }
         }
         if (!empty($conditions)) {
+            foreach ($conditions as $condition) {
+                if (false !== $i = array_search($condition, $this->columns)) {
+                    $this->columns[$i] = 'TL' . $this->numOfJoins . '.' . $this->columns[$i];
+                }
+            }
             if (1 == count($conditions)) {
                 $conditions[1] = $conditions[0];
             }

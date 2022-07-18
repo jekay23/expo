@@ -15,7 +15,7 @@ class QueryBuilder
             return [false, null];
         }
 
-        $query = QO::select()->table('Photos')->columns('location', 'altText');
+        $query = QO::select()->table('Photos')->columns('photoID', 'location', 'altText');
 
         switch ($type) {
             case 'latest':
@@ -38,6 +38,35 @@ class QueryBuilder
 
         $photos = self::executeQuery($query);
         return [true, $photos];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public static function getPhotoDetails(int $photoID): array
+    {
+        if (!DataBaseConnection::makeSureConnectionIsOpen()) {
+            throw new \Exception('Unable to connect to server. Please try again later or contact support.');
+        }
+
+        $query = QO::select()->table('Photos')->columns('location', 'altText', 'addedBy');
+        $query->where(['photoID', $photoID]);
+
+        $photos = self::executeQuery($query);
+        $photo = $photos[0];
+
+        $query = QO::select()->table('Users')->columns('name', 'avatarLocation')->where(['userID', $photo['addedBy']]);
+        $users = self::executeQuery($query);
+        $photo['authorID'] = $photo['addedBy'];
+        unset($photo['addedBy']);
+        $photo['authorName'] = $users[0]['name'];
+        if (isset($users[0]['avatarLocation'])) {
+            $photo['authorAvatarLocation'] = '/uploads/photos/' . $users[0]['avatarLocation'];
+        } else {
+            $photo['authorAvatarLocation'] = '/image/defaultAvatar.jpg';
+        }
+
+        return [true, $photo];
     }
 
     /**
@@ -193,7 +222,7 @@ class QueryBuilder
         $result = self::executeQuery($query);
         $numOfPhotos = $result[0]['numOfPhotos'];
 
-        $query = QO::select()->table('Photos')->columns('location, altText')->where(['addedBy', $userID]);
+        $query = QO::select()->table('Photos')->columns('photoID', 'location, altText')->where(['addedBy', $userID]);
         $query->orderBy(['uploadTime', 'DESC'])->limit(24);
 
         $photos = self::executeQuery($query);
