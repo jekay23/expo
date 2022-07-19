@@ -1,3 +1,4 @@
+<?php use Expo\Resources\Views\Components\TextField; ?>
 <div class="row pt-3 justify-content-center mmd-edit-profile">
     <div class="col-12 col-lg-3 text-center">
         <div>
@@ -12,14 +13,8 @@
         </div>
     </div>
     <form class="mt-3 col-12 col-lg-7" method="post" target="_self" action="/api/edit-profile">
-        <div class="row justify-content-center justify-content-sm-start">
-            <div class="col-12 col-sm-2 text-center text-sm-end mt-2 px-0 align-self-start"><p>Имя</p></div>
-            <div class="col-10 col-sm-8 mmd-edit-wrap p-0 px-sm-3"><input name="name" value="<?= $profileName ?>"></div>
-        </div>
-        <div class="row justify-content-center justify-content-sm-start">
-            <div class="col-12 col-sm-2 text-center text-sm-end mt-2 px-0 align-self-start"><p>Email</p></div>
-            <div class="col-10 col-sm-8 mmd-edit-wrap p-0 px-sm-3"><input class="text-info" name="email" value="<?= $email ?>" disabled></div>
-        </div>
+        <?php TextField::render('editProfile', 'Имя', ['name' => 'name', 'value' => $profileName]); ?>
+        <?php TextField::render('editProfile', 'Email', ['class' => 'text-info', 'name' => 'email', 'value' => $email, 'disabled' => true]); ?>
         <div class="row justify-content-center justify-content-sm-start">
             <div class="col-12 col-sm-2 text-center text-sm-end mt-2 px-0 align-self-start"><p>Обращение</p></div>
             <div class="col-3 p-0 ps-sm-3 mmd-edit-wrap">

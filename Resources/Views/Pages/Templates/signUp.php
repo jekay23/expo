@@ -2,9 +2,9 @@
     <h1><strong>Зарегистрируйтесь</strong></h1>
 </div>
 <form class="container-fluid text-center mmd-sign-in" method="post" target="_self" action="/api/sign-up">
-    <?php Expo\Resources\Views\Components\TextField::render('Email', ['name' => 'email']) ?>
-    <?php Expo\Resources\Views\Components\TextField::render('Имя', ['name' => 'name']) ?>
-    <?php Expo\Resources\Views\Components\TextField::render('Пароль', ['type' => 'password', 'name' => 'password']) ?>
+    <?php Expo\Resources\Views\Components\TextField::render('signIn', 'Email', ['name' => 'email', 'required' => true]) ?>
+    <?php Expo\Resources\Views\Components\TextField::render('signIn', 'Имя', ['name' => 'name', 'required' => true]) ?>
+    <?php Expo\Resources\Views\Components\TextField::render('signIn', 'Пароль', ['type' => 'password', 'name' => 'password', 'required' => true]) ?>
     <div class="row">
         <p class="d-inline-flex">Обращение</p>
         <div class="d-inline-flex text-start mmd-input-wrap">
