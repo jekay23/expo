@@ -4,6 +4,7 @@ namespace Expo\App\Http\Controllers\Api;
 
 use Expo\App\Http\Controllers\HashHandler;
 use Expo\App\Models\QueryBuilder;
+use Expo\App\Models\Users;
 
 $userID = Authentication::getUserIdFromCookie();
 if ('' === $_FILES['file']['name']) {
@@ -33,7 +34,7 @@ if (0 === $file['error']) {
         __DIR__ . '/../../../../Public/uploads/photos/' . $filename
     );
     if ($moveStatus) {
-        QueryBuilder::updateAvatar($userID, $filename);
+        Users::updateAvatar($userID, $filename);
     }
 } else {
     $messageEndings = [

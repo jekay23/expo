@@ -5,6 +5,7 @@ namespace Expo\App\Http\Controllers\Api;
 use Exception;
 use Expo\App\Http\Controllers\HashHandler;
 use Expo\App\Models\QueryBuilder as QB;
+use Expo\App\Models\Users;
 
 class Authentication
 {
@@ -43,7 +44,7 @@ class Authentication
         if (isset($credentials['email'], $credentials['name'], $credentials['passwordHash'])) {
             $emailIsNew = self::checkEmailIsNew($credentials['email']);
             if ($emailIsNew) {
-                list($userCreated, $userID) = QB::createUser($credentials);
+                list($userCreated, $userID) = Users::createUser($credentials);
                 if ($userCreated) {
                     self::saveHashToCookie($userID);
                     return [true, $userID];
@@ -64,9 +65,9 @@ class Authentication
     private static function signIn(array $credentials, bool $saveCookie = true): array
     {
         if (isset($credentials['email'], $credentials['passwordHash'])) {
-            list($emailInDB, $userID) = QB::checkEmailInDB($credentials['email']);
+            list($emailInDB, $userID) = Users::checkEmailInDB($credentials['email']);
             if ($emailInDB) {
-                list($authenticated, $error) = QB::authenticate($userID, $credentials['passwordHash']);
+                list($authenticated, $error) = Users::authenticate($userID, $credentials['passwordHash']);
                 if ($authenticated) {
                     if ($saveCookie) {
                         self::saveHashToCookie($userID);
@@ -114,7 +115,7 @@ class Authentication
 
     private static function checkEmailIsNew(string $email): bool
     {
-        list($emailInDB,) = QB::checkEmailInDB($email);
+        list($emailInDB,) = Users::checkEmailInDB($email);
         return !$emailInDB;
     }
 
@@ -153,7 +154,7 @@ class Authentication
                     'userID' => $userID,
                     'passwordHash' => $newHash
                 ];
-                QB::updateProfileData($user);
+                Users::updateProfileData($user);
                 $uriQuery = http_build_query(['message' => 'Пароль изменён', 'color' => 'green']);
                 header("Location: /profile/$userID?$uriQuery");
                 exit;
@@ -162,7 +163,7 @@ class Authentication
                 header("Location: /profile/$userID/change-password-email?$uriQuery");
                 exit;
             }
-        } elseif (QB::checkEmailInDB($post['email'])) {
+        } elseif (Users::checkEmailInDB($post['email'])) {
             $uriQuery = http_build_query(['message' => 'Профиль с данным email уже существует', 'color' => 'red']);
             header("Location: /profile/$userID/change-password-email?$uriQuery");
             exit;
@@ -173,7 +174,7 @@ class Authentication
                 'email' => $post['email'],
                 'passwordHash' => $newHash
             ];
-            QB::updateProfileData($user);
+            Users::updateProfileData($user);
             $uriQuery = http_build_query(['message' => 'Email изменён', 'color' => 'green']);
             header("Location: /profile/$userID?$uriQuery");
             exit;
@@ -184,7 +185,7 @@ class Authentication
                 'email' => $post['email'],
                 'passwordHash' => $newHash
             ];
-            QB::updateProfileData($user);
+            Users::updateProfileData($user);
             $uriQuery = http_build_query(['message' => 'Email и пароль изменены', 'color' => 'green']);
             header("Location: /profile/$userID?$uriQuery");
             exit;

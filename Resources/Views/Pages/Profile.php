@@ -24,7 +24,7 @@ class Profile
             $numOfLikes = 0;
             $button = $user['isProfileOwner'] ? [
                 'name' => 'Загрузить фотографии',
-                'href' => 'http://' . $_SERVER['HTTP_HOST'] . '/upload'
+                'href' => 'onclick="location.href=' . "'" . 'http://' . $_SERVER['HTTP_HOST'] . '/upload' . "'" . '"'
             ] : [
                 'name' => 'Договориться о фотосессии',
                 'href' => 'http://' . $_SERVER['HTTP_HOST'] . '/profile/' . $user['userID'] . '#contact'

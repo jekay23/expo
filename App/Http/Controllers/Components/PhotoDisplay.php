@@ -2,7 +2,7 @@
 
 namespace Expo\App\Http\Controllers\Components;
 
-use Expo\App\Models\QueryBuilder;
+use Expo\App\Models\Photos;
 use Expo\Resources\Views;
 
 class PhotoDisplay
@@ -19,7 +19,7 @@ class PhotoDisplay
         } else {
             $args = null;
         }
-        list($status, $photos) = QueryBuilder::getPhotos($dataType, $quantity, $args);
+        list($status, $photos) = Photos::getPhotos($dataType, $quantity, $args);
         if ($status) {
             switch ($appearanceType) {
                 case 'carousel':

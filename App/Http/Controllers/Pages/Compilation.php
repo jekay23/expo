@@ -7,7 +7,8 @@
 
 namespace Expo\App\Http\Controllers\Pages;
 
-use Expo\App\Models\QueryBuilder as QB;
+use Expo\App\Models\Compilations;
+use Expo\App\Models\Photos;
 use Expo\Resources\Views\View;
 
 class Compilation
@@ -18,11 +19,11 @@ class Compilation
             View::render('404');
         } else {
             $compilationID = $requestList[0];
-            list($status, $compilation) = QB::getCompilationDetails($compilationID);
+            list($status, $compilation) = Compilations::getCompilationDetails($compilationID);
             if (!$status) {
                 View::render('404');
             }
-            list($status, $compilationPhotos) = QB::getPhotos('compilation', 30, ['compilationID' => $compilationID]);
+            list($status, $compilationPhotos) = Photos::getPhotos('compilation', 30, ['compilationID' => $compilationID]);
             if (!$status) {
                 View::render('404');
             }
