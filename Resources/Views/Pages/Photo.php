@@ -34,7 +34,7 @@ class Photo
             case 'notLiked':
                 $photo['likeImage'] = '/image/emptyBlackHeart.png';
                 $photo['likeAlt'] = 'Непоставленный лайк';
-                $photo['likeText'] = 'Вы ещё не оценили это фото';
+                $photo['likeText'] = 'Вы не оценили это фото';
                 $uriQuery = http_build_query(['photoID' => $photo['photoID']]);
                 $photo['likeHref'] = "/api/like?$uriQuery";
                 break;
