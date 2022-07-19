@@ -6,8 +6,6 @@ use Expo\App\Models\Compilations;
 use Expo\App\Models\Photos;
 use Expo\Resources\Views;
 
-// TODO: rename controller classes and extend the namespace here and in other View Components classes
-
 class ExhibitionSlider
 {
     public static function prepare(string $headerText, string $type, int $quantity, int $compilationID = null)

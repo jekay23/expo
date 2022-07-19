@@ -4,6 +4,7 @@ namespace Expo\App\Http\Controllers\Api;
 
 use Expo\App\Http\Controllers\Authentication;
 use Expo\App\Http\Controllers\HashHandler;
+use Expo\App\Http\Controllers\QueryHandler;
 use Expo\App\Models\Likes;
 use Expo\App\Models\QueryBuilder;
 use Expo\App\Models\Users;

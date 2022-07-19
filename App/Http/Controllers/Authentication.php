@@ -14,7 +14,7 @@ class Authentication
         $post = $_POST;
         unset($post['password']);
         $post['passwordHash'] = $hash;
-        list($inputStatus, $error) = UserInputHandler::processPost($post);
+        list($inputStatus, $error) = QueryHandler::processPost($post);
         if ($inputStatus) {
             $authStatus = false;
             $data = null;
@@ -122,7 +122,7 @@ class Authentication
     {
         $post = $_POST;
         $userID = Authentication::getUserIdFromCookie();
-        list($postStatus, $error) = UserInputHandler::processPost($post);
+        list($postStatus, $error) = QueryHandler::processPost($post);
         if (!$postStatus) {
             $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
             header("Location: /profile/$userID/change-password-email?$uriQuery");

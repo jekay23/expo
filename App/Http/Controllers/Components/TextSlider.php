@@ -14,7 +14,7 @@ class TextSlider
         } else {
             $args = null;
         }
-        list($status, $textFields) = QueryBuilder::getTextFields($type, $quantity);
+        list($status, $textFields) = QueryBuilder::getTextFields($type, $quantity, $args);
         if ($status) {
             if ('filters' != $type) {
                 foreach ($textFields as &$textField) {
