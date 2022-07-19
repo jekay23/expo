@@ -7,7 +7,7 @@
 
 namespace Expo\App\Http\Controllers\Pages;
 
-use Expo\App\Http\Controllers\Api\Authentication;
+use Expo\App\Http\Controllers\Authentication;
 use Expo\App\Models\QueryBuilder;
 use Expo\Resources\Views\View;
 

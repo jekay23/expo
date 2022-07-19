@@ -7,7 +7,7 @@
 
 namespace Expo\Resources\Views;
 
-use Expo\App\Http\Controllers\Api\Authentication;
+use Expo\App\Http\Controllers\Authentication;
 use Expo\Resources\Views\Pages;
 
 class View

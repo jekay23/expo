@@ -1,9 +1,8 @@
 <?php
 
-namespace Expo\App\Http\Controllers\Api;
+namespace Expo\App\Http\Controllers;
 
 use Exception;
-use Expo\App\Http\Controllers\HashHandler;
 use Expo\App\Models\QueryBuilder as QB;
 use Expo\App\Models\Users;
 

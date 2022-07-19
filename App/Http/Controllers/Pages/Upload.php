@@ -2,7 +2,7 @@
 
 namespace Expo\App\Http\Controllers\Pages;
 
-use Expo\App\Http\Controllers\Api\Authentication;
+use Expo\App\Http\Controllers\Authentication;
 use Expo\Resources\Views\View;
 
 class Upload

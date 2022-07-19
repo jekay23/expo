@@ -2,7 +2,7 @@
 
 namespace Expo\App\Models;
 
-use Expo\App\Http\Controllers\Api\Authentication;
+use Expo\App\Http\Controllers\Authentication;
 use Expo\App\Models\QueryObject as QO;
 
 class QueryBuilder
