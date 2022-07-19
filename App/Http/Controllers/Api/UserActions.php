@@ -24,7 +24,7 @@ class UserActions
         }
         $uriQuery = [];
         parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-        $validUriQuery = UserInputHandler::processUriQuery($uriQuery);
+        $validUriQuery = QueryHandler::processGET($uriQuery);
         if ($validUriQuery && isset($uriQuery['photoID'])) {
             $photoID = $uriQuery['photoID'];
             $likeSet = Likes::checkLike($userID, $photoID);
@@ -94,7 +94,7 @@ class UserActions
     {
         $post = $_POST;
         $userID = \Expo\App\Http\Controllers\Authentication::getUserIdFromCookie();
-        list($postStatus, $error) = \Expo\App\Http\Controllers\Api\UserInputHandler::processPost($post);
+        list($postStatus, $error) = \Expo\App\Http\Controllers\QueryHandler::processPOST($post);
         if (!$postStatus) {
             $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
             header("Location: /profile/$userID/edit?$uriQuery");
@@ -126,7 +126,7 @@ class UserActions
         }
         $uriQuery = [];
         parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-        $validUriQuery = UserInputHandler::processUriQuery($uriQuery);
+        $validUriQuery = QueryHandler::processGET($uriQuery);
         if ($validUriQuery && isset($uriQuery['photoID'])) {
             $photoID = $uriQuery['photoID'];
             $likeSet = Likes::checkLike($userID, $photoID);

@@ -1,10 +1,10 @@
 <?php
 
-namespace Expo\App\Http\Controllers\Api;
+namespace Expo\App\Http\Controllers;
 
-class UserInputHandler
+class QueryHandler
 {
-    public static function processPost(array &$post): array
+    public static function processPOST(array &$post): array
     {
         if (isset($post['name'])) {
             // for some reason regexp with just а-я doesn't work... so here's a work-around:
@@ -35,7 +35,7 @@ class UserInputHandler
         return [true, null];
     }
 
-    public static function processUriQuery(array $uriQuery): bool
+    public static function processGET(array $uriQuery): bool
     {
         foreach ($uriQuery as $key => $value) {
             if (htmlspecialchars($key) != $key || htmlspecialchars($value) != $value) {
