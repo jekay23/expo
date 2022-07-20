@@ -10,37 +10,39 @@ class Profile
     public static function render(bool &$stickFooter, $user)
     {
         $stickFooter = true;
-        $numOfPhotos = 0;
-        $varNames = null;
+        $compact = compact(null);
         if (isset($user)) {
-            $profileName = $user['name'];
-            $avatarLocation = $user['avatarLocation'];
-            $pronoun = $user['pronoun'];
-            $bio = $user['bio'];
-            $numOfPhotos = $user['numOfPhotos'];
-            if ($numOfPhotos > 6) {
+            if ($user['numOfPhotos'] > 6) {
                 $stickFooter = false;
             }
-            $numOfLikes = 0;
-            $button = $user['isProfileOwner'] ? [
-                'name' => 'Загрузить фотографии',
-                'href' => 'onclick="location.href=' . "'" . 'http://' . $_SERVER['HTTP_HOST'] . '/upload' . "'" . '"'
-            ] : [
-                'name' => 'Договориться о фотосессии',
-                'href' => 'http://' . $_SERVER['HTTP_HOST'] . '/profile/' . $user['userID'] . '#contact'
-            ];
-            $ownProfile = $user['isProfileOwner'] ? [
+            if ($user['isProfileOwner']) {
+                $button = [
+                    'name' => 'Загрузить фотографии',
+                    'href' => 'onclick="location.href=\'http://' . $_SERVER['HTTP_HOST'] . '/upload\'"'
+                ];
+            } else {
+                if (empty($user['contact'])) {
+                    $user['contact'] = 'Пользователь пока что не оставил своих контактов';
+                }
+                $button = [
+                    'name' => 'Договориться о фотосессии',
+                    'href' => 'data-bs-toggle="popover" title="Title" data-bs-content="' . $user['contact'] . '"'
+                ];
+            }
+            $user['ownProfile'] = $user['isProfileOwner'] ? [
                 'status' => true,
                 'editLink' => 'http://' . $_SERVER['HTTP_HOST'] . '/profile/' . $user['userID'] . '/edit'
             ] : [
                 'status' => false
             ];
-            $varNames = ['profileName', 'avatarLocation', 'pronoun', 'bio',
-                         'numOfPhotos', 'numOfLikes', 'button', 'ownProfile'];
+            $compact = compact(
+                'user',
+                'button'
+            );
         }
-        View::requireTemplate('profile', 'Page', compact($varNames));
+        View::requireTemplate('profile', 'Page', $compact);
 
-        if ($numOfPhotos > 0) {
+        if ($user['numOfPhotos'] > 0) {
             SmallGrid::render('', $user['photos']);
         } else {
             View::requireTemplate('noPhotos', 'Component');

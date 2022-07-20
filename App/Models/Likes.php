@@ -31,4 +31,18 @@ class Likes extends QueryBuilder
         $query = QO::delete()->table('Likes')->where(['userID', $userID], ['photoID', $photoID]);
         self::executeQuery($query, false);
     }
+
+    public static function countLikes(string $type, int $id): int
+    {
+        // TODO: NOT TESTED
+        $query = QO::select()->table('Photos')->join('RIGHT','Likes', 'photoID');
+        $query->where(['addedBy', $id]);
+        $query->columns(QO::count('likeID', 'likes'))->groupBy('addedBy');
+        $result = self::executeQuery($query);
+        if (empty($result)) {
+            return 0;
+        } else {
+            return $result[0]['likes'];
+        }
+    }
 }

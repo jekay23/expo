@@ -73,11 +73,11 @@ class QueryBuilder
     public static function getProfileData(int $userID): array
     {
         $user = Users::getUserData($userID);
-        $photos = Photos::getUserPhotos($userID);
-        $numOfPhotos = count($photos);
 
         if (isset($user)) {
-            $user['numOfPhotos'] = $numOfPhotos;
+            $photos = Photos::getUserPhotos($userID);
+            $user['numOfPhotos'] = count($photos);
+            $user['numOfLikes'] = Likes::countLikes('profile', $userID);
             $user['photos'] = $photos;
             if (isset($user['avatarLocation'])) {
                 $user['avatarLocation'] = '/uploads/photos/' . $user['avatarLocation'];

@@ -162,7 +162,7 @@ class Authentication
                 header("Location: /profile/$userID/change-password-email?$uriQuery");
                 exit;
             }
-        } elseif (Users::checkEmailInDB($post['email'])) {
+        } elseif (Users::checkEmailInDB($post['email'])[0]) {
             $uriQuery = http_build_query(['message' => 'Профиль с данным email уже существует', 'color' => 'red']);
             header("Location: /profile/$userID/change-password-email?$uriQuery");
             exit;
