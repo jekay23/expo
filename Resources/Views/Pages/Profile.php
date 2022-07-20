@@ -26,7 +26,7 @@ class Profile
                 }
                 $button = [
                     'name' => 'Договориться о фотосессии',
-                    'href' => 'data-bs-toggle="popover" title="Title" data-bs-content="' . $user['contact'] . '"'
+                    'href' => 'data-toggle="popover" data-bs-content="' . $user['contact'] . '"'
                 ];
             }
             $user['ownProfile'] = $user['isProfileOwner'] ? [
