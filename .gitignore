@@ -6,3 +6,4 @@ Vagrantfile
 /App/Models/DataBaseCredentials.php
 /App/Http/Controllers/HashCredentials.php
 /Public/uploads/photos/
+/React/
