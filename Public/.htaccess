@@ -1,4 +1,7 @@
 RewriteEngine On
 RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^admin(.*)$ /admin.html [QSA,END]
+
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ /index.php [QSA,END]

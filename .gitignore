@@ -7,3 +7,4 @@ Vagrantfile
 /App/Http/Controllers/HashCredentials.php
 /Public/uploads/photos/
 /React/
+/Public/js/bundle.js
