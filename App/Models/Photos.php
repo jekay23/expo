@@ -10,7 +10,7 @@ class Photos extends QB
     /**
      * @throws \Exception
      */
-    public static function getPhotos(string $type, int $quantity, array $args = null): array
+    public static function getPhotos(string $type, int $quantity = 12, array $args = null): array
     {
         if (!DataBaseConnection::makeSureConnectionIsOpen()) {
             return [false, null];

@@ -106,7 +106,7 @@ class QueryBuilder
         if ($yields) {
             return $statement->fetchAll();
         } else {
-            return 0;
+            return [];
         }
     }
 }

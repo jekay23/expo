@@ -1,10 +1,5 @@
 <?php
 
-/**
- * View class
- * In the future it will construct the whole page, but now it's quite primitive
- */
-
 namespace Expo\Resources\Views;
 
 use Expo\App\Http\Controllers\Authentication;
@@ -46,6 +41,7 @@ class View
         'signUp' => 'Регистрация',
         '404' => 'Страница не найдена',
         '403' => 'Доступ запрещён',
+        '503' => 'Сервис не отвечает',
         'upload' => 'Загрузка снимков',
         'editProfile' => 'Настройки профиля',
         'changeAvatar' => 'Смена аватара',

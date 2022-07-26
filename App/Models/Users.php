@@ -2,13 +2,14 @@
 
 namespace Expo\App\Models;
 
+use Exception;
 use Expo\App\Models\QueryObject as QO;
 use Expo\App\Models\QueryBuilder as QB;
 
 class Users extends QB
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function createUser(array $credentials): array
     {
@@ -29,7 +30,7 @@ class Users extends QB
             $userID = $user[0]['userID'];
             return [true, $userID];
         } else {
-            throw new \Exception('Unknown error: user created, but ID inaccessible.');
+            throw new Exception('Unknown error: user created, but ID inaccessible.');
         }
     }
 
@@ -45,17 +46,17 @@ class Users extends QB
                 return [false, 'Неверная комбинация email и пароля'];
             }
         } else {
-            throw new \Exception('Unknown error: user exists, but inaccessible.');
+            throw new Exception('Unknown error: user exists, but inaccessible.');
         }
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function checkEmailInDB(string $email): array
     {
         if (!DataBaseConnection::makeSureConnectionIsOpen()) {
-            throw new \Exception('Unable to connect to server. Please try again later or contact support.');
+            throw new Exception('Unable to connect to server. Please try again later or contact support.');
         }
 
         $query = QO::select()->table('Users')->columns('userID')->where(['email', "$email"]);
