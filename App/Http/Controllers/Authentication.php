@@ -112,6 +112,60 @@ class Authentication
         return 0;
     }
 
+    /**
+     * @throws Exception
+     */
+    public static function checkUserIsEditor(): bool
+    {
+        return self::checkUserHasSufficientLevel(2);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function checkUserIsAdmin(): bool
+    {
+        return self::checkUserHasSufficientLevel(3);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private static function checkUserHasSufficientLevel(int $minLevel): bool
+    {
+        $userID = self::getUserIdFromCookie();
+        if ($userID) {
+            $userLevel = Users::getUserLevel($userID);
+            return self::compareUserLevel($userLevel, $minLevel);
+        }
+        return false;
+    }
+
+    /**
+     * @param int $userLevel
+     * @param int $condition
+     * @param string{'geq', 'leq', 'greater', 'less', 'equal'} $comparisonType
+     * @return bool
+     * @throws Exception
+     */
+    private static function compareUserLevel(int $userLevel, int $condition, string $comparisonType = 'geq'): bool
+    {
+        switch ($comparisonType) {
+            case 'geq':
+                return ($userLevel >= $condition);
+            case 'leq':
+                return ($userLevel <= $condition);
+            case 'greater':
+                return ($userLevel > $condition);
+            case 'less':
+                return ($userLevel < $condition);
+            case 'equal':
+                return ($userLevel == $condition);
+            default:
+                throw new Exception('Unknown comparison type in Authentication::compareUserLevel()');
+        }
+    }
+
     private static function checkEmailIsNew(string $email): bool
     {
         list($emailInDB,) = Users::checkEmailInDB($email);

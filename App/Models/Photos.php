@@ -34,6 +34,9 @@ class Photos extends QB
                 $query->join('RIGHT', 'Likes', 'photoID');
                 $query->groupBy('photoID')->orderBy(['likes', 'DESC']);
                 break;
+            case 'all':
+                $query->addColumns('addedBy', 'uploadTime', 'isHiddenByEditor', 'isHiddenByUser');
+                return self::executeQuery($query);
         }
         $query->limit($quantity);
 
@@ -61,6 +64,16 @@ class Photos extends QB
     {
         $query = QO::select()->table('Photos')->columns('photoID', 'location', 'altText')->where(['addedBy', $userID]);
         $query->orderBy(['uploadTime', 'DESC'])->limit(24);
+        return self::executeQuery($query);
+    }
+
+    public static function getCompilationItems(int $compilationID): array
+    {
+        $query = QO::select()->table('Photos');
+        $query->join('RIGHT', 'CompilationItems', 'photoID');
+        $query->columns('TL1.photoID', 'location', 'additionTime', 'isHiddenByEditor', 'isHiddenByUser');
+        $query->where(['compilationID', $compilationID]);
+
         return self::executeQuery($query);
     }
 }

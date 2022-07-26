@@ -34,4 +34,20 @@ class Compilations extends QueryBuilder
         $compilations = self::executeQuery($query);
         return [true, $compilations[0]['compilationID']];
     }
+
+    public static function getCompilations(): array
+    {
+        $query = QO::select()->table('Compilations');
+        $query->columns(
+            'compilationID',
+            'name',
+            'description',
+            'creationTime',
+            'isExhibit',
+            'exhibitNumber',
+            'isHidden'
+        );
+
+        return self::executeQuery($query);
+    }
 }

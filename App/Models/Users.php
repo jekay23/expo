@@ -128,4 +128,54 @@ class Users extends QB
         $users = self::executeQuery($query);
         return $users[0];
     }
+
+    public static function getUsers(): array
+    {
+        $query = QO::select()->table('Users');
+        $query->columns(
+            'userID',
+            'email',
+            'name',
+            'pronoun',
+            'bio',
+            'contact',
+            'signUpDate',
+            'isEditor',
+            'isAdmin',
+            'avatarLocation',
+            'isHiddenProfile',
+            'isHiddenBio',
+            'isHiddenAvatar'
+        );
+
+        return self::executeQuery($query);
+    }
+
+    /**
+     * @param int $userID
+     * @return int
+     * @throws Exception
+     * Levels:
+     *  0: anonymous user
+     *  1: authenticated user
+     *  2: editor
+     *  3: admin
+     */
+    public static function getUserLevel(int $userID): int
+    {
+        $query = QO::select()->table('Users');
+        $query->columns('isEditor', 'isAdmin')->where(['userID', $userID]);
+
+        $users = self::executeQuery($query);
+        if (empty($users)) {
+            return 0;
+        }
+        if ($users[0]['isAdmin']) {
+            return 3;
+        }
+        if ($users[0]['isEditor']) {
+            return 2;
+        }
+        return 1;
+    }
 }
