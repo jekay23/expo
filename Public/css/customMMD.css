@@ -485,3 +485,19 @@ textarea {
     padding-top: .2rem;
     padding-left: 1rem;
 }
+
+.mmd-admin-table {
+    margin: 1rem 2rem;
+}
+
+.mmd-admin-table > thead > tr > th {
+    border: 0.15rem solid #939292;
+    padding: 0.5rem;
+    font-weight: bold;
+    background-color: #BCDDCD;
+}
+
+.mmd-admin-table > tbody > tr > td {
+    border: 0.15rem solid #939292;
+    padding: 0.5rem;
+}
