@@ -148,7 +148,17 @@ class Users extends QB
             'isHiddenAvatar'
         );
 
-        return self::executeQuery($query);
+        $users = self::executeQuery($query);
+        foreach ($users as &$user) {
+            if ($user['isEditor']) {
+                $user['accessLevel'] = 2;
+            } elseif ($user['isAdmin']) {
+                $user['accessLevel'] = 3;
+            } else {
+                $user['accessLevel'] = 1;
+            }
+        }
+        return $users;
     }
 
     /**
