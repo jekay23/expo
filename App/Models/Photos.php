@@ -76,4 +76,12 @@ class Photos extends QB
 
         return self::executeQuery($query);
     }
+
+    public static function hide(int $photoID, bool $value)
+    {
+        $query = QO::update()->table('Photos');
+        $query->columns('isHiddenByEditor')->values(($value ? 1 : 0))->where(['photoID', $photoID]);
+
+        self::executeQuery($query, false);
+    }
 }

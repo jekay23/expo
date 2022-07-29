@@ -377,7 +377,7 @@ a {
     }
 }
 
-textarea {
+.mmd-edit-wrap > textarea {
     height: 12rem;
     background-color: white;
     border-color: #54b686;
@@ -500,4 +500,11 @@ textarea {
 .mmd-admin-table > tbody > tr > td {
     border: 0.15rem solid #939292;
     padding: 0.5rem;
+}
+
+.mmd-admin-table > tbody > tr > td > textarea {
+    border: none;
+    width: 20rem;
+    height: max-content;
+    resize: none;
 }

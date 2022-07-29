@@ -58,4 +58,40 @@ class AdminActions
             View::render('403');
         }
     }
+
+    public static function change(int $id, string $field, $value)
+    {
+        if (Authentication::checkUserIsEditor()) {
+            if ('description' == $field || 'name' == $field) {
+                Compilations::updateString($id, $field, $value);
+            } elseif ('isExhibit' == $field || 'isHidden' == $field) {
+                if ('true' === $value || 1 === $value || '1' === $value) {
+                    $value = true;
+                } else {
+                    $value = false;
+                }
+                Compilations::updateBool($id, $field, $value);
+            } elseif ('isHiddenProfile' == $field || 'isHiddenBio' == $field || 'isHiddenAvatar' == $field) {
+                if ('true' === $value || 1 === $value || '1' === $value) {
+                    $value = true;
+                } else {
+                    $value = false;
+                }
+                Users::updateBool($id, $field, $value);
+            } elseif ('changeAccessLevel' == $field) {
+                Users::changeAccessLevel($id, $value);
+            } elseif ('hidePhoto' == $field) {
+                if ('true' === $value || 1 === $value || '1' === $value) {
+                    $value = true;
+                } else {
+                    $value = false;
+                }
+                Photos::hide($id, $value);
+            } else {
+                View::render('404');
+            }
+        } else {
+            View::render('403');
+        }
+    }
 }

@@ -53,15 +53,92 @@ class Api
                 AdminActions::getCompilations();
                 break;
             case 'compilation-items':
-                $uriQuery = [];
-                parse_str($_SERVER['QUERY_STRING'], $uriQuery);
+                $uriQuery = self::getUriQueryArray();
                 if (isset($uriQuery['compilationID'])) {
-                    $compilationID = $uriQuery['compilationID'];
-                    AdminActions::getCompilationItems($compilationID);
+                    AdminActions::getCompilationItems($uriQuery['compilationID']);
+                } else {
+                    View::render('404');
+                }
+                break;
+            case 'changeDesc':
+                $uriQuery = self::getUriQueryArray();
+                if (isset($uriQuery['compilationID']) && isset($uriQuery['value'])) {
+                    AdminActions::change($uriQuery['compilationID'], 'description', $uriQuery['value']);
+                } else {
+                    View::render('404');
+                }
+                break;
+            case 'changeName':
+                $uriQuery = self::getUriQueryArray();
+                if (isset($uriQuery['compilationID']) && isset($uriQuery['value'])) {
+                    AdminActions::change($uriQuery['compilationID'], 'name', $uriQuery['value']);
+                } else {
+                    View::render('404');
+                }
+                break;
+            case 'makeExhibit':
+                $uriQuery = self::getUriQueryArray();
+                if (isset($uriQuery['compilationID']) && isset($uriQuery['enabled'])) {
+                    AdminActions::change($uriQuery['compilationID'], 'isExhibit', $uriQuery['enabled']);
+                } else {
+                    View::render('404');
+                }
+                break;
+            case 'hideCompilation':
+                $uriQuery = self::getUriQueryArray();
+                if (isset($uriQuery['compilationID']) && isset($uriQuery['enabled'])) {
+                    AdminActions::change($uriQuery['compilationID'], 'isHidden', $uriQuery['enabled']);
+                } else {
+                    View::render('404');
+                }
+                break;
+            case 'hideProfile':
+                $uriQuery = self::getUriQueryArray();
+                if (isset($uriQuery['userID']) && isset($uriQuery['enabled'])) {
+                    AdminActions::change($uriQuery['userID'], 'isHiddenProfile', $uriQuery['enabled']);
+                } else {
+                    View::render('404');
+                }
+                break;
+            case 'hideBio':
+                $uriQuery = self::getUriQueryArray();
+                if (isset($uriQuery['userID']) && isset($uriQuery['enabled'])) {
+                    AdminActions::change($uriQuery['userID'], 'isHiddenBio', $uriQuery['enabled']);
+                } else {
+                    View::render('404');
+                }
+                break;
+            case 'hideAvatar':
+                $uriQuery = self::getUriQueryArray();
+                if (isset($uriQuery['userID']) && isset($uriQuery['enabled'])) {
+                    AdminActions::change($uriQuery['userID'], 'isHiddenAvatar', $uriQuery['enabled']);
+                } else {
+                    View::render('404');
+                }
+                break;
+            case 'changeUserLevel':
+                $uriQuery = self::getUriQueryArray();
+                if (isset($uriQuery['userID']) && isset($uriQuery['value'])) {
+                    AdminActions::change($uriQuery['userID'], 'changeAccessLevel', $uriQuery['value']);
+                } else {
+                    View::render('404');
+                }
+                break;
+            case 'hidePhoto':
+                $uriQuery = self::getUriQueryArray();
+                if (isset($uriQuery['photoID']) && isset($uriQuery['enabled'])) {
+                    AdminActions::change($uriQuery['photoID'], 'hidePhoto', $uriQuery['enabled']);
                 } else {
                     View::render('404');
                 }
                 break;
         }
+    }
+
+    private static function getUriQueryArray(): array
+    {
+        $uriQuery = [];
+        parse_str($_SERVER['QUERY_STRING'], $uriQuery);
+        return $uriQuery;
     }
 }

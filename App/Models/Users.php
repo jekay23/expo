@@ -188,4 +188,26 @@ class Users extends QB
         }
         return 1;
     }
+
+    public static function updateBool(int $userID, string $field, bool $value)
+    {
+        $query = QO::update()->table('Users');
+        $query->columns($field)->values(($value ? 1 : 0))->where(['userID', $userID]);
+
+        self::executeQuery($query, false);
+    }
+
+    public static function changeAccessLevel(int $userID, int $value)
+    {
+        $isEditor = [0, 0, 1, 0];
+        $isAdmin = [0, 0, 0, 1];
+
+        $query = QO::update()->table('Users')->columns('isEditor')->where(['userID', $userID]);
+        $query->values($isEditor[$value]);
+        self::executeQuery($query, false);
+
+        $query = QO::update()->table('Users')->columns('isAdmin')->where(['userID', $userID]);
+        $query->values($isAdmin[$value]);
+        self::executeQuery($query, false);
+    }
 }

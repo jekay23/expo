@@ -2,12 +2,13 @@
 
 namespace Expo\App\Models;
 
+use Exception;
 use Expo\App\Models\QueryObject as QO;
 
 class Compilations extends QueryBuilder
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function getCompilationDetails(int $compilationID): array
     {
@@ -49,5 +50,29 @@ class Compilations extends QueryBuilder
         );
 
         return self::executeQuery($query);
+    }
+
+    public static function updateString(int $compilationID, string $field, string $value)
+    {
+        switch ($field) {
+            case 'description':
+                $field = 'description';
+                break;
+            case 'name':
+                $field = 'name';
+                break;
+        }
+        $query = QO::update()->table('Compilations');
+        $query->columns($field)->values($value)->where(['compilationID', $compilationID]);
+
+        self::executeQuery($query, false);
+    }
+
+    public static function updateBool(int $compilationID, string $field, bool $value)
+    {
+        $query = QO::update()->table('Compilations');
+        $query->columns($field)->values(($value ? 1 : 0))->where(['compilationID', $compilationID]);
+
+        self::executeQuery($query, false);
     }
 }
