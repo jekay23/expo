@@ -17,10 +17,14 @@ class Compilations extends QueryBuilder
         }
 
         $query = QO::select()->table('Compilations')->columns('name', 'description');
-        $query->where(['compilationID', $compilationID]);
+        $query->where(['compilationID', $compilationID], ['isHidden', '0']);
 
         $compilations = self::executeQuery($query);
-        return [true, $compilations[0]];
+        if (!empty($compilations)) {
+            return [true, $compilations[0]];
+        } else {
+            return [true, []];
+        }
     }
 
     public static function getCurrentExhibition(): array

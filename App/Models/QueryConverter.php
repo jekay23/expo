@@ -23,14 +23,14 @@ class QueryConverter
         }
         if (!empty($groupBy)) {
             if ($numOfJoins > 0) {
-                $groupBy = "TL$numOfJoins.$groupBy";
+                $groupBy = "$groupBy";
             }
             $queryString .= " GROUP BY $groupBy";
         }
         if (!empty($orderBy)) {
             if ($numOfJoins > 0) {
                 foreach ($orderBy as &$order) {
-                    $order = "TL$numOfJoins.$order";
+                    $order = "$order";
                 }
             }
             $queryString .= ' ORDER BY ' . implode(', ', $orderBy);
@@ -52,8 +52,7 @@ class QueryConverter
     ): string {
         $columnString = implode(', ', $columns);
         $valueString = implode(', ', $values);
-        $queryString = "INSERT INTO $table ($columnString) VALUES ($valueString);";
-        return $queryString;
+        return "INSERT INTO $table ($columnString) VALUES ($valueString);";
     }
 
     public static function composeUpdate(

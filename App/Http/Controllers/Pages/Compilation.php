@@ -20,15 +20,21 @@ class Compilation
         } else {
             $compilationID = $requestList[0];
             list($status, $compilation) = Compilations::getCompilationDetails($compilationID);
-            if (!$status) {
+            if (!$status || empty($compilation)) {
                 View::render('404');
+            } else {
+                list($status, $compilationPhotos) = Photos::getPhotos(
+                    'compilation',
+                    30,
+                    ['compilationID' => $compilationID]
+                );
+                if (!$status) {
+                    View::render('404');
+                } else {
+                    $compilation['photos'] = $compilationPhotos;
+                    View::render('compilation', $compilation);
+                }
             }
-            list($status, $compilationPhotos) = Photos::getPhotos('compilation', 30, ['compilationID' => $compilationID]);
-            if (!$status) {
-                View::render('404');
-            }
-            $compilation['photos'] = $compilationPhotos;
-            View::render('compilation', $compilation);
         }
     }
 }

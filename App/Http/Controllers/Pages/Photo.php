@@ -18,7 +18,7 @@ class Photo
 
         list($status, $photo) = QueryBuilder::getPhotoDetails($photoID);
         if (!$status) {
-            View::render('503');
+            View::render('404');
         } else {
             View::render('photo', $photo, 'Фото пользователя ' . $photo['authorName']);
         }

@@ -8,9 +8,11 @@ class SmallGrid
 {
     public static function render(string $headerText, array $photos, int $photosPerBlock = 3)
     {
-        $numOfBlocks = self::getNumOfBlocks($photos, $photosPerBlock);
-        $blocks = self::fillBlocksWithPhotos($numOfBlocks, $photos, $photosPerBlock);
-        View::requireTemplate('smallGrid', 'Component', compact('headerText', 'blocks'));
+        if (!empty($photos)) {
+            $numOfBlocks = self::getNumOfBlocks($photos, $photosPerBlock);
+            $blocks = self::fillBlocksWithPhotos($numOfBlocks, $photos, $photosPerBlock);
+            View::requireTemplate('smallGrid', 'Component', compact('headerText', 'blocks'));
+        }
     }
 
     private static function getNumOfBlocks(array $photos, int $photosPerBlock): int

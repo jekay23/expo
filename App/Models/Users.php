@@ -115,17 +115,35 @@ class Users extends QB
                 $query .= ''; // TODO
                 break;
         }
+        $query->where(['isHiddenProfile', 0]);
         $query->limit($quantity);
         return self::executeQuery($query);
     }
 
-    public static function getUserData(int $userID): array
+    public static function getUserData(int $userID, bool $accessHidden = false)
     {
         $query = QO::select()->table('Users');
-        $query->columns('userID', 'name', 'email', 'pronoun', 'bio', 'contact', 'avatarLocation');
-        $query->where(['userID', $userID]);
+        $query->columns(
+            'userID',
+            'name',
+            'email',
+            'pronoun',
+            'bio',
+            'contact',
+            'avatarLocation',
+            'isHiddenBio',
+            'isHiddenAvatar'
+        );
+        if ($accessHidden) {
+            $query->where(['userID', $userID]);
+        } else {
+            $query->where(['userID', $userID], ['isHiddenProfile', 0]);
+        }
 
         $users = self::executeQuery($query);
+        if (empty($users)) {
+            return false;
+        }
         return $users[0];
     }
 

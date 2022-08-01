@@ -8,6 +8,8 @@ class ContinuousSlider
 {
     public static function render(string $headerText, array $photos)
     {
-        View::requireTemplate('continuousSlider', 'Component', compact('headerText', 'photos'));
+        if (!empty($photos)) {
+            View::requireTemplate('continuousSlider', 'Component', compact('headerText', 'photos'));
+        }
     }
 }

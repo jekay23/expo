@@ -8,6 +8,8 @@ class TextSlider
 {
     public static function render(string $headerText, array $textFields)
     {
-        View::requireTemplate('textSlider', 'Component', compact('headerText', 'textFields'));
+        if (!empty($textFields)) {
+            View::requireTemplate('textSlider', 'Component', compact('headerText', 'textFields'));
+        }
     }
 }

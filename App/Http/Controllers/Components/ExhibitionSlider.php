@@ -18,7 +18,7 @@ class ExhibitionSlider
         list($status, $photos) = Photos::getPhotos('compilation', $quantity, $args);
         if ($status) {
             list($status, $compilation) = Compilations::getCompilationDetails($compilationID);
-            if ($status) {
+            if ($status && !empty($compilation)) {
                 Views\Components\ExhibitionSlider::render(
                     $headerText,
                     $photos,

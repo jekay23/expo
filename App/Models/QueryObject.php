@@ -19,6 +19,7 @@ class QueryObject
     private int $numOfJoins;
     private bool $grouppable;
     private array $values;
+    private array $aliasMap;
 
     private function __construct(string $action)
     {
@@ -28,12 +29,13 @@ class QueryObject
         $this->columns = ['*'];
         $this->where = '';
         $this->groupBy = '';
-        $this->orderBy = array();
+        $this->orderBy = [];
         $this->limit = 0;
         $this->offset = 0;
         $this->numOfJoins = 0;
         $this->grouppable = false;
-        $this->values = array();
+        $this->values = [];
+        $this->aliasMap = [];
     }
 
     public function __toString(): string
@@ -140,33 +142,35 @@ class QueryObject
         }
         if ('string' == gettype($table)) {
             $this->numOfJoins++;
-            $this->table .= " AS TL$this->numOfJoins $type JOIN $table AS TR$this->numOfJoins";
-        } elseif ('QueryObject' == gettype($table)) {
-            if ('select' == $table->action) {
-                ob_start();
-                echo $table;
-                $tableString = ob_get_clean();
-                $this->numOfJoins = $table->getNumOfJoins() + 1;
-                $this->table .= " AS TL$this->numOfJoins $type JOIN ($tableString) AS TR$this->numOfJoins";
-            } else {
-                throw new Exception('Incorrect query formation: using composed table for other purpose than selection');
+            if ($this->numOfJoins == 1) {
+                $this->aliasMap[$this->table] = "TL$this->numOfJoins";
+                $this->table .= " AS TL$this->numOfJoins";
             }
+            $this->aliasMap[$table] = "TR$this->numOfJoins";
+            $this->table .= " $type JOIN $table AS TR$this->numOfJoins";
+        } else {
+            throw new Exception('Incorrect query formation: joining with an unknown object');
         }
         if (!empty($conditions)) {
             foreach ($conditions as $condition) {
                 if (false !== $i = array_search($condition, $this->columns)) {
-                    $this->columns[$i] = 'TL' . $this->numOfJoins . '.' . $this->columns[$i];
+                    $this->columns[$i] = 'TR' . $this->numOfJoins . '.' . $this->columns[$i];
                 }
             }
             if (1 == count($conditions)) {
                 $conditions[1] = $conditions[0];
             }
             if (2 == count($conditions)) {
-                $condition = "TL$this->numOfJoins.$conditions[0] = TR$this->numOfJoins.$conditions[1]";
+                if ($this->numOfJoins == 1) {
+                    $condition = "TL$this->numOfJoins.$conditions[0] = TR$this->numOfJoins.$conditions[1]";
+                } else {
+                    // not scalable yet...
+                    $condition = 'TR' . ($this->numOfJoins - 1) . ".$conditions[0] = TR$this->numOfJoins.$conditions[1]";
+                }
             } else {
                 throw new Exception('Incorrect query formation: too many conditions for joining');
             }
-            $this->table .= " ON $condition";
+            $this->table = "($this->table ON $condition)";
         } else {
             throw new Exception('Incorrect query formation: join condition is not specified');
         }
@@ -210,10 +214,7 @@ class QueryObject
      */
     public function where(array ...$conditions): QueryObject
     {
-        if (!empty($this->where)) {
-            throw new Exception('Incorrect query formation: rewriting the WHERE statement');
-        }
-        $conditionStrings = array();
+        $conditionStrings = [];
         foreach ($conditions as $condition) {
             if (2 != count($condition)) {
                 throw new Exception('Incorrect query formation: wrong where condition format');
@@ -223,7 +224,11 @@ class QueryObject
             }
             $conditionStrings[] = "$condition[0] = $condition[1]";
         }
-        $this->where = implode(' AND ', $conditionStrings);
+        if (!empty($this->where)) {
+            $this->where .= ' AND ' . implode(' AND ', $conditionStrings);
+        } else {
+            $this->where = implode(' AND ', $conditionStrings);
+        }
         return $this;
     }
 
@@ -282,7 +287,7 @@ class QueryObject
         if (!empty($this->orderBy)) {
             throw new Exception('Incorrect query formation: rewriting the ORDER BY statement');
         }
-        $orderBy = array();
+        $orderBy = [];
         $orderTypes = ['DESC', 'ASC'];
         foreach ($orders as $order) {
             if (!empty($order[1])) {

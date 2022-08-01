@@ -16,7 +16,8 @@ class Profile
     public static function prepare(array $requestList, array $requestQuery)
     {
         $userID = $requestList[0];
-        list($status, $user) = QueryBuilder::getProfileData($userID);
+        $accessHidden = Authentication::checkUserIsEditor();
+        list($status, $user) = QueryBuilder::getProfileData($userID, $accessHidden);
         if ($status) {
             if ($userID == Authentication::getUserIdFromCookie()) {
                 $user['isProfileOwner'] = true;

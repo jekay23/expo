@@ -16,7 +16,8 @@ class Photos extends QB
             return [false, null];
         }
 
-        $query = QO::select()->table('Photos')->columns('photoID', 'location', 'altText');
+        $query = QO::select()->table('Users')->join('RIGHT', 'Photos', 'userID', 'addedBy');
+        $query->columns('photoID', 'location', 'altText', 'isHiddenByEditor', 'isHiddenByUser', 'isHiddenProfile');
 
         switch ($type) {
             case 'latest':
@@ -30,7 +31,7 @@ class Photos extends QB
                 }
                 break;
             case 'best':
-                $query->addColumns(QO::count('userID', 'likes'), 'uploadTime');
+                $query->addColumns(QO::count('TL1.userID', 'likes'), 'uploadTime');
                 $query->join('RIGHT', 'Likes', 'photoID');
                 $query->groupBy('photoID')->orderBy(['likes', 'DESC']);
                 break;
@@ -38,6 +39,7 @@ class Photos extends QB
                 $query->addColumns('addedBy', 'uploadTime', 'isHiddenByEditor', 'isHiddenByUser');
                 return self::executeQuery($query);
         }
+        $query->where(['isHiddenProfile', 0], ['isHiddenByEditor', 0], ['isHiddenByUser', 0]);
         $query->limit($quantity);
 
         $photos = self::executeQuery($query);
@@ -71,7 +73,7 @@ class Photos extends QB
     {
         $query = QO::select()->table('Photos');
         $query->join('RIGHT', 'CompilationItems', 'photoID');
-        $query->columns('TL1.photoID', 'location', 'additionTime', 'isHiddenByEditor', 'isHiddenByUser');
+        $query->columns('TR1.photoID', 'location', 'additionTime', 'isHiddenByEditor', 'isHiddenByUser');
         $query->where(['compilationID', $compilationID]);
 
         return self::executeQuery($query);

@@ -182,7 +182,7 @@ class Authentication
             header("Location: /profile/$userID/change-password-email?$uriQuery");
             exit;
         }
-        list($status, $user) = QB::getProfileData($userID);
+        list($status, $user) = QB::getProfileData($userID, true);
         if (!$status) {
             $uriQuery = http_build_query(['message' => 'Пользователь не существует', 'color' => 'red']);
             header("Location: /?$uriQuery");

@@ -19,7 +19,7 @@ class Front
 
         Controllers\Components\PhotoDisplay::prepare('slider', 'Предыдущая выставка', 'latest', 10);
 
-        Controllers\Components\TextSlider::prepare('Фотографы мехмата', 'latest', 10);
+        Controllers\Components\TextSlider::prepare('Фотографы мехмата', 'latest', 20);
 
         Controllers\Components\PhotoDisplay::prepare('carousel', 'Подборка команды мехмата', 'compilation', 5, 2);
 

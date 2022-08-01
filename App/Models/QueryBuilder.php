@@ -19,10 +19,13 @@ class QueryBuilder
         $photo = Photos::getPhoto($photoID);
 
         $user = Users::getUserData($photo['addedBy']);
+        if (!$user) {
+            return [false, null];
+        }
         $photo['authorID'] = $photo['addedBy'];
         unset($photo['addedBy']);
         $photo['authorName'] = $user['name'];
-        if (isset($user['avatarLocation'])) {
+        if (isset($user['avatarLocation']) && $user['isHiddenAvatar'] === '0') {
             $photo['authorAvatarLocation'] = '/uploads/photos/' . $user['avatarLocation'];
         } else {
             $photo['authorAvatarLocation'] = '/image/defaultAvatar.jpg';
@@ -70,19 +73,22 @@ class QueryBuilder
         return [true, $users];
     }
 
-    public static function getProfileData(int $userID): array
+    public static function getProfileData(int $userID, bool $accessHidden = false): array
     {
-        $user = Users::getUserData($userID);
+        $user = Users::getUserData($userID, $accessHidden);
 
-        if (isset($user)) {
+        if ($user) {
             $photos = Photos::getUserPhotos($userID);
             $user['numOfPhotos'] = count($photos);
             $user['numOfLikes'] = Likes::countLikes('profile', $userID);
             $user['photos'] = $photos;
-            if (isset($user['avatarLocation'])) {
+            if (isset($user['avatarLocation']) && $user['isHiddenAvatar'] === '0') {
                 $user['avatarLocation'] = '/uploads/photos/' . $user['avatarLocation'];
             } else {
                 $user['avatarLocation'] = '/image/defaultAvatar.jpg';
+            }
+            if ($user['isHiddenBio'] === '1') {
+                $user['bio'] = '';
             }
             return [true, $user];
         } else {
