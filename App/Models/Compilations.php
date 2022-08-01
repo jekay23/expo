@@ -78,9 +78,20 @@ class Compilations extends QueryBuilder
      */
     public static function updateBool(int $compilationID, string $field, bool $value)
     {
-        $query = QO::update()->table('Compilations');
-        $query->columns($field)->values(($value ? 1 : 0))->where(['compilationID', $compilationID]);
+        $query = QO::update()->table('Compilations')->columns($field)->values(($value ? 1 : 0));
+        $query->where(['compilationID', $compilationID]);
 
+        self::executeQuery($query, false);
+    }
+
+    public static function updateExhibit(int $compilationID, string $field, bool $value, int $exhibitNumber = 0)
+    {
+        $query = QO::update()->table('Compilations')->columns($field)->values(($value ? 1 : 0));
+        $query->where(['compilationID', $compilationID]);
+        self::executeQuery($query, false);
+
+        $query = QO::update()->table('Compilations')->columns('exhibitNumber');
+        $query->values($exhibitNumber ? $exhibitNumber : 'NULL')->where(['compilationID', $compilationID]);
         self::executeQuery($query, false);
     }
 
@@ -90,5 +101,12 @@ class Compilations extends QueryBuilder
         $query->values('Название подборки', $createdBy, 1);
 
         self::executeQuery($query, false);
+    }
+
+    public static function getNextExhibitNumber(): int
+    {
+        $query = QO::select()->table('Compilations')->columns(QO::max('exhibitNumber', 'maxExhibitNumber'));
+        $result = self::executeQuery($query);
+        return $result[0]['maxExhibitNumber'] + 1;
     }
 }

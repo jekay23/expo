@@ -61,6 +61,9 @@ class QueryConverter
         array $values,
         string $where
     ): string {
+        if ($values[0] === "'NULL'") {
+            $values[0] = 'NULL';
+        }
         $queryString = "UPDATE $table SET $columns[0] = $values[0]";
         if (!empty($where)) {
             $queryString .= " WHERE $where";

@@ -64,13 +64,22 @@ class AdminActions
         if (Authentication::checkUserIsEditor()) {
             if ('description' == $field || 'name' == $field) {
                 Compilations::updateString($id, $field, $value);
-            } elseif ('isExhibit' == $field || 'isHidden' == $field) {
+            } elseif ('isHidden' == $field) {
                 if ('true' === $value || 1 === $value || '1' === $value) {
                     $value = true;
                 } else {
                     $value = false;
                 }
                 Compilations::updateBool($id, $field, $value);
+            } elseif ('isExhibit' == $field) {
+                if ('true' === $value || 1 === $value || '1' === $value) {
+                    $value = true;
+                    $exhibitNumber = Compilations::getNextExhibitNumber();
+                } else {
+                    $value = false;
+                    $exhibitNumber = 0;
+                }
+                Compilations::updateExhibit($id, $field, $value, $exhibitNumber);
             } elseif ('isHiddenProfile' == $field || 'isHiddenBio' == $field || 'isHiddenAvatar' == $field) {
                 if ('true' === $value || 1 === $value || '1' === $value) {
                     $value = true;

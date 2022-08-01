@@ -102,6 +102,15 @@ class QueryObject
         }
     }
 
+    public static function max(string $column = '*', string $alias = null): string
+    {
+        if (!empty($alias)) {
+            return "MAX($column) AS $alias";
+        } else {
+            return "MAX($column)";
+        }
+    }
+
     /**
      * @throws Exception
      */
