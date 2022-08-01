@@ -94,4 +94,13 @@ class AdminActions
             View::render('403');
         }
     }
+
+    public static function createCompilation()
+    {
+        if (Authentication::checkUserIsEditor()) {
+            Compilations::create(Authentication::getUserIdFromCookie());
+        } else {
+            View::render('403');
+        }
+    }
 }

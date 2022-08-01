@@ -132,6 +132,9 @@ class Api
                     View::render('404');
                 }
                 break;
+            case 'createCompilation':
+                AdminActions::createCompilation();
+                break;
         }
     }
 

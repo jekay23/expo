@@ -27,6 +27,9 @@ class Compilations extends QueryBuilder
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public static function getCurrentExhibition(): array
     {
         if (!DataBaseConnection::makeSureConnectionIsOpen()) {
@@ -40,6 +43,9 @@ class Compilations extends QueryBuilder
         return [true, $compilations[0]['compilationID']];
     }
 
+    /**
+     * @throws Exception
+     */
     public static function getCompilations(): array
     {
         $query = QO::select()->table('Compilations');
@@ -56,26 +62,32 @@ class Compilations extends QueryBuilder
         return self::executeQuery($query);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function updateString(int $compilationID, string $field, string $value)
     {
-        switch ($field) {
-            case 'description':
-                $field = 'description';
-                break;
-            case 'name':
-                $field = 'name';
-                break;
-        }
         $query = QO::update()->table('Compilations');
         $query->columns($field)->values($value)->where(['compilationID', $compilationID]);
 
         self::executeQuery($query, false);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function updateBool(int $compilationID, string $field, bool $value)
     {
         $query = QO::update()->table('Compilations');
         $query->columns($field)->values(($value ? 1 : 0))->where(['compilationID', $compilationID]);
+
+        self::executeQuery($query, false);
+    }
+
+    public static function create(int $createdBy)
+    {
+        $query = QO::insert()->table('Compilations')->columns('name', 'createdBy', 'isHidden');
+        $query->values('Название подборки', $createdBy, 1);
 
         self::executeQuery($query, false);
     }
