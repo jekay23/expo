@@ -29,7 +29,7 @@ class View
     ];
 
     private static array $staticPages = ['404', '403', '503', 'upload', 'signIn', 'signUp',
-                                         'contacts', 'license', 'changeAvatar'];
+                                         'support', 'license', 'faq', 'changeAvatar'];
 
     private static array $titles = [
         'frontpage' => 'Выставка фотографов мехмата',
@@ -45,7 +45,10 @@ class View
         'upload' => 'Загрузка снимков',
         'editProfile' => 'Настройки профиля',
         'changeAvatar' => 'Смена аватара',
-        'changePasswordEmail' => 'Смена пароля и email'
+        'changePasswordEmail' => 'Смена пароля и email',
+        'support' => 'Поддержка',
+        'faq' => 'Частозадоваемые вопросы',
+        'license' => 'Пользовательское соглашение'
     ];
 
     private static function makeTitle(string $requestTitle, $override = null): string

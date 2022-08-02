@@ -42,3 +42,15 @@ Router::saveCallback('upload', function (array $requestList, array $requestQuery
 Router::saveCallback('404', function () {
     Controllers\Pages\Error404::prepare();
 });
+
+Router::saveCallback('support', function (array $requestList, array $requestQuery) {
+    Controllers\Pages\Support::prepare($requestList, $requestQuery);
+});
+
+Router::saveCallback('license', function (array $requestList, array $requestQuery) {
+    Controllers\Pages\License::prepare($requestList, $requestQuery);
+});
+
+Router::saveCallback('faq', function (array $requestList, array $requestQuery) {
+    Controllers\Pages\FAQ::prepare($requestList, $requestQuery);
+});
