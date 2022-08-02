@@ -3,6 +3,7 @@
 namespace Expo\App\Models;
 
 use Exception;
+use Expo\App\Http\Controllers\Authentication;
 use Expo\App\Models\QueryObject as QO;
 
 class Compilations extends QueryBuilder
@@ -84,6 +85,9 @@ class Compilations extends QueryBuilder
         self::executeQuery($query, false);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function updateExhibit(int $compilationID, string $field, bool $value, int $exhibitNumber = 0)
     {
         $query = QO::update()->table('Compilations')->columns($field)->values(($value ? 1 : 0));
@@ -95,6 +99,9 @@ class Compilations extends QueryBuilder
         self::executeQuery($query, false);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function create(int $createdBy)
     {
         $query = QO::insert()->table('Compilations')->columns('name', 'createdBy', 'isHidden');
@@ -103,10 +110,37 @@ class Compilations extends QueryBuilder
         self::executeQuery($query, false);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function getNextExhibitNumber(): int
     {
         $query = QO::select()->table('Compilations')->columns(QO::max('exhibitNumber', 'maxExhibitNumber'));
         $result = self::executeQuery($query);
         return $result[0]['maxExhibitNumber'] + 1;
     }
+
+    /**
+     * @throws Exception
+     */
+    public static function addCompilationItem(int $compilationID, int $photoID)
+    {
+        $query = QO::insert()->table('CompilationItems')->columns('compilationID', 'photoID', 'addedBy');
+        $query->values($compilationID, $photoID, Authentication::getUserIdFromCookie());
+
+        self::executeQuery($query, false);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function removeCompilationItem($compilationID, $photoID)
+    {
+        $query = QO::delete()->table('CompilationItems');
+        $query->where(['compilationID', $compilationID], ['photoID', $photoID]);
+
+        self::executeQuery($query, false);
+    }
+
+
 }

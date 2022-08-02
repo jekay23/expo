@@ -508,3 +508,8 @@ a {
     height: max-content;
     resize: none;
 }
+
+.mmd-admin-input-wrap {
+    max-width: 10rem;
+    margin-right: 1rem;
+}

@@ -135,6 +135,22 @@ class Api
             case 'createCompilation':
                 AdminActions::createCompilation();
                 break;
+            case 'addCompilationItem':
+                $uriQuery = self::getUriQueryArray();
+                if (isset($uriQuery['compilationID']) && isset($uriQuery['photoID'])) {
+                    AdminActions::addCompilationItem($uriQuery['compilationID'], $uriQuery['photoID']);
+                } else {
+                    View::render('404');
+                }
+                break;
+            case 'removeCompilationItem':
+                $uriQuery = self::getUriQueryArray();
+                if (isset($uriQuery['compilationID']) && isset($uriQuery['photoID'])) {
+                    AdminActions::removeCompilationItem($uriQuery['compilationID'], $uriQuery['photoID']);
+                } else {
+                    View::render('404');
+                }
+                break;
         }
     }
 

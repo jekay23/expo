@@ -112,4 +112,22 @@ class AdminActions
             View::render('403');
         }
     }
+
+    public static function addCompilationItem(int $compilationID, int $photoID)
+    {
+        if (Authentication::checkUserIsEditor()) {
+            Compilations::addCompilationItem($compilationID, $photoID);
+        } else {
+            View::render('403');
+        }
+    }
+
+    public static function removeCompilationItem($compilationID, $photoID)
+    {
+        if (Authentication::checkUserIsEditor()) {
+            Compilations::removeCompilationItem($compilationID, $photoID);
+        } else {
+            View::render('403');
+        }
+    }
 }
