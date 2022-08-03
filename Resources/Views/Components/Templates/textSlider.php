@@ -1,6 +1,6 @@
 <hr>
 <h2><?= $headerText ?></h2>
-<div class="scrolling-wrapper">
+<div class="scrolling-wrapper mmd-slider">
     <?php foreach ($textFields as $textField) {?>
         <a href="<?= $textField['href'] ?>">
             <div class="card">
