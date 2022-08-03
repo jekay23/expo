@@ -76,21 +76,21 @@
 }
 
 hr {
-    border-top: .25rem solid #54b686;
+    border-top: .25rem solid var(--bs-primary);
     opacity: 1;
     border-radius: .25rem;
     margin-bottom: 0;
     background-color: transparent;
 }
 
-h2 {
+.mmd-main > div > h2 {
     font-size: 100%;
     font-weight: normal;
     padding: 1rem 3rem .25rem;
 }
 
 @media screen and (max-width: 767px) {
-    h2 {
+    .mmd-main > div > h2 {
         padding-left: .25rem;
     }
 }
@@ -112,7 +112,7 @@ h2 {
 
 .scrolling-wrapper::-webkit-scrollbar-thumb {
     border-radius: .4rem;
-    background: #939292;
+    background: var(--bs-info);
     opacity: .5;
 }
 
@@ -133,7 +133,7 @@ h2 {
 
 .exhibit-title {
     font-weight: normal;
-    color: #54b686;
+    color: var(--bs-primary);
     margin-right: 1rem;
 }
 
@@ -181,7 +181,7 @@ h2 {
     margin: .5rem .8rem;
     border-width: .19rem;
     border-radius: 1.25rem;
-    border-color: #939292;
+    border-color: var(--bs-info);
 }
 
 .scrolling-wrapper > a > .card > p {
@@ -265,7 +265,7 @@ h2 {
 .mmd-input-wrap > input, .mmd-select {
     height: 2.5rem;
     background-color: white;
-    border-color: #54b686;
+    border-color: var(--bs-primary);
     border-width: .19rem;
     border-radius: 1.25rem;
     border-style: solid;
@@ -293,7 +293,7 @@ h2 {
 }
 
 .mmd-thin-button {
-    background-color: #54b686;
+    background-color: var(--bs-primary);
     color: white;
     border: none;
     height: 2.5rem;
@@ -306,7 +306,7 @@ h2 {
 }
 
 .mmd-button {
-    background-color: #54b686;
+    background-color: var(--bs-primary);
     color: white;
     border: none;
     border-radius: 1.25rem;
@@ -322,14 +322,14 @@ h2 {
 }
 
 a {
-    color: #54b686;
+    color: var(--bs-primary);
 }
 
 .mmd-profile > div > div > div > img {
     height: 8rem;
     width: 8rem;
     object-fit: cover;
-    border: .5rem solid #54b686;
+    border: .5rem solid var(--bs-primary);
     border-radius: 2rem;
     margin: 1rem;
 }
@@ -351,7 +351,7 @@ a {
     height: 12rem;
     width: 12rem;
     object-fit: cover;
-    border: .5rem solid #54b686;
+    border: .5rem solid var(--bs-primary);
     border-radius: 2rem;
     margin: 1rem;
 }
@@ -380,7 +380,7 @@ a {
 .mmd-edit-wrap > textarea {
     height: 12rem;
     background-color: white;
-    border-color: #54b686;
+    border-color: var(--bs-primary);
     border-width: .19rem;
     border-radius: 1.25rem;
     border-style: solid;
@@ -396,7 +396,7 @@ a {
 .mmd-small-note {
     font-size: smaller;
     font-weight: bold;
-    color: #939292;
+    color: var(--bs-info);
     line-height: 1.2;
     align-self: center;
 }
@@ -420,7 +420,7 @@ a {
 .mmd-edit-wrap > input, .mmd-select {
     height: 2.5rem;
     background-color: white;
-    border-color: #54b686;
+    border-color: var(--bs-primary);
     border-width: .19rem;
     border-radius: 1.25rem;
     border-style: solid;
@@ -466,7 +466,7 @@ a {
     height: 5rem;
     width: 5rem;
     object-fit: cover;
-    border: .4rem solid #54b686;
+    border: .4rem solid var(--bs-primary);
     border-radius: 1rem;
 }
 
@@ -491,14 +491,14 @@ a {
 }
 
 .mmd-admin-table > thead > tr > th {
-    border: 0.15rem solid #939292;
+    border: 0.15rem solid var(--bs-info);
     padding: 0.5rem;
     font-weight: bold;
     background-color: #BCDDCD;
 }
 
 .mmd-admin-table > tbody > tr > td {
-    border: 0.15rem solid #939292;
+    border: 0.15rem solid var(--bs-info);
     padding: 0.5rem;
 }
 
@@ -512,4 +512,18 @@ a {
 .mmd-admin-input-wrap {
     max-width: 10rem;
     margin-right: 1rem;
+}
+
+.mmd-list > li::marker {
+    color: var(--bs-primary);
+}
+
+.mmd-faq > div > div > h2 {
+    margin-top: 1rem;
+}
+
+.mmd-faq {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 10rem;
 }
