@@ -4,6 +4,7 @@ namespace Expo\App\Http\Controllers\Api;
 
 use Exception;
 use Expo\App\Http\Controllers\Authentication;
+use Expo\App\Mail\EmailSender;
 use Expo\App\Models\Compilations;
 use Expo\App\Models\Photos;
 use Expo\App\Models\Users;
@@ -129,5 +130,10 @@ class AdminActions
         } else {
             View::render('403');
         }
+    }
+
+    public static function sendEmail(int $id, string $type)
+    {
+        EmailSender::send($type, $id);
     }
 }

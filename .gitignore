@@ -8,3 +8,4 @@ Vagrantfile
 /Public/uploads/photos/
 /React/
 /Public/js/bundle.js
+/App/Mail/EmailCredentials.php

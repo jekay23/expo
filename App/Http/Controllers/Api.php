@@ -151,6 +151,14 @@ class Api
                     View::render('404');
                 }
                 break;
+            case 'checkEmail':
+                $uriQuery = self::getUriQueryArray();
+                if (isset($uriQuery['userID']) && isset($uriQuery['type'])) {
+                    AdminActions::sendEmail($uriQuery['userID'], $uriQuery['type']);
+                } else {
+                    View::render('404');
+                }
+                break;
         }
     }
 

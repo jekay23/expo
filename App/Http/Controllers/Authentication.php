@@ -4,6 +4,7 @@ namespace Expo\App\Http\Controllers;
 
 use Exception;
 use Expo\App\Models\QueryBuilder as QB;
+use Expo\App\Models\Tokens;
 use Expo\App\Models\Users;
 
 class Authentication
@@ -247,5 +248,12 @@ class Authentication
             header("Location: /profile/$userID/change-password-email?$uriQuery");
             exit;
         }
+    }
+
+    public static function getToken(int $userID, string $type)
+    {
+        $token = HashHandler::getHash('token', $userID, time());
+        Tokens::add($userID, $token, $type);
+        return $token;
     }
 }
