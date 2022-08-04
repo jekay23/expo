@@ -9,12 +9,9 @@ class Profile
 {
     public static function render(bool &$stickFooter, $user)
     {
-        $stickFooter = true;
+        $stickFooter = false;
         $compact = compact(null);
         if (isset($user)) {
-            if ($user['numOfPhotos'] > 6) {
-                $stickFooter = false;
-            }
             if ($user['isProfileOwner']) {
                 $button = [
                     'name' => 'Загрузить фотографии',

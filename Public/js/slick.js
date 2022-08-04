@@ -1,21 +1,27 @@
 $(document).ready(function () {
-    $('.mmd-slider').slick({
-        infinite: false,
-        speed: 300,
-        variableWidth: true,
-        arrows: false,
-        draggable: true,
-        slidesToScroll: 5
-    });
+    if ('ontouchstart' in document.documentElement) {
+    } else {
+        $('.mmd-slider').slick({
+            infinite: false,
+            speed: 300,
+            variableWidth: true,
+            arrows: false,
+            draggable: true,
+            slidesToScroll: 3
+        });
+    }
 });
 
 $(document).ready(function () {
-    $('.mmd-slider-infinite').slick({
-        infinite: true,
-        speed: 300,
-        variableWidth: true,
-        arrows: false,
-        draggable: true,
-        slidesToScroll: 5
-    });
+    if ('ontouchstart' in document.documentElement) {
+    } else {
+        $('.mmd-slider-infinite').slick({
+            infinite: true,
+            speed: 300,
+            variableWidth: true,
+            arrows: false,
+            draggable: true,
+            slidesToScroll: 3
+        });
+    }
 });

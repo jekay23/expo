@@ -10,7 +10,7 @@ class Compilation
     public static function render(bool &$stickFooter, array $compilation)
     {
         if (count($compilation['photos']) <= 24) {
-            $stickFooter = true;
+            $stickFooter = false;
         }
         View::requireTemplate('compilation', 'Page', compact('compilation'));
         if (count($compilation['photos']) > 0) {

@@ -8,7 +8,7 @@ class ChangePasswordEmail
 {
     public static function render(bool &$stickFooter, $user)
     {
-        $stickFooter = true;
+        $stickFooter = false;
         $varNames = null;
         if (isset($user)) {
             $userID = $user['userID'];

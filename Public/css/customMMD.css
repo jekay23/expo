@@ -228,7 +228,7 @@ hr {
 }
 
 @media screen and (max-width: 1200px) {
-    .carousel-item > img {
+    .carousel-item > a > img {
         height: 42vw;
         width: 63vw;
         object-fit: cover;
@@ -549,4 +549,8 @@ a {
     text-align: center;
     margin-top: 1rem;
     margin-bottom: 10rem;
+}
+
+.mmd-main {
+    min-height: calc(100vh - 7.5rem)
 }

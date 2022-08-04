@@ -9,7 +9,7 @@ class Photo
     public static function render(bool &$stickFooter, $photo)
     {
         $varNames = null;
-        $stickFooter = true;
+        $stickFooter = false;
         switch ($photo['likeStatus']) {
             case 'notSignedIn':
                 $photo['likeImage'] = '/image/emptyBlackHeart.png';
