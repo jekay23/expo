@@ -3,12 +3,16 @@
 namespace Expo\App\Http\Controllers;
 
 use Exception;
+use Expo\App\Mail\EmailSender;
 use Expo\App\Models\QueryBuilder as QB;
 use Expo\App\Models\Tokens;
 use Expo\App\Models\Users;
 
 class Authentication
 {
+    /**
+     * @throws Exception
+     */
     public static function authenticate(string $type)
     {
         $hash = HashHandler::getHash('password', $_POST['password'], $_POST['email']);
@@ -47,6 +51,8 @@ class Authentication
                 list($userCreated, $userID) = Users::createUser($credentials);
                 if ($userCreated) {
                     self::saveHashToCookie($userID);
+                    $token = self::getToken($userID, 'verify');
+                    EmailSender::send('verify', $userID, ['verifyUrl' => Api::getUrlWithToken('verify', $token)]);
                     return [true, $userID];
                 } else {
                     throw new Exception('Unknown error: ID accessible, but user not set as created.');
@@ -250,10 +256,54 @@ class Authentication
         }
     }
 
-    public static function getToken(int $userID, string $type)
+    /**
+     * @throws Exception
+     */
+    public static function getToken(int $userID, string $type): string
     {
         $token = HashHandler::getHash('token', $userID, time());
         Tokens::add($userID, $token, $type);
         return $token;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function checkToken(int $userID, string $token, string $type): bool
+    {
+        return Tokens::check($userID, $token, $type);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function verifyEmail(string $token)
+    {
+        $hash = HashHandler::getHash('password', $_POST['password'], $_POST['email']);
+        $post = $_POST;
+        unset($post['password']);
+        $post['passwordHash'] = $hash;
+        list($inputStatus, $error) = QueryHandler::processPost($post);
+        if ($inputStatus) {
+            list($authStatus, $data) = self::signIn($post, false);
+            if ($authStatus) {
+                $tokenStatus = self::checkToken($data, $token, 'verify');
+                if ($tokenStatus) {
+                    Tokens::delete($token);
+                    Users::verifyEmail($data);
+                    $uriQuery = http_build_query(['message' => 'Email подтверждён', 'color' => 'green']);
+                    header("Location: /profile/$data?$uriQuery");
+                } else {
+                    $uriQuery = http_build_query(['message' => 'Email не подтверждён', 'color' => 'red']);
+                    header("Location: /?$uriQuery");
+                }
+            } else {
+                $uriQuery = http_build_query(['message' => $data, 'color' => 'red']);
+                header("Location: /verify?token=$token&$uriQuery");
+            }
+        } else {
+            $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
+            header("Location: /$type?$uriQuery");
+        }
     }
 }

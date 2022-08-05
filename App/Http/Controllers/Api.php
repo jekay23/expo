@@ -159,6 +159,14 @@ class Api
                     View::render('404');
                 }
                 break;
+            case 'verify':
+                $uriQuery = self::getUriQueryArray();
+                if (isset($uriQuery['token'])) {
+                    Authentication::verifyEmail($uriQuery['token']);
+                } else {
+                    View::render('404');
+                }
+                break;
         }
     }
 
@@ -167,5 +175,11 @@ class Api
         $uriQuery = [];
         parse_str($_SERVER['QUERY_STRING'], $uriQuery);
         return $uriQuery;
+    }
+
+    public static function getUrlWithToken(string $type, string $token): string
+    {
+        $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . "/$type?token=$token";
+        return $url;
     }
 }

@@ -2,18 +2,18 @@
 
 namespace Expo\App\Models;
 
+use Exception;
 use Expo\App\Http\Controllers\Authentication;
-use Expo\App\Models\QueryObject as QO;
 
 class QueryBuilder
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function getPhotoDetails(int $photoID): array
     {
         if (!DataBaseConnection::makeSureConnectionIsOpen()) {
-            throw new \Exception('Unable to connect to server. Please try again later or contact support.');
+            throw new Exception('Unable to connect to server. Please try again later or contact support.');
         }
 
         $photo = Photos::getPhoto($photoID);
@@ -52,14 +52,14 @@ class QueryBuilder
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function getTextFields(string $type, int $quantity, array $args = null): array
     {
         if ('filters' === $type) {
             $filters = [
                 ['name' => 'По дате публикации', 'href' => ''],
-                ['name' => 'По поулярности', 'href' => ''],
+                ['name' => 'По полярности', 'href' => ''],
                 ['name' => 'По выставкам', 'href' => '']
             ];
             return [true, $filters];

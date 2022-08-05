@@ -228,4 +228,11 @@ class Users extends QB
         $query->values($isAdmin[$value]);
         self::executeQuery($query, false);
     }
+
+    public static function verifyEmail(int $userID)
+    {
+        $query = QO::update()->table('Users')->columns('isEmailVerified')->where(['userID', $userID]);
+        $query->values(1);
+        self::executeQuery($query, false);
+    }
 }

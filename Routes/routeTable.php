@@ -54,3 +54,15 @@ Router::saveCallback('license', function (array $requestList, array $requestQuer
 Router::saveCallback('faq', function (array $requestList, array $requestQuery) {
     Controllers\Pages\FAQ::prepare($requestList, $requestQuery);
 });
+
+Router::saveCallback('verify', function (array $requestList, array $requestQuery) {
+    Controllers\Pages\Verify::prepare($requestList, $requestQuery);
+});
+
+Router::saveCallback('request-restore', function (array $requestList, array $requestQuery) {
+    Controllers\Pages\RequestRestore::prepare($requestList, $requestQuery);
+});
+
+Router::saveCallback('restore', function (array $requestList, array $requestQuery) {
+    Controllers\Pages\Restore::prepare($requestList, $requestQuery);
+});

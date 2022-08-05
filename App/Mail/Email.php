@@ -45,7 +45,7 @@ class Email
         return true;
     }
 
-    public function setBody(string $customSting = null): bool
+    public function setBody(array $customStings): bool
     {
         $this->body = '';
         if (isset($this->recipientName)) {
@@ -56,31 +56,41 @@ class Email
         $this->body .= '<br>';
         switch ($this->type) {
             case 'verify':
-                $this->body .= '<p>Вы только что зарегистрировались на сайте <a href="http://62.113.110.35/">Выставки фотографов мехмата</a>.</p>';
-                $this->body .= "<p>Пожалуйста, подтвердите ваш адрес электронной почты <b>$this->recipientEmails[0]</b>, ";
-                $this->body .= "перейдя по одноразовой ссылке <a href=\"#\">#</a>.</p><br>";
+                $verifyUrl = $customStings['verifyUrl'];
+                $recipientEmail = $this->recipientEmails[0];
+                $this->body .= '<p>Вы только что зарегистрировались на сайте ';
+                $this->body .= '<a href="http://62.113.110.35/">Выставки фотографов мехмата</a>.</p>';
+                $this->body .= "<p>Пожалуйста, подтвердите ваш адрес электронной почты <b>$recipientEmail</b>, ";
+                $this->body .= "перейдя по одноразовой ссылке <a href=\"$verifyUrl\">$verifyUrl</a>.</p><br>";
                 $this->body .= '<p>Пожалуйста, <b>никому не сообщайте данную ссылку</b>.</p><br>';
-                $this->body .= '<p>Если вы не регистрировались на сайте, вы можете проигнорировать это письмо.</p><br><br>';
-                $this->body .= '<p>C уважением, <br>Команда мехмата</p>';
+                $this->body .= '<p>Если вы не регистрировались на сайте, вы можете проигнорировать это письмо.</p><br>';
+                $this->body .= '<br><p>C уважением, <br>Команда мехмата</p>';
                 break;
             case 'exhibit':
-                $this->body .= '<p>Ваша фотография на сайте <a href="http://62.113.110.35/">Выставки фотографов мехмата</a> ';
+                $photoUrl = $customStings['photoUrl'];
+                $exhibitUrl = $customStings['exhibitUrl'];
+                $this->body .= '<p>Ваша фотография на сайте ';
+                $this->body .= '<a href="http://62.113.110.35/">Выставки фотографов мехмата</a> ';
                 $this->body .= 'была отобрана для участия в следующей выставке!</p><br>';
                 $this->body .= '<p>Подробности:</p>';
-                $this->body .= "<ul><li>фотография: <a href=\"#\">#</a></li><li>выставка: <a href=\"#\">#</a></li></ul>";
+                $this->body .= "<ul><li>фотография: <a href=\"$photoUrl\">$photoUrl</a></li>";
+                $this->body .= "<li>выставка: <a href=\"$exhibitUrl\">$exhibitUrl</a></li></ul>";
                 $this->body .= '<br><br>';
                 $this->body .= '<p>C уважением, <br>Команда мехмата</p>';
                 break;
             case 'restore':
+                $restoreUrl = $customStings['restoreUrl'];
                 $this->body .= '<p>Нам только что поступил запрос на восстновление пароля от вашего аккаунта ';
                 $this->body .= 'на сайте <a href="http://62.113.110.35/">Выставки фотографов мехмата</a>.</p><br>';
-                $this->body .= "<p>Если это были вы, пожалуйста, перейдите по одноразовой ссылке <a href=\"#\">#</a> ";
+                $this->body .= "<p>Если это были вы, пожалуйста, перейдите по одноразовой ссылке ";
+                $this->body .= "<a href=\"$restoreUrl\">$restoreUrl</a> ";
                 $this->body .= 'для восстановления пароля. <b>Никому не сообщайте данную ссылку</b>.</p><br>';
-                $this->body .= '<p>Если это были не вы, пожалуйста, проигнорируйте это письмо. Ваш аккаунт в безопасности.</p><br><br>';
+                $this->body .= '<p>Если это были не вы, пожалуйста, проигнорируйте это письмо. ';
+                $this->body .= 'Ваш аккаунт в безопасности.</p><br><br>';
                 $this->body .= '<p>C уважением, <br>Команда мехмата</p>';
                 break;
             case 'custom':
-                $this->body .= $customSting;
+                $this->body .= $customStings;
         }
         return true;
     }

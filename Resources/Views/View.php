@@ -14,7 +14,8 @@ class View
         'compilation' => 'Compilation',
         'exhibition' => 'Compilation',
         'editProfile' => 'EditProfile',
-        'changePasswordEmail' => 'ChangePasswordEmail'
+        'changePasswordEmail' => 'ChangePasswordEmail',
+        'verify' => 'Verify'
     ];
 
     private static array $navbarLinks = [
@@ -25,11 +26,22 @@ class View
         'editProfile' => 'profile',
         'changeAvatar' => 'profile',
         'changePasswordEmail' => 'profile',
-        'compilation' => 'selection'
+        'compilation' => 'selection',
+        'verify' => 'profile'
     ];
 
-    private static array $staticPages = ['404', '403', '503', 'upload', 'signIn', 'signUp',
-                                         'support', 'license', 'faq', 'changeAvatar'];
+    private static array $staticPages = [
+        '404',
+        '403',
+        '503',
+        'upload',
+        'signIn',
+        'signUp',
+        'support',
+        'license',
+        'faq',
+        'changeAvatar'
+    ];
 
     private static array $titles = [
         'frontpage' => 'Выставка фотографов мехмата',
@@ -47,8 +59,9 @@ class View
         'changeAvatar' => 'Смена аватара',
         'changePasswordEmail' => 'Смена пароля и email',
         'support' => 'Поддержка',
-        'faq' => 'Частозадоваемые вопросы',
-        'license' => 'Пользовательское соглашение'
+        'faq' => 'Частозадаваемые вопросы',
+        'license' => 'Пользовательское соглашение',
+        'verify' => 'Подтверждение email'
     ];
 
     private static function makeTitle(string $requestTitle, $override = null): string

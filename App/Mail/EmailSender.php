@@ -6,13 +6,13 @@ use Expo\App\Models\Users;
 
 class EmailSender
 {
-    public static function send(string $type, int $id)
+    public static function send(string $type, int $id, array $customStrings)
     {
         $email = new Email($type);
         $user = Users::getUserData($id, true);
         $email->addRecipient($user['email']);
         $email->setRecipientName($user['name']);
-        $email->setBody();
+        $email->setBody($customStrings);
         $email->send();
     }
 }
