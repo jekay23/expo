@@ -7,7 +7,11 @@
         <?php foreach ($rows as $row) : ?>
             <div class="one-of-stack d-flex justify-content-evenly">
                 <?php foreach ($row as $photo) : ?>
-                    <a href="/photo/<?= $photo['photoID'] ?>"><img src= <?= '/uploads/photos/' . $photo['location'] ?> alt="<?= $photo['altText'] ?>"></a>
+                    <a class="mmd-exhibit-slider-photo" href="/photo/<?= $photo['photoID'] ?>">
+                        <img alt="<?= $photo['altText'] ?>" class="mmd-image"
+                             src="<?= '/uploads/photos/' . $photo['location'] ?>">
+                        <img class="mmd-like" src="/image/emptyWhiteHeart.png" alt="Непоставленный лайк">
+                    </a>
                 <?php endforeach; ?>
             </div>
         <?php endforeach; ?>

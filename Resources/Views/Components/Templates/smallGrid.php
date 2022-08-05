@@ -4,7 +4,11 @@
     <?php foreach ($blocks as $block) : ?>
         <div class="small-grid-triple d-inline-flex">
             <?php foreach ($block as $photo) : ?>
-                <a href="/photo/<?= $photo['photoID'] ?>"><img src="<?= '/uploads/photos/' . $photo['location'] ?>" alt="<?= $photo['altText'] ?>"></a>
+                <a class="mmd-small-grid-image" href="/photo/<?= $photo['photoID'] ?>">
+                    <img alt="<?= $photo['altText'] ?>" class="mmd-image"
+                         src="<?= '/uploads/photos/' . $photo['location'] ?>">
+                    <img class="mmd-like" src="/image/emptyWhiteHeart.png" alt="Непоставленный лайк">
+                </a>
             <?php endforeach; ?>
         </div>
     <?php endforeach; ?>

@@ -3,8 +3,14 @@
 <div id="photoCarousel" class="carousel carousel-dark slide py-2" data-bs-ride="false">
     <div class="carousel-inner">
         <?php foreach ($photos as $photo) : ?>
-            <div class="carousel-item <?= $photo['carouselStatus'] ?> text-center">
-                <a href="/photo/<?= $photo['photoID'] ?>"><img src=<?= '/uploads/photos/' . $photo['location'] ?> alt="<?= $photo['altText'] ?>"></a>
+            <div class="carousel-item <?= $photo['carouselStatus'] ?>">
+                <div class="d-flex justify-content-center">
+                    <a class="mmd-carousel-image" href="/photo/<?= $photo['photoID'] ?>">
+                        <img alt="<?= $photo['altText'] ?>" class="mmd-image"
+                             src="<?= '/uploads/photos/' . $photo['location'] ?>">
+                        <img class="mmd-like" src="/image/emptyWhiteHeart.png" alt="Непоставленный лайк">
+                    </a>
+                </div>
             </div>
         <?php endforeach; ?>
     </div>
