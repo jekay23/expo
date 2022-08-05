@@ -5,7 +5,6 @@ namespace Expo\App\Http\Controllers;
 use Exception;
 use Expo\App\Http\Controllers\Api\AdminActions;
 use Expo\App\Http\Controllers\Api\UserActions;
-use Expo\App\Http\Controllers\Authentication;
 use Expo\Resources\Views\View;
 
 class Api
@@ -163,6 +162,17 @@ class Api
                 $uriQuery = self::getUriQueryArray();
                 if (isset($uriQuery['token'])) {
                     Authentication::verifyEmail($uriQuery['token']);
+                } else {
+                    View::render('404');
+                }
+                break;
+            case 'requestRestore':
+                Authentication::requestRestore();
+                break;
+            case 'restore':
+                $uriQuery = self::getUriQueryArray();
+                if (isset($uriQuery['token'])) {
+                    Authentication::restorePassword($uriQuery['token']);
                 } else {
                     View::render('404');
                 }

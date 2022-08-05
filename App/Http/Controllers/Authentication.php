@@ -303,7 +303,68 @@ class Authentication
             }
         } else {
             $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
-            header("Location: /$type?$uriQuery");
+            header("Location: /?$uriQuery");
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function requestRestore()
+    {
+        $post = $_POST;
+        list($inputStatus, $error) = QueryHandler::processPost($post);
+        if ($inputStatus) {
+            $email = $post['email'];
+            list($emailExists, $userID) = Users::checkEmailInDB($email);
+            if ($emailExists) {
+                $token = self::getToken($userID, 'restore');
+                EmailSender::send('restore', $userID, ['restoreUrl' => Api::getUrlWithToken('restore', $token)]);
+            }
+            $uriQuery = http_build_query([
+                'message' => "Если email $email зарегистрирован на сайте, на него придёт письмо c инструкциями",
+                'color' => 'green'
+            ]);
+        } else {
+            $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
+        }
+        header("Location: /request-restore?$uriQuery");
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function restorePassword(string $token)
+    {
+        $hash = HashHandler::getHash('password', $_POST['password'], $_POST['email']);
+        $hashAgain = HashHandler::getHash('password', $_POST['passwordAgain'], $_POST['email']);
+        $post = $_POST;
+        unset($post['password']);
+        unset($post['passwordAgain']);
+        $post['passwordHash'] = $hash;
+        $post['passwordHashAgain'] = $hashAgain;
+        list($inputStatus, $error) = QueryHandler::processPost($post);
+        if ($inputStatus) {
+            if ($post['passwordHash'] != $post['passwordHashAgain']) {
+                $uriQuery = http_build_query(['message' => 'Пароли не совпадают', 'color' => 'red', 'token' => $token]);
+                header("Location: /restore?$uriQuery");
+                exit;
+            }
+            list($emailExists, $userID) = Users::checkEmailInDB($post['email']);
+            if ($emailExists) {
+                $tokenStatus = self::checkToken($userID, $token, 'restore');
+                if ($tokenStatus) {
+                    Tokens::delete($token);
+                    Users::changePassword($userID, $post['passwordHash']);
+                    $uriQuery = http_build_query(['message' => 'Пароль изменён', 'color' => 'green']);
+                    header("Location: /sign-in?$uriQuery");
+                    exit;
+                }
+            }
+            $uriQuery = http_build_query(['message' => 'Пароль не изменён', 'color' => 'red']);
+        } else {
+            $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
+        }
+        header("Location: /request-restore?$uriQuery");
     }
 }

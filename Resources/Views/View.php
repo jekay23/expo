@@ -15,7 +15,8 @@ class View
         'exhibition' => 'Compilation',
         'editProfile' => 'EditProfile',
         'changePasswordEmail' => 'ChangePasswordEmail',
-        'verify' => 'Verify'
+        'verify' => 'Verify',
+        'restore' => 'Restore'
     ];
 
     private static array $navbarLinks = [
@@ -27,7 +28,9 @@ class View
         'changeAvatar' => 'profile',
         'changePasswordEmail' => 'profile',
         'compilation' => 'selection',
-        'verify' => 'profile'
+        'verify' => 'profile',
+        'requestRestore' => 'profile',
+        'restore' => 'profile'
     ];
 
     private static array $staticPages = [
@@ -40,7 +43,8 @@ class View
         'support',
         'license',
         'faq',
-        'changeAvatar'
+        'changeAvatar',
+        'requestRestore'
     ];
 
     private static array $titles = [
@@ -61,7 +65,9 @@ class View
         'support' => 'Поддержка',
         'faq' => 'Частозадаваемые вопросы',
         'license' => 'Пользовательское соглашение',
-        'verify' => 'Подтверждение email'
+        'verify' => 'Подтверждение email',
+        'requestRestore' => 'Восстановление пароля',
+        'restore' => 'Восстановление пароля'
     ];
 
     private static function makeTitle(string $requestTitle, $override = null): string

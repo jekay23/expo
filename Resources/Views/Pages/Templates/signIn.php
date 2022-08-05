@@ -7,6 +7,6 @@
     <button class="mmd-thin-button" type="submit">
         Войти
     </button>
-    <p><a href="/">Восстановить пароль</a></p>
+    <p><a href="/request-restore">Восстановить пароль</a></p>
     <p><a href="/sign-up">Зарегистрироваться</a></p>
 </form>

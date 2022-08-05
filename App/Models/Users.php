@@ -235,4 +235,11 @@ class Users extends QB
         $query->values(1);
         self::executeQuery($query, false);
     }
+
+    public static function changePassword($userID, string $passwordHash)
+    {
+        $query = QO::update()->table('Users')->columns('passwordHash')->where(['userID', $userID]);
+        $query->values($passwordHash);
+        self::executeQuery($query, false);
+    }
 }
