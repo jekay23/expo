@@ -4,7 +4,7 @@
     <?php foreach ($photos as $photo) : ?>
         <a class="mmd-slider-image" href="/photo/<?= $photo['photoID'] ?>">
             <img src="<?= '/uploads/photos/' . $photo['location'] ?>" alt="<?= $photo['altText'] ?>" class="mmd-image">
-            <img class="mmd-like" src="/image/emptyWhiteHeart.png" alt="Непоставленный лайк">
+            <?php \Expo\Resources\Views\Components\Like::render(isset($photo['likeID'])) ?>
         </a>
     <?php endforeach; ?>
 </div>

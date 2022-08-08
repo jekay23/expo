@@ -20,13 +20,13 @@ class Likes extends QueryBuilder
         }
     }
 
-    public static function addLike($userID, $photoID)
+    public static function addLike(int $userID, int $photoID)
     {
         $query = QO::insert()->table('Likes')->columns('userID', 'photoID')->values($userID, $photoID);
         self::executeQuery($query, false);
     }
 
-    public static function removeLike($userID, $photoID)
+    public static function removeLike(int $userID, int $photoID)
     {
         $query = QO::delete()->table('Likes')->where(['userID', $userID], ['photoID', $photoID]);
         self::executeQuery($query, false);
@@ -43,5 +43,24 @@ class Likes extends QueryBuilder
         } else {
             return $result[0]['likes'];
         }
+    }
+
+    public static function addLikeByName(int $userID, string $name)
+    {
+        $photoID = self::getPhotoIdByName($name);
+        self::addLike($userID, $photoID);
+    }
+
+    public static function removeLikeByName(int $userID, string $name)
+    {
+        $photoID = self::getPhotoIdByName($name);
+        self::removeLike($userID, $photoID);
+    }
+
+    public static function getPhotoIdByName(string $name): int
+    {
+        $query = QO::select()->table('Photos')->columns('photoID')->where(['location', $name]);
+        $photos = self::executeQuery($query);
+        return $photos[0]['photoID'];
     }
 }

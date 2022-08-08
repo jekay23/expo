@@ -7,7 +7,7 @@
                 <a class="mmd-small-grid-image" href="/photo/<?= $photo['photoID'] ?>">
                     <img alt="<?= $photo['altText'] ?>" class="mmd-image"
                          src="<?= '/uploads/photos/' . $photo['location'] ?>">
-                    <img class="mmd-like" src="/image/emptyWhiteHeart.png" alt="Непоставленный лайк">
+                    <?php \Expo\Resources\Views\Components\Like::render(isset($photo['likeID'])) ?>
                 </a>
             <?php endforeach; ?>
         </div>

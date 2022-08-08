@@ -29,5 +29,6 @@
                 src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
         <script src="/js/popover.js"></script>
         <script src="/js/slick.js"></script>
+        <script src="/js/quickLike.js"></script>
     </body>
 </html>

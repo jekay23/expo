@@ -225,13 +225,18 @@ class QueryObject
     {
         $conditionStrings = [];
         foreach ($conditions as $condition) {
-            if (2 != count($condition)) {
+            if (count($condition) > 2) {
                 throw new Exception('Incorrect query formation: wrong where condition format');
             }
-            if (gettype($condition[1]) != 'integer') {
-                $condition[1] = "'$condition[1]'";
+            if (1 == count($condition)) {
+                // preformatted
+                $conditionStrings[] = $condition[0];
+            } else {
+                if (gettype($condition[1]) != 'integer') {
+                    $condition[1] = "'$condition[1]'";
+                }
+                $conditionStrings[] = "$condition[0] = $condition[1]";
             }
-            $conditionStrings[] = "$condition[0] = $condition[1]";
         }
         if (!empty($this->where)) {
             $this->where .= ' AND ' . implode(' AND ', $conditionStrings);
@@ -332,5 +337,10 @@ class QueryObject
         }
         $this->values = $values;
         return $this;
+    }
+
+    public function getNumOfJoins(): int
+    {
+        return $this->numOfJoins;
     }
 }

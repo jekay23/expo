@@ -8,6 +8,7 @@ use Expo\App\Http\Controllers\QueryHandler;
 use Expo\App\Models\Likes;
 use Expo\App\Models\QueryBuilder;
 use Expo\App\Models\Users;
+use Expo\Resources\Views\View;
 
 class UserActions
 {
@@ -30,7 +31,7 @@ class UserActions
             $photoID = $uriQuery['photoID'];
             $likeSet = Likes::checkLike($userID, $photoID);
             if ($likeSet) {
-                $uriQuery = http_build_query(['message' => 'Вы уже оцениали это фото', 'color' => 'red']);
+                $uriQuery = http_build_query(['message' => 'Вы уже оценивали это фото', 'color' => 'red']);
                 header("Location: /photo/$photoID?$uriQuery");
             } else {
                 Likes::addLike($userID, $photoID);
@@ -78,7 +79,7 @@ class UserActions
                 1 => 'Файл весит больше 6 МБ',
                 2 => 'Файл весит больше 6 МБ',
                 3 => 'Файл не загрузился полностью',
-                4 => 'Файл не был загрузжен',
+                4 => 'Файл не был загружен',
                 6 => 'Файл не был помещён во временную папку на сервере'
             ];
             $message = $messageEndings[$file['error']];
@@ -182,7 +183,7 @@ class UserActions
                     1 => '-й файл весит больше 6 МБ',
                     2 => '-й файл весит больше 6 МБ',
                     3 => '-й файл не загрузился полностью',
-                    4 => '-й файл не был загрузжен',
+                    4 => '-й файл не был загружен',
                     6 => '-й файл не был помещён во временную папку на сервере'
                 ];
                 $message = $i . ' фото было добавлено, однако ' . ($i + 1) . $messageEndings[$files['error'][$i]];
@@ -194,5 +195,36 @@ class UserActions
         $message = $i . ' фото было добавлено';
         $uriQuery = http_build_query(['message' => $message, 'color' => 'green']);
         header("Location: /profile/$userID?$uriQuery");
+    }
+
+    public static function quickAction(string $type)
+    {
+        $uriQuery = self::getUriQueryArray();
+        if (isset($uriQuery['name'])) {
+            $userID = Authentication::getUserIdFromCookie();
+            if ($userID) {
+                switch ($type) {
+                    case 'like':
+                        Likes::addLikeByName($userID, $uriQuery['name']);
+                        break;
+                    case 'dislike':
+                        Likes::removeLikeByName($userID, $uriQuery['name']);
+                        break;
+                }
+            }
+        } else {
+            View::render('404');
+        }
+    }
+
+    private static function getUriQueryArray(): array
+    {
+        $uriQuery = [];
+        parse_str($_SERVER['QUERY_STRING'], $uriQuery);
+        if (QueryHandler::processGET($uriQuery)) {
+            return $uriQuery;
+        } else {
+            return [];
+        }
     }
 }

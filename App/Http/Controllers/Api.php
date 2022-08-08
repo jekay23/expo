@@ -177,6 +177,12 @@ class Api
                     View::render('404');
                 }
                 break;
+            case 'quick-like':
+                UserActions::quickAction('like');
+                break;
+            case 'quick-dislike':
+                UserActions::quickAction('dislike');
+                break;
         }
     }
 

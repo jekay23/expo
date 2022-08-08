@@ -40,9 +40,32 @@ class Photos extends QB
                 return self::executeQuery($query);
         }
         $query->where(['isHiddenProfile', 0], ['isHiddenByEditor', 0], ['isHiddenByUser', 0]);
+        if ($type != 'best') {
+            $query->join('LEFT', 'Likes', 'photoID');
+            if ('compilation' == $type) {
+                $query->addColumns('TR3.likeID');
+                $query->where(['(TR3.userID = 24 OR TR3.userID IS NULL)']);
+            } else {
+                $query->addColumns('TR2.likeID');
+                $query->where(['(TR2.userID = 24 OR TR2.userID IS NULL)']);
+            }
+        }
         $query->limit($quantity);
 
         $photos = self::executeQuery($query);
+        foreach ($photos as &$photo) {
+            if (!isset($photo['photoID'])) {
+                for ($i = 1; $i < $query->getNumOfJoins(); $i++) {
+                    if (isset($photo["TL$i.photoID"])) {
+                        $photo['photoID'] = $photo["TL$i.photoID"];
+                        break;
+                    } elseif (isset($photo["TR$i.photoID"])) {
+                        $photo['photoID'] = $photo["TR$i.photoID"];
+                        break;
+                    }
+                }
+            }
+        }
         return [true, $photos];
     }
 
