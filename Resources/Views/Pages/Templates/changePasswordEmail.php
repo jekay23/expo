@@ -11,13 +11,17 @@ use Expo\Resources\Views\Components\TextField;
     </div>
     <div class="mt-3 col-12 col-lg-7 mmd-edit-profile">
         <form method="post" target="_self" action="/api/change-password-email">
-            <h3 class="mb-3">Изменить email</h3>
-            <?php TextField::render('changePasswordEmail', 'Email', ['name' => 'email', 'value' => $email]); ?>
-            <hr>
-            <h3 class="mt-4 mb-3">Изменить пароль</h3>
-            <?php TextField::render('changePasswordEmail', 'Новый пароль', ['name' => 'newPassword', 'type' => 'password']); ?>
-            <?php TextField::render('changePasswordEmail', 'Новый пароль ещё раз', ['name' => 'newPasswordAgain', 'type' => 'password']); ?>
-            <hr>
+            <div class="row">
+                <div class="col-12 col-md-5">
+                    <h3 class="mb-3">Изменить email</h3>
+                    <?php TextField::render('changePasswordEmail', 'Email', ['name' => 'email', 'value' => $email]); ?>
+                </div>
+                <div class="col-12 col-md-7">
+                    <h3 class="mt-4 mb-3">Изменить пароль</h3>
+                    <?php TextField::render('changePasswordEmail', 'Новый пароль', ['name' => 'newPassword', 'type' => 'password']); ?>
+                    <?php TextField::render('changePasswordEmail', 'Ещё раз', ['name' => 'newPasswordAgain', 'type' => 'password']); ?>
+                </div>
+            </div>
             <h3 class="mt-4 mb-3">Подтвердить действие и сохранить</h3>
             <?php TextField::render('changePasswordEmail', 'Старый пароль', ['name' => 'oldPassword', 'type' => 'password', 'required' => true]); ?>
             <div class="row justify-content-center mb-5">

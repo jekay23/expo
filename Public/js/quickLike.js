@@ -3,12 +3,12 @@ $('.mmd-like').click(function (e) {
     switch (e.target.alt) {
         case 'Лайк':
             e.target.alt = 'Непоставленный лайк';
-            e.target.src = e.target.baseURI + 'image/emptyWhiteHeart.png';
+            e.target.src = window.location.origin + '/image/emptyWhiteHeart.png';
             action = 'dislike';
             break;
         case 'Непоставленный лайк':
             e.target.alt = 'Лайк';
-            e.target.src = e.target.baseURI + 'image/filledHeart.png';
+            e.target.src = window.location.origin + '/image/filledHeart.png';
             action = 'like';
             break;
     }

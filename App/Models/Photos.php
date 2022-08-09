@@ -97,7 +97,18 @@ class Photos extends QB
     {
         $query = QO::select()->table('Photos')->columns('photoID', 'location', 'altText')->where(['addedBy', $userID]);
         $query->orderBy(['uploadTime', 'DESC'])->limit(24);
-        return self::executeQuery($query);
+        $photos = self::executeQuery($query);
+
+        $likes = Likes::getUserLikes(Authentication::getUserIdFromCookie());
+        $likedPhotoIds = [];
+        foreach ($likes as $like) {
+            $likedPhotoIds[] = $like['photoID'];
+        }
+        foreach ($photos as &$photo) {
+            $photo['liked'] = in_array($photo['photoID'], $likedPhotoIds);
+        }
+
+        return $photos;
     }
 
     /**
