@@ -8,6 +8,9 @@ use Expo\Resources\Views;
 
 class ExhibitionSlider
 {
+    /**
+     * @throws \Exception
+     */
     public static function prepare(string $headerText, string $type, int $quantity, int $compilationID = null)
     {
         if ('compilation' === $type) {
@@ -19,11 +22,11 @@ class ExhibitionSlider
         if ($status) {
             list($status, $compilation) = Compilations::getCompilationDetails($compilationID);
             if ($status && !empty($compilation)) {
+                $compilation['compilationID'] = $compilationID;
                 Views\Components\ExhibitionSlider::render(
                     $headerText,
                     $photos,
-                    $compilation['name'],
-                    $compilation['description']
+                    $compilation
                 );
             }
         }

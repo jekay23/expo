@@ -6,7 +6,7 @@ use Expo\Resources\Views\View;
 
 class ExhibitionSlider
 {
-    public static function render(string $headerText, array $photos, string $exhibitionName, string $exhibitionDesc)
+    public static function render(string $headerText, array $photos, array $exhibition)
     {
         if (!empty($photos)) {
             if (0 !== count($photos) % 2) {
@@ -21,7 +21,7 @@ class ExhibitionSlider
             View::requireTemplate(
                 'exhibitionSlider',
                 'Component',
-                compact('headerText', 'exhibitionName', 'exhibitionDesc', 'rows')
+                compact('headerText', 'exhibition', 'rows')
             );
         }
     }
