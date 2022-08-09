@@ -2,6 +2,7 @@
 
 namespace Expo\App\Models;
 
+use Expo\App\Http\Controllers\Authentication;
 use Expo\App\Models\QueryObject as QO;
 use Expo\App\Models\QueryBuilder as QB;
 
@@ -40,16 +41,6 @@ class Photos extends QB
                 return self::executeQuery($query);
         }
         $query->where(['isHiddenProfile', 0], ['isHiddenByEditor', 0], ['isHiddenByUser', 0]);
-        if ($type != 'best') {
-            $query->join('LEFT', 'Likes', 'photoID');
-            if ('compilation' == $type) {
-                $query->addColumns('TR3.likeID');
-                $query->where(['(TR3.userID = 24 OR TR3.userID IS NULL)']);
-            } else {
-                $query->addColumns('TR2.likeID');
-                $query->where(['(TR2.userID = 24 OR TR2.userID IS NULL)']);
-            }
-        }
         $query->limit($quantity);
 
         $photos = self::executeQuery($query);
@@ -66,9 +57,20 @@ class Photos extends QB
                 }
             }
         }
+        $likes = Likes::getUserLikes(Authentication::getUserIdFromCookie());
+        $likedPhotoIds = [];
+        foreach ($likes as $like) {
+            $likedPhotoIds[] = $like['photoID'];
+        }
+        foreach ($photos as &$photo) {
+            $photo['liked'] = in_array($photo['photoID'], $likedPhotoIds);
+        }
         return [true, $photos];
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function getPhoto(int $photoID): array
     {
         $query = QO::select()->table('Photos')->columns('photoID', 'location', 'altText', 'addedBy');
@@ -78,6 +80,9 @@ class Photos extends QB
         return $photos[0];
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function savePhoto(int $userID, string $location, string $authorName)
     {
         $query = QO::insert()->table('Photos')->columns('location', 'addedBy', 'altText');
@@ -85,6 +90,9 @@ class Photos extends QB
         self::executeQuery($query, false);
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function getUserPhotos(int $userID): array
     {
         $query = QO::select()->table('Photos')->columns('photoID', 'location', 'altText')->where(['addedBy', $userID]);
@@ -92,21 +100,25 @@ class Photos extends QB
         return self::executeQuery($query);
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function getCompilationItems(int $compilationID): array
     {
         $query = QO::select()->table('Photos');
         $query->join('RIGHT', 'CompilationItems', 'photoID');
         $query->columns('TR1.photoID', 'location', 'additionTime', 'isHiddenByEditor', 'isHiddenByUser');
         $query->where(['compilationID', $compilationID]);
-
         return self::executeQuery($query);
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function hide(int $photoID, bool $value)
     {
         $query = QO::update()->table('Photos');
         $query->columns('isHiddenByEditor')->values(($value ? 1 : 0))->where(['photoID', $photoID]);
-
         self::executeQuery($query, false);
     }
 }

@@ -8,7 +8,7 @@
                     <a class="mmd-carousel-image" href="/photo/<?= $photo['photoID'] ?>">
                         <img alt="<?= $photo['altText'] ?>" class="mmd-image"
                              src="<?= '/uploads/photos/' . $photo['location'] ?>">
-                        <?php \Expo\Resources\Views\Components\Like::render(isset($photo['likeID'])) ?>
+                        <?php \Expo\Resources\Views\Components\Like::render($photo['liked']) ?>
                     </a>
                 </div>
             </div>
