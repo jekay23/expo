@@ -5,9 +5,9 @@ namespace Expo\App\Http\Controllers\Api;
 use Exception;
 use Expo\App\Http\Controllers\Authentication;
 use Expo\App\Mail\EmailSender;
-use Expo\App\Models\Compilations;
-use Expo\App\Models\Photos;
-use Expo\App\Models\Users;
+use Expo\App\Models\Entities\Compilations;
+use Expo\App\Models\Entities\Photos;
+use Expo\App\Models\Entities\Users;
 use Expo\Resources\Views\View;
 
 class AdminActions
@@ -88,8 +88,8 @@ class AdminActions
                     $value = false;
                 }
                 Users::updateBool($id, $field, $value);
-            } elseif ('changeAccessLevel' == $field) {
-                Users::changeAccessLevel($id, $value);
+            } elseif ('updateAccessLevel' == $field) {
+                Users::updateAccessLevel($id, $value);
             } elseif ('hidePhoto' == $field) {
                 if ('true' === $value || 1 === $value || '1' === $value) {
                     $value = true;

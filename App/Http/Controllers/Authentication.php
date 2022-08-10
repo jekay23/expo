@@ -4,9 +4,8 @@ namespace Expo\App\Http\Controllers;
 
 use Exception;
 use Expo\App\Mail\EmailSender;
-use Expo\App\Models\QueryBuilder as QB;
-use Expo\App\Models\Tokens;
-use Expo\App\Models\Users;
+use Expo\App\Models\Entities\Tokens;
+use Expo\App\Models\Entities\Users;
 
 class Authentication
 {
@@ -19,7 +18,7 @@ class Authentication
         $post = $_POST;
         unset($post['password']);
         $post['passwordHash'] = $hash;
-        list($inputStatus, $error) = QueryHandler::processPost($post);
+        list($inputStatus, $error) = HTTPQueryHandler::processPost($post);
         if ($inputStatus) {
             $authStatus = false;
             $data = null;
@@ -48,15 +47,11 @@ class Authentication
         if (isset($credentials['email'], $credentials['name'], $credentials['passwordHash'])) {
             $emailIsNew = self::checkEmailIsNew($credentials['email']);
             if ($emailIsNew) {
-                list($userCreated, $userID) = Users::createUser($credentials);
-                if ($userCreated) {
-                    self::saveHashToCookie($userID);
-                    $token = self::getToken($userID, 'verify');
-                    EmailSender::send('verify', $userID, ['verifyUrl' => Api::getUrlWithToken('verify', $token)]);
-                    return [true, $userID];
-                } else {
-                    throw new Exception('Unknown error: ID accessible, but user not set as created.');
-                }
+                $userID = Users::create($credentials);
+                self::saveHashToCookie($userID);
+                $token = self::getToken($userID, 'verify');
+                EmailSender::send('verify', $userID, ['verifyUrl' => Api::getUrlWithToken('verify', $token)]);
+                return [true, $userID];
             } else {
                 return [false, 'Email уже зарегистрирован. Пожалуйста, воспользуйтесь формой входа.'];
             }
@@ -71,16 +66,16 @@ class Authentication
     private static function signIn(array $credentials, bool $saveCookie = true): array
     {
         if (isset($credentials['email'], $credentials['passwordHash'])) {
-            list($emailInDB, $userID) = Users::checkEmailInDB($credentials['email']);
-            if ($emailInDB) {
-                list($authenticated, $error) = Users::authenticate($userID, $credentials['passwordHash']);
+            $userID = Users::getIdByEmail($credentials['email']);
+            if ($userID) {
+                $authenticated = Users::authenticate($userID, $credentials['passwordHash']);
                 if ($authenticated) {
                     if ($saveCookie) {
                         self::saveHashToCookie($userID);
                     }
                     return [true, $userID];
                 } else {
-                    return [false, $error];
+                    return [false, 'Неверная комбинация email и пароля'];
                 }
             } else {
                 return [false, 'Неверная комбинация email и пароля'];
@@ -142,7 +137,7 @@ class Authentication
     {
         $userID = self::getUserIdFromCookie();
         if ($userID) {
-            $userLevel = Users::getUserLevel($userID);
+            $userLevel = Users::getAccessLevel($userID);
             return self::compareUserLevel($userLevel, $minLevel);
         }
         return false;
@@ -175,25 +170,30 @@ class Authentication
 
     private static function checkEmailIsNew(string $email): bool
     {
-        list($emailInDB,) = Users::checkEmailInDB($email);
-        return !$emailInDB;
+        $userID = Users::getIdByEmail($email);
+        return !$userID;
     }
 
     public static function changePasswordEmail()
     {
         $post = $_POST;
         $userID = Authentication::getUserIdFromCookie();
-        list($postStatus, $error) = QueryHandler::processPost($post);
+        list($postStatus, $error) = HTTPQueryHandler::processPost($post);
         if (!$postStatus) {
             $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
             header("Location: /profile/$userID/change-password-email?$uriQuery");
             exit;
         }
-        list($status, $user) = QB::getProfileData($userID, true);
-        if (!$status) {
-            $uriQuery = http_build_query(['message' => 'Пользователь не существует', 'color' => 'red']);
-            header("Location: /?$uriQuery");
-            exit;
+        try {
+            $user = Users::getUserData($userID, true);
+        } catch (Exception $e) {
+            if ($e->getCode() == 1) {
+                $uriQuery = http_build_query(['message' => $e->getMessage(), 'color' => 'red']);
+                header("Location: /?$uriQuery");
+                exit;
+            } else {
+                throw $e;
+            }
         }
         $oldEmail = $user['email'];
         $oldHash = HashHandler::getHash('password', $post['oldPassword'], $oldEmail);
@@ -207,7 +207,6 @@ class Authentication
             if (empty($post['newPassword']) && empty($post['newPasswordAgain'])) {
                 $uriQuery = http_build_query(['message' => 'Вы ничего не изменили', 'color' => 'red']);
                 header("Location: /profile/$userID/change-password-email?$uriQuery");
-                exit;
             } elseif ($post['newPassword'] == $post['newPasswordAgain']) {
                 $newHash = HashHandler::getHash('password', $post['newPassword'], $post['email']);
                 $user = [
@@ -217,13 +216,12 @@ class Authentication
                 Users::updateProfileData($user);
                 $uriQuery = http_build_query(['message' => 'Пароль изменён', 'color' => 'green']);
                 header("Location: /profile/$userID?$uriQuery");
-                exit;
             } else {
                 $uriQuery = http_build_query(['message' => 'Пароли не совпадают', 'color' => 'red']);
                 header("Location: /profile/$userID/change-password-email?$uriQuery");
-                exit;
             }
-        } elseif (Users::checkEmailInDB($post['email'])[0]) {
+            exit;
+        } elseif (Users::getIdByEmail($post['email'])) {
             $uriQuery = http_build_query(['message' => 'Профиль с данным email уже существует', 'color' => 'red']);
             header("Location: /profile/$userID/change-password-email?$uriQuery");
             exit;
@@ -283,7 +281,7 @@ class Authentication
         $post = $_POST;
         unset($post['password']);
         $post['passwordHash'] = $hash;
-        list($inputStatus, $error) = QueryHandler::processPost($post);
+        list($inputStatus, $error) = HTTPQueryHandler::processPost($post);
         if ($inputStatus) {
             list($authStatus, $data) = self::signIn($post, false);
             if ($authStatus) {
@@ -313,11 +311,11 @@ class Authentication
     public static function requestRestore()
     {
         $post = $_POST;
-        list($inputStatus, $error) = QueryHandler::processPost($post);
+        list($inputStatus, $error) = HTTPQueryHandler::processPost($post);
         if ($inputStatus) {
             $email = $post['email'];
-            list($emailExists, $userID) = Users::checkEmailInDB($email);
-            if ($emailExists) {
+            $userID = Users::getIdByEmail($email);
+            if ($userID) {
                 $token = self::getToken($userID, 'restore');
                 EmailSender::send('restore', $userID, ['restoreUrl' => Api::getUrlWithToken('restore', $token)]);
             }
@@ -343,19 +341,19 @@ class Authentication
         unset($post['passwordAgain']);
         $post['passwordHash'] = $hash;
         $post['passwordHashAgain'] = $hashAgain;
-        list($inputStatus, $error) = QueryHandler::processPost($post);
+        list($inputStatus, $error) = HTTPQueryHandler::processPost($post);
         if ($inputStatus) {
             if ($post['passwordHash'] != $post['passwordHashAgain']) {
                 $uriQuery = http_build_query(['message' => 'Пароли не совпадают', 'color' => 'red', 'token' => $token]);
                 header("Location: /restore?$uriQuery");
                 exit;
             }
-            list($emailExists, $userID) = Users::checkEmailInDB($post['email']);
-            if ($emailExists) {
+            $userID = Users::getIdByEmail($post['email']);
+            if ($userID) {
                 $tokenStatus = self::checkToken($userID, $token, 'restore');
                 if ($tokenStatus) {
                     Tokens::delete($token);
-                    Users::changePassword($userID, $post['passwordHash']);
+                    Users::updatePassword($userID, $post['passwordHash']);
                     $uriQuery = http_build_query(['message' => 'Пароль изменён', 'color' => 'green']);
                     header("Location: /sign-in?$uriQuery");
                     exit;

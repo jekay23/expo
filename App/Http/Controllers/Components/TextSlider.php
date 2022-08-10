@@ -2,7 +2,7 @@
 
 namespace Expo\App\Http\Controllers\Components;
 
-use Expo\App\Models\QueryBuilder;
+use Expo\App\Models\Entities\Compilations;
 use Expo\Resources\Views;
 
 class TextSlider
@@ -14,7 +14,7 @@ class TextSlider
         } else {
             $args = null;
         }
-        list($status, $textFields) = QueryBuilder::getTextFields($type, $quantity, $args);
+        list($status, $textFields) = Compilations::getTextFields($type, $quantity, $args);
         if ($status) {
             if ('filters' != $type) {
                 foreach ($textFields as &$textField) {

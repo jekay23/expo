@@ -7,8 +7,8 @@
 
 namespace Expo\App\Http\Controllers\Pages;
 
-use Expo\App\Models\Compilations;
-use Expo\App\Models\Photos;
+use Expo\App\Models\Entities\Compilations;
+use Expo\App\Models\Entities\Photos;
 use Expo\Resources\Views\View;
 
 class Compilation
@@ -19,16 +19,16 @@ class Compilation
             View::render('404');
         } else {
             $compilationID = $requestList[0];
-            list($status, $compilation) = Compilations::getCompilationDetails($compilationID);
-            if (!$status || empty($compilation)) {
+            $compilation = Compilations::getCompilationDetails($compilationID);
+            if (empty($compilation)) {
                 View::render('404');
             } else {
-                list($status, $compilationPhotos) = Photos::getPhotos(
+                $compilationPhotos = Photos::getPhotos(
                     'compilation',
                     30,
                     ['compilationID' => $compilationID]
                 );
-                if (!$status) {
+                if (empty($compilationPhotos)) {
                     View::render('404');
                 } else {
                     $compilation['photos'] = $compilationPhotos;

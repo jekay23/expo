@@ -1,25 +1,22 @@
 <?php
 
-namespace Expo\App\Models;
+namespace Expo\App\Models\Entities;
 
+use Exception;
 use Expo\App\Http\Controllers\Authentication;
 use Expo\App\Models\QueryObject as QO;
-use Expo\App\Models\QueryBuilder as QB;
+use Expo\App\Models\Entity;
 
-class Photos extends QB
+class Photos extends Entity
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function getPhotos(string $type, int $quantity = 12, array $args = null): array
     {
-        if (!DataBaseConnection::makeSureConnectionIsOpen()) {
-            return [false, null];
-        }
-
+        self::prepareExecution();
         $query = QO::select()->table('Users')->join('RIGHT', 'Photos', 'userID', 'addedBy');
         $query->columns('photoID', 'location', 'altText', 'isHiddenByEditor', 'isHiddenByUser', 'isHiddenProfile');
-
         switch ($type) {
             case 'latest':
                 $query->orderBy(['uploadTime', 'DESC']);
@@ -57,65 +54,90 @@ class Photos extends QB
                 }
             }
         }
-        $likes = Likes::getUserLikes(Authentication::getUserIdFromCookie());
-        $likedPhotoIds = [];
-        foreach ($likes as $like) {
-            $likedPhotoIds[] = $like['photoID'];
-        }
+        $likedPhotoIds = Likes::getUserLikesArray(Authentication::getUserIdFromCookie());
         foreach ($photos as &$photo) {
             $photo['liked'] = in_array($photo['photoID'], $likedPhotoIds);
         }
-        return [true, $photos];
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public static function getPhoto(int $photoID): array
-    {
-        $query = QO::select()->table('Photos')->columns('photoID', 'location', 'altText', 'addedBy');
-        $query->where(['photoID', $photoID]);
-
-        $photos = self::executeQuery($query);
-        return $photos[0];
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public static function savePhoto(int $userID, string $location, string $authorName)
-    {
-        $query = QO::insert()->table('Photos')->columns('location', 'addedBy', 'altText');
-        $query->values($location, $userID, "Фото пользователя $authorName");
-        self::executeQuery($query, false);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public static function getUserPhotos(int $userID): array
-    {
-        $query = QO::select()->table('Photos')->columns('photoID', 'location', 'altText')->where(['addedBy', $userID]);
-        $query->orderBy(['uploadTime', 'DESC'])->limit(24);
-        $photos = self::executeQuery($query);
-
-        $likes = Likes::getUserLikes(Authentication::getUserIdFromCookie());
-        $likedPhotoIds = [];
-        foreach ($likes as $like) {
-            $likedPhotoIds[] = $like['photoID'];
-        }
-        foreach ($photos as &$photo) {
-            $photo['liked'] = in_array($photo['photoID'], $likedPhotoIds);
-        }
-
         return $photos;
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
+     */
+    public static function getPhoto(int $photoID): array
+    {
+        self::prepareExecution();
+        $query = QO::select()->table('Photos')->columns('photoID', 'location', 'altText', 'addedBy');
+        $query->where(['photoID', $photoID]);
+        $photos = self::executeQuery($query);
+        if (!empty($photos)) {
+            return $photos[0];
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function getPhotoDetails(int $photoID): array
+    {
+        self::prepareExecution();
+        $photo = Photos::getPhoto($photoID);
+        if (empty($photo)) {
+            return [];
+        }
+        $user = Users::getUserData($photo['addedBy']);
+        if (empty($user)) {
+            return [];
+        }
+        $photo['authorID'] = $photo['addedBy'];
+        unset($photo['addedBy']);
+        $photo['authorName'] = $user['name'];
+        $photo['authorAvatarLocation'] = $user['avatarLocation'];
+
+        $userID = Authentication::getUserIdFromCookie();
+        switch ($userID) {
+            case 0:
+                $photo['likeStatus'] = 'notSignedIn';
+                break;
+            case $photo['authorID']:
+                $photo['likeStatus'] = 'author';
+                break;
+            default:
+                $likeSet = Likes::checkLike($userID, $photoID);
+                if ($likeSet) {
+                    $photo['likeStatus'] = 'liked';
+                } else {
+                    $photo['likeStatus'] = 'notLiked';
+                }
+        }
+        return $photo;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function getUserPhotos(int $userID): array
+    {
+        self::prepareExecution();
+        $query = QO::select()->table('Photos')->columns('photoID', 'location', 'altText')->where(['addedBy', $userID]);
+        $query->orderBy(['uploadTime', 'DESC'])->limit(24);
+        $photos = self::executeQuery($query);
+        $likedPhotoIds = Likes::getUserLikesArray(Authentication::getUserIdFromCookie());
+        foreach ($photos as &$photo) {
+            $photo['liked'] = in_array($photo['photoID'], $likedPhotoIds);
+        }
+        return $photos;
+    }
+
+    /**
+     * Get all compilations' items info for admin app
+     * @throws Exception
      */
     public static function getCompilationItems(int $compilationID): array
     {
+        self::prepareExecution();
         $query = QO::select()->table('Photos');
         $query->join('RIGHT', 'CompilationItems', 'photoID');
         $query->columns('TR1.photoID', 'location', 'additionTime', 'isHiddenByEditor', 'isHiddenByUser');
@@ -124,12 +146,34 @@ class Photos extends QB
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function hide(int $photoID, bool $value)
     {
+        self::prepareExecution();
         $query = QO::update()->table('Photos');
         $query->columns('isHiddenByEditor')->values(($value ? 1 : 0))->where(['photoID', $photoID]);
         self::executeQuery($query, false);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private static function savePhoto(int $userID, string $location, string $authorName)
+    {
+        self::prepareExecution();
+        $query = QO::insert()->table('Photos')->columns('location', 'addedBy', 'altText');
+        $query->values($location, $userID, "Фото пользователя $authorName");
+        self::executeQuery($query, false);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function addPhoto(int $userID, string $location)
+    {
+        self::prepareExecution();
+        $authorName = Users::getName($userID);
+        Photos::savePhoto($userID, $location, $authorName);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Expo\App\Http\Controllers;
 
-class QueryHandler
+class HTTPQueryHandler
 {
     public static function processPOST(array &$post): array
     {

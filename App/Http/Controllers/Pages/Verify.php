@@ -2,7 +2,7 @@
 
 namespace Expo\App\Http\Controllers\Pages;
 
-use Expo\App\Models\Tokens;
+use Expo\App\Models\Entities\Tokens;
 use Expo\Resources\Views\View;
 
 class Verify

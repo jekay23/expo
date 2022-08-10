@@ -2,8 +2,8 @@
 
 namespace Expo\App\Http\Controllers\Components;
 
-use Expo\App\Models\Compilations;
-use Expo\App\Models\Photos;
+use Expo\App\Models\Entities\Compilations;
+use Expo\App\Models\Entities\Photos;
 use Expo\Resources\Views;
 
 class ExhibitionSlider
@@ -18,10 +18,10 @@ class ExhibitionSlider
         } else {
             $args = null;
         }
-        list($status, $photos) = Photos::getPhotos('compilation', $quantity, $args);
-        if ($status) {
-            list($status, $compilation) = Compilations::getCompilationDetails($compilationID);
-            if ($status && !empty($compilation)) {
+        $photos = Photos::getPhotos('compilation', $quantity, $args);
+        if (!empty($photos)) {
+            $compilation = Compilations::getCompilationDetails($compilationID);
+            if (!empty($compilation)) {
                 $compilation['compilationID'] = $compilationID;
                 Views\Components\ExhibitionSlider::render(
                     $headerText,

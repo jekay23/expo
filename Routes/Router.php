@@ -9,9 +9,9 @@ namespace Expo\Routes;
 
 class Router
 {
-    private static $callbacks = [];
+    private static array $callbacks = [];
 
-    private static $idSpecificPages = [];
+    private static array $idSpecificPages = [];
 
     public static function saveCallback(string $uriMain, callable $callback, bool $isIdSpecific = false)
     {

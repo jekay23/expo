@@ -2,7 +2,7 @@
 
 namespace Expo\App\Http\Controllers\Components;
 
-use Expo\App\Models\Photos;
+use Expo\App\Models\Entities\Photos;
 use Expo\Resources\Views;
 
 class PhotoDisplay
@@ -19,8 +19,8 @@ class PhotoDisplay
         } else {
             $args = null;
         }
-        list($status, $photos) = Photos::getPhotos($dataType, $quantity, $args);
-        if ($status) {
+        $photos = Photos::getPhotos($dataType, $quantity, $args);
+        if (!empty($photos)) {
             switch ($appearanceType) {
                 case 'carousel':
                     Views\Components\Carousel::render($headerText, $photos);

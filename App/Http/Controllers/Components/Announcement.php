@@ -2,7 +2,7 @@
 
 namespace Expo\App\Http\Controllers\Components;
 
-use Expo\App\Http\Controllers\QueryHandler;
+use Expo\App\Http\Controllers\HTTPQueryHandler;
 use Expo\Resources\Views\View;
 
 class Announcement
@@ -12,7 +12,7 @@ class Announcement
         if (!empty($_SERVER['QUERY_STRING'])) {
             $uriQuery = [];
             parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-            $validUriQuery = QueryHandler::processGET($uriQuery);
+            $validUriQuery = HTTPQueryHandler::processGET($uriQuery);
             if ($validUriQuery) {
                 $message = '';
                 $bgClass = 'bg-info';

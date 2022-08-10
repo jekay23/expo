@@ -4,10 +4,10 @@ namespace Expo\App\Http\Controllers\Api;
 
 use Expo\App\Http\Controllers\Authentication;
 use Expo\App\Http\Controllers\HashHandler;
-use Expo\App\Http\Controllers\QueryHandler;
-use Expo\App\Models\Likes;
-use Expo\App\Models\QueryBuilder;
-use Expo\App\Models\Users;
+use Expo\App\Http\Controllers\HTTPQueryHandler;
+use Expo\App\Models\Entities\Likes;
+use Expo\App\Models\Entities\Photos;
+use Expo\App\Models\Entities\Users;
 use Expo\Resources\Views\View;
 
 class UserActions
@@ -26,7 +26,7 @@ class UserActions
         }
         $uriQuery = [];
         parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-        $validUriQuery = QueryHandler::processGET($uriQuery);
+        $validUriQuery = HTTPQueryHandler::processGET($uriQuery);
         if ($validUriQuery && isset($uriQuery['photoID'])) {
             $photoID = $uriQuery['photoID'];
             $likeSet = Likes::checkLike($userID, $photoID);
@@ -96,7 +96,7 @@ class UserActions
     {
         $post = $_POST;
         $userID = \Expo\App\Http\Controllers\Authentication::getUserIdFromCookie();
-        list($postStatus, $error) = \Expo\App\Http\Controllers\QueryHandler::processPOST($post);
+        list($postStatus, $error) = \Expo\App\Http\Controllers\HTTPQueryHandler::processPOST($post);
         if (!$postStatus) {
             $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
             header("Location: /profile/$userID/edit?$uriQuery");
@@ -109,7 +109,7 @@ class UserActions
             'bio' => $post['bio'],
             'contact' => $post['contact']
         ];
-        \Expo\App\Models\Users::updateProfileData($user);
+        \Expo\App\Models\Entities\Users::updateProfileData($user);
         $uriQuery = http_build_query(['message' => 'Данные профиля обновлены', 'color' => 'green']);
         header("Location: /profile/$userID?$uriQuery");
     }
@@ -128,7 +128,7 @@ class UserActions
         }
         $uriQuery = [];
         parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-        $validUriQuery = QueryHandler::processGET($uriQuery);
+        $validUriQuery = HTTPQueryHandler::processGET($uriQuery);
         if ($validUriQuery && isset($uriQuery['photoID'])) {
             $photoID = $uriQuery['photoID'];
             $likeSet = Likes::checkLike($userID, $photoID);
@@ -176,7 +176,7 @@ class UserActions
                     __DIR__ . '/../../../../Public/uploads/photos/' . $filename
                 );
                 if ($moveStatus) {
-                    QueryBuilder::addPhoto($userID, $filename);
+                    Photos::addPhoto($userID, $filename);
                 }
             } else {
                 $messageEndings = [
@@ -221,7 +221,7 @@ class UserActions
     {
         $uriQuery = [];
         parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-        if (QueryHandler::processGET($uriQuery)) {
+        if (HTTPQueryHandler::processGET($uriQuery)) {
             return $uriQuery;
         } else {
             return [];

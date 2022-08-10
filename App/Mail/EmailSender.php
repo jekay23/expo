@@ -2,7 +2,7 @@
 
 namespace Expo\App\Mail;
 
-use Expo\App\Models\Users;
+use Expo\App\Models\Entities\Users;
 
 class EmailSender
 {

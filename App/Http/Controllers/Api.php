@@ -118,7 +118,7 @@ class Api
             case 'changeUserLevel':
                 $uriQuery = self::getUriQueryArray();
                 if (isset($uriQuery['userID']) && isset($uriQuery['value'])) {
-                    AdminActions::change($uriQuery['userID'], 'changeAccessLevel', $uriQuery['value']);
+                    AdminActions::change($uriQuery['userID'], 'updateAccessLevel', $uriQuery['value']);
                 } else {
                     View::render('404');
                 }
