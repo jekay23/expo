@@ -90,7 +90,7 @@ class Email
                 $this->body .= '<p>C уважением, <br>Команда мехмата</p>';
                 break;
             case 'custom':
-                $this->body .= $customStings;
+                $this->body .= $customStings[0];
         }
         return true;
     }
@@ -120,7 +120,7 @@ class Email
                     $email->addAddress($recipientEmail);
                 }
             } else {
-                throw new Exception('No recipient set for email');
+                throw new MailException('No recipient set for email');
             }
 
             $email->isHTML(true);
@@ -133,7 +133,7 @@ class Email
             } else {
                 $result = 'error';
             }
-        } catch (Exception $e) {
+        } catch (MailException $e) {
             $result = 'error';
             $status = "Сообщение не было отправлено. Причина ошибки: $email->ErrorInfo";
         }

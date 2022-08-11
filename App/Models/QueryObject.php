@@ -144,7 +144,7 @@ class QueryObject
             throw new Exception('Incorrect query formation: unknown join type');
         }
         if (!!empty($this->table)) {
-            throw new Exception('Incorrect query formation: first table of the join hasn`t been specified');
+            throw new Exception("Incorrect query formation: first table of the join hasn't been specified");
         }
         if ('select' != $this->action) {
             throw new Exception('Incorrect query formation: using composed table for other purpose than selection');

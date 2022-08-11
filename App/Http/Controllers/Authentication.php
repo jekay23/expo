@@ -6,35 +6,31 @@ use Exception;
 use Expo\App\Mail\EmailSender;
 use Expo\App\Models\Entities\Tokens;
 use Expo\App\Models\Entities\Users;
+use Expo\Config\ExceptionWithUserMessage;
 
 class Authentication
 {
-    /**
-     * @throws Exception
-     */
     public static function authenticate(string $type)
     {
-        $hash = HashHandler::getHash('password', $_POST['password'], $_POST['email']);
         $post = $_POST;
-        unset($post['password']);
-        $post['passwordHash'] = $hash;
-        list($inputStatus, $error) = HTTPQueryHandler::processPost($post);
-        if ($inputStatus) {
-            $authStatus = false;
-            $data = null;
-            if ('sign-in' == $type) {
-                list($authStatus, $data) = self::signIn($post);
-            } elseif ('sign-up' == $type) {
-                list($authStatus, $data) = self::signUp($post);
-            }
-            if ($authStatus) {
-                header("Location: /profile/$data");
-            } else {
-                $uriQuery = http_build_query(['message' => $data, 'color' => 'red']);
-                header("Location: /$type?$uriQuery");
-            }
+        try {
+            HTTPQueryHandler::validateAndProcessPostWithPassword($post);
+        } catch (ExceptionWithUserMessage $e) {
+            $uriQuery = http_build_query(['message' => $e->getMessage(), 'color' => 'red']);
+            header("Location: /$type?$uriQuery");
+            exit;
+        }
+        $authStatus = false;
+        $data = null;
+        if ('sign-in' == $type) {
+            list($authStatus, $data) = self::signIn($post);
+        } elseif ('sign-up' == $type) {
+            list($authStatus, $data) = self::signUp($post);
+        }
+        if ($authStatus) {
+            header("Location: /profile/$data");
         } else {
-            $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
+            $uriQuery = http_build_query(['message' => $data, 'color' => 'red']);
             header("Location: /$type?$uriQuery");
         }
     }
@@ -98,12 +94,18 @@ class Authentication
         header("Location: /");
     }
 
+    /**
+     * @throws Exception
+     */
     private static function saveHashToCookie(int $userID)
     {
         setcookie('authenticatedUserIDHash', HashHandler::getHash('id', $userID), time() + 10 * 24 * 3600, '/');
         setcookie('userID', $userID, time() + 10 * 24 * 3600, '/');
     }
 
+    /**
+     * @throws Exception
+     */
     public static function getUserIdFromCookie(): int
     {
         if (isset($_COOKIE['userID']) && isset($_COOKIE['authenticatedUserIDHash']) && $_COOKIE['userID'] > 0) {
@@ -146,7 +148,7 @@ class Authentication
     /**
      * @param int $userLevel
      * @param int $condition
-     * @param string{'geq', 'leq', 'greater', 'less', 'equal'} $comparisonType
+     * @param string $comparisonType 'geq' | 'leq' | 'greater' | 'less' | 'equal'
      * @return bool
      * @throws Exception
      */
@@ -168,6 +170,9 @@ class Authentication
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private static function checkEmailIsNew(string $email): bool
     {
         $userID = Users::getIdByEmail($email);
@@ -178,9 +183,10 @@ class Authentication
     {
         $post = $_POST;
         $userID = Authentication::getUserIdFromCookie();
-        list($postStatus, $error) = HTTPQueryHandler::processPost($post);
-        if (!$postStatus) {
-            $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
+        try {
+            HTTPQueryHandler::validateAndProcessPost($post);
+        } catch (ExceptionWithUserMessage $e) {
+            $uriQuery = http_build_query(['message' => $e->getMessage(), 'color' => 'red']);
             header("Location: /profile/$userID/change-password-email?$uriQuery");
             exit;
         }
@@ -220,11 +226,9 @@ class Authentication
                 $uriQuery = http_build_query(['message' => 'Пароли не совпадают', 'color' => 'red']);
                 header("Location: /profile/$userID/change-password-email?$uriQuery");
             }
-            exit;
         } elseif (Users::getIdByEmail($post['email'])) {
             $uriQuery = http_build_query(['message' => 'Профиль с данным email уже существует', 'color' => 'red']);
             header("Location: /profile/$userID/change-password-email?$uriQuery");
-            exit;
         } elseif (empty($post['newPassword']) && empty($post['newPasswordAgain'])) {
             $newHash = HashHandler::getHash('password', $post['oldPassword'], $post['email']);
             $user = [
@@ -235,7 +239,6 @@ class Authentication
             Users::updateProfileData($user);
             $uriQuery = http_build_query(['message' => 'Email изменён', 'color' => 'green']);
             header("Location: /profile/$userID?$uriQuery");
-            exit;
         } elseif ($post['newPassword'] == $post['newPasswordAgain']) {
             $newHash = HashHandler::getHash('password', $post['newPassword'], $post['email']);
             $user = [
@@ -246,12 +249,11 @@ class Authentication
             Users::updateProfileData($user);
             $uriQuery = http_build_query(['message' => 'Email и пароль изменены', 'color' => 'green']);
             header("Location: /profile/$userID?$uriQuery");
-            exit;
         } else {
             $uriQuery = http_build_query(['message' => 'Пароли не совпадают', 'color' => 'red']);
             header("Location: /profile/$userID/change-password-email?$uriQuery");
-            exit;
         }
+        exit;
     }
 
     /**
@@ -277,61 +279,55 @@ class Authentication
      */
     public static function verifyEmail(string $token)
     {
-        $hash = HashHandler::getHash('password', $_POST['password'], $_POST['email']);
         $post = $_POST;
-        unset($post['password']);
-        $post['passwordHash'] = $hash;
-        list($inputStatus, $error) = HTTPQueryHandler::processPost($post);
-        if ($inputStatus) {
-            list($authStatus, $data) = self::signIn($post, false);
-            if ($authStatus) {
-                $tokenStatus = self::checkToken($data, $token, 'verify');
-                if ($tokenStatus) {
-                    Tokens::delete($token);
-                    Users::verifyEmail($data);
-                    $uriQuery = http_build_query(['message' => 'Email подтверждён', 'color' => 'green']);
-                    header("Location: /profile/$data?$uriQuery");
-                } else {
-                    $uriQuery = http_build_query(['message' => 'Email не подтверждён', 'color' => 'red']);
-                    header("Location: /?$uriQuery");
-                }
+        try {
+            HTTPQueryHandler::validateAndProcessPostWithPassword($post);
+        } catch (ExceptionWithUserMessage $e) {
+            $uriQuery = http_build_query(['message' => $e->getMessage(), 'color' => 'red']);
+            header("Location: /?$uriQuery");
+            exit;
+        }
+        list($authStatus, $data) = self::signIn($post, false);
+        if ($authStatus) {
+            $tokenStatus = self::checkToken($data, $token, 'verify');
+            if ($tokenStatus) {
+                Tokens::delete($token);
+                Users::verifyEmail($data);
+                $uriQuery = http_build_query(['message' => 'Email подтверждён', 'color' => 'green']);
+                header("Location: /profile/$data?$uriQuery");
             } else {
-                $uriQuery = http_build_query(['message' => $data, 'color' => 'red']);
-                header("Location: /verify?token=$token&$uriQuery");
+                $uriQuery = http_build_query(['message' => 'Email не подтверждён', 'color' => 'red']);
+                header("Location: /?$uriQuery");
             }
         } else {
-            $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
-            header("Location: /?$uriQuery");
+            $uriQuery = http_build_query(['message' => $data, 'color' => 'red']);
+            header("Location: /verify?token=$token&$uriQuery");
         }
     }
 
-    /**
-     * @throws Exception
-     */
     public static function requestRestore()
     {
         $post = $_POST;
-        list($inputStatus, $error) = HTTPQueryHandler::processPost($post);
-        if ($inputStatus) {
-            $email = $post['email'];
-            $userID = Users::getIdByEmail($email);
-            if ($userID) {
-                $token = self::getToken($userID, 'restore');
-                EmailSender::send('restore', $userID, ['restoreUrl' => Api::getUrlWithToken('restore', $token)]);
-            }
-            $uriQuery = http_build_query([
-                'message' => "Если email $email зарегистрирован на сайте, на него придёт письмо c инструкциями",
-                'color' => 'green'
-            ]);
-        } else {
-            $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
+        try {
+            HTTPQueryHandler::validateAndProcessPost($post);
+        } catch (ExceptionWithUserMessage $e) {
+            $uriQuery = http_build_query(['message' => $e->getMessage(), 'color' => 'red']);
+            header("Location: /request-restore?$uriQuery");
+            exit;
         }
+        $email = $post['email'];
+        $userID = Users::getIdByEmail($email);
+        if ($userID) {
+            $token = self::getToken($userID, 'restore');
+            EmailSender::send('restore', $userID, ['restoreUrl' => Api::getUrlWithToken('restore', $token)]);
+        }
+        $uriQuery = http_build_query([
+            'message' => "Если email $email зарегистрирован на сайте, на него придёт письмо c инструкциями",
+            'color' => 'green'
+        ]);
         header("Location: /request-restore?$uriQuery");
     }
 
-    /**
-     * @throws Exception
-     */
     public static function restorePassword(string $token)
     {
         $hash = HashHandler::getHash('password', $_POST['password'], $_POST['email']);
@@ -341,28 +337,30 @@ class Authentication
         unset($post['passwordAgain']);
         $post['passwordHash'] = $hash;
         $post['passwordHashAgain'] = $hashAgain;
-        list($inputStatus, $error) = HTTPQueryHandler::processPost($post);
-        if ($inputStatus) {
-            if ($post['passwordHash'] != $post['passwordHashAgain']) {
-                $uriQuery = http_build_query(['message' => 'Пароли не совпадают', 'color' => 'red', 'token' => $token]);
-                header("Location: /restore?$uriQuery");
+        try {
+            HTTPQueryHandler::validateAndProcessPost($post);
+        } catch (ExceptionWithUserMessage $e) {
+            $uriQuery = http_build_query(['message' => $e->getMessage(), 'color' => 'red']);
+            header("Location: /request-restore?$uriQuery");
+            exit;
+        }
+        if ($post['passwordHash'] != $post['passwordHashAgain']) {
+            $uriQuery = http_build_query(['message' => 'Пароли не совпадают', 'color' => 'red', 'token' => $token]);
+            header("Location: /restore?$uriQuery");
+            exit;
+        }
+        $userID = Users::getIdByEmail($post['email']);
+        if ($userID) {
+            $tokenStatus = self::checkToken($userID, $token, 'restore');
+            if ($tokenStatus) {
+                Tokens::delete($token);
+                Users::updatePassword($userID, $post['passwordHash']);
+                $uriQuery = http_build_query(['message' => 'Пароль изменён', 'color' => 'green']);
+                header("Location: /sign-in?$uriQuery");
                 exit;
             }
-            $userID = Users::getIdByEmail($post['email']);
-            if ($userID) {
-                $tokenStatus = self::checkToken($userID, $token, 'restore');
-                if ($tokenStatus) {
-                    Tokens::delete($token);
-                    Users::updatePassword($userID, $post['passwordHash']);
-                    $uriQuery = http_build_query(['message' => 'Пароль изменён', 'color' => 'green']);
-                    header("Location: /sign-in?$uriQuery");
-                    exit;
-                }
-            }
-            $uriQuery = http_build_query(['message' => 'Пароль не изменён', 'color' => 'red']);
-        } else {
-            $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
         }
+        $uriQuery = http_build_query(['message' => 'Пароль не изменён', 'color' => 'red']);
         header("Location: /request-restore?$uriQuery");
     }
 }

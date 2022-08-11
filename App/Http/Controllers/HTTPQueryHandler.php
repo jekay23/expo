@@ -2,28 +2,34 @@
 
 namespace Expo\App\Http\Controllers;
 
+use Exception;
+use Expo\Config\ExceptionWithUserMessage;
+
 class HTTPQueryHandler
 {
-    public static function processPOST(array &$post): array
+    /**
+     * @throws ExceptionWithUserMessage
+     */
+    public static function validateAndProcessPost(array &$post): bool
     {
+        if (isset($post['email'])) {
+            $post['email'] = trim($post['email']);
+            if (!filter_var($post['email'], FILTER_VALIDATE_EMAIL)) {
+                throw new ExceptionWithUserMessage('Пожалуйста, перепроверьте email');
+            }
+        }
         if (isset($post['name'])) {
             // for some reason regexp with just а-я doesn't work... so here's a work-around:
             if (!preg_match('/^[a-zA-Zа-пр-цч-яА-Я\d\s\-\p{Cyrillic}]+$/', $post['name'])) {
-                return [false, 'Ваше имя должно содержать только буквы, цифры, дефисы и пробелы'];
+                throw new ExceptionWithUserMessage('Ваше имя должно содержать только буквы, цифры, дефисы и пробелы');
             }
             $post['name'] = trim(preg_replace('/\s+/', ' ', $post['name']));
             $post['name'] = trim(preg_replace('/-+/', ' ', $post['name']), '-');
         }
-        if (isset($post['email'])) {
-            $post['email'] = trim($post['email']);
-            if (!filter_var($post['email'], FILTER_VALIDATE_EMAIL)) {
-                return [false, 'Пожалуйста, перепроверьте email'];
-            }
-        }
         if (isset($post['pronoun'])) {
             $pronouns = ['none', 'he', 'she'];
             if (!in_array($post['pronoun'], $pronouns)) {
-                return [false, 'Неизвестное обращение'];
+                throw new ExceptionWithUserMessage(false, 'Неизвестное обращение');
             }
         }
         if (isset($post['bio'])) {
@@ -32,10 +38,22 @@ class HTTPQueryHandler
         if (isset($post['contact'])) {
             $post['contact'] = htmlspecialchars($post['contact']);
         }
-        return [true, null];
+        return true;
     }
 
-    public static function processGET(array $uriQuery): bool
+    /**
+     * @throws ExceptionWithUserMessage
+     * @throws Exception
+     */
+    public static function validateAndProcessPostWithPassword(array &$post): bool
+    {
+        $hash = HashHandler::getHash('password', $post['password'], $post['email']);
+        unset($post['password']);
+        $post['passwordHash'] = $hash;
+        return self::validateAndProcessPost($post);
+    }
+
+    public static function validateGet(array $uriQuery): bool
     {
         foreach ($uriQuery as $key => $value) {
             if (htmlspecialchars($key) != $key || htmlspecialchars($value) != $value) {

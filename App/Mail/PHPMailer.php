@@ -991,7 +991,7 @@ class PHPMailer
      * @param string $name
      *
      * @return bool true on success, false if address already used or invalid in some way
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function addAddress($address, $name = '')
@@ -1006,7 +1006,7 @@ class PHPMailer
      * @param string $name
      *
      * @return bool true on success, false if address already used or invalid in some way
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function addCC($address, $name = '')
@@ -1021,7 +1021,7 @@ class PHPMailer
      * @param string $name
      *
      * @return bool true on success, false if address already used or invalid in some way
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function addBCC($address, $name = '')
@@ -1036,7 +1036,7 @@ class PHPMailer
      * @param string $name
      *
      * @return bool true on success, false if address already used or invalid in some way
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function addReplyTo($address, $name = '')
@@ -1055,7 +1055,7 @@ class PHPMailer
      * @param string $name An optional username associated with the address
      *
      * @return bool true on success, false if address already used or invalid in some way
-     * @throws Exception
+     * @throws MailException
      *
      */
     protected function addOrEnqueueAnAddress($kind, $address, $name)
@@ -1118,7 +1118,7 @@ class PHPMailer
      * @param string $name
      *
      * @return bool true on success, false if address already used or invalid in some way
-     * @throws Exception
+     * @throws MailException
      *
      */
     protected function addAnAddress($kind, $address, $name = '')
@@ -1268,7 +1268,7 @@ class PHPMailer
      * @param bool $auto Whether to also set the Sender address, defaults to true
      *
      * @return bool
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function setFrom($address, $name = '', $auto = true)
@@ -1472,7 +1472,7 @@ class PHPMailer
      * Uses the sending method specified by $Mailer.
      *
      * @return bool false on error - See the ErrorInfo property for details of the error
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function send()
@@ -1498,7 +1498,7 @@ class PHPMailer
      * Prepare a message for sending.
      *
      * @return bool
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function preSend()
@@ -1632,7 +1632,7 @@ class PHPMailer
      * Actually send a message via the selected mechanism.
      *
      * @return bool
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function postSend()
@@ -1676,7 +1676,7 @@ class PHPMailer
      * @param string $body The message body
      *
      * @return bool
-     * @throws Exception
+     * @throws MailException
      *
      * @see PHPMailer::$Sendmail
      *
@@ -1864,7 +1864,7 @@ class PHPMailer
      * @param string $header The message headers
      * @param string $body The message body
      *
-     * @throws Exception
+     * @throws MailException
      *
      * @return bool
      */
@@ -1967,7 +1967,7 @@ class PHPMailer
      * @param string $body The message body
      *
      * @return bool
-     * @throws Exception
+     * @throws MailException
      *
      * @see  PHPMailer::setSMTPInstance() to use a different class.
      *
@@ -2054,7 +2054,7 @@ class PHPMailer
      * @param array $options An array of options compatible with stream_context_create()
      *
      * @return bool
-     * @throws Exception
+     * @throws MailException
      *
      * @uses \PHPMailer\PHPMailer\SMTP
      *
@@ -2762,7 +2762,7 @@ class PHPMailer
      * Returns an empty string on failure.
      *
      * @return string The assembled message body
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function createBody()
@@ -3152,7 +3152,7 @@ class PHPMailer
      * @param string $disposition Disposition to use
      *
      * @return bool
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function addAttachment(
@@ -3221,7 +3221,7 @@ class PHPMailer
      * @param string $boundary
      *
      * @return string
-     * @throws Exception
+     * @throws MailException
      *
      */
     protected function attachAll($disposition_type, $boundary)
@@ -3366,7 +3366,7 @@ class PHPMailer
      * @param string $encoding The encoding to use; one of 'base64', '7bit', '8bit', 'binary', 'quoted-printable'
      *
      * @return string
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function encodeString($str, $encoding = self::ENCODING_BASE64)
@@ -3649,7 +3649,7 @@ class PHPMailer
      * @param string $disposition Disposition to use
      *
      * @return bool True on successfully adding an attachment
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function addStringAttachment(
@@ -3712,7 +3712,7 @@ class PHPMailer
      *                            (unlikely you want this – {@see `addAttachment()`} instead)
      *
      * @return bool True on successfully adding an attachment
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function addEmbeddedImage(
@@ -3782,7 +3782,7 @@ class PHPMailer
      * @param string $disposition Disposition to use
      *
      * @return bool True on successfully adding an attachment
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function addStringEmbeddedImage(
@@ -4161,7 +4161,7 @@ class PHPMailer
      * @param string $name Custom header name
      * @param string|null $value Header value
      *
-     * @throws Exception
+     * @throws MailException
      */
     public function addCustomHeader($name, $value = null)
     {
@@ -4211,7 +4211,7 @@ class PHPMailer
      *                                or your own custom converter
      * @return string The transformed message body
      *
-     * @throws Exception
+     * @throws MailException
      *
      * @see PHPMailer::html2text()
      */
@@ -4686,7 +4686,7 @@ class PHPMailer
      * @param string $signHeader
      *
      * @return string The DKIM signature value
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function DKIM_Sign($signHeader)
@@ -4795,7 +4795,7 @@ class PHPMailer
      * @param string $body Body
      *
      * @return string
-     * @throws Exception
+     * @throws MailException
      *
      */
     public function DKIM_Add($headers_line, $subject, $body)

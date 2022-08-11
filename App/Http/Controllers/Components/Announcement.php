@@ -12,7 +12,7 @@ class Announcement
         if (!empty($_SERVER['QUERY_STRING'])) {
             $uriQuery = [];
             parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-            $validUriQuery = HTTPQueryHandler::processGET($uriQuery);
+            $validUriQuery = HTTPQueryHandler::validateGet($uriQuery);
             if ($validUriQuery) {
                 $message = '';
                 $bgClass = 'bg-info';

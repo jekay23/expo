@@ -40,7 +40,15 @@ Router::saveCallback('upload', function (array $requestList, array $requestQuery
 });
 
 Router::saveCallback('404', function () {
-    Controllers\Pages\Error404::prepare();
+    Controllers\Pages\Error404::prepare('404');
+});
+
+Router::saveCallback('403', function () {
+    Controllers\Pages\Error404::prepare('403');
+});
+
+Router::saveCallback('503', function () {
+    Controllers\Pages\Error404::prepare('503');
 });
 
 Router::saveCallback('support', function (array $requestList, array $requestQuery) {

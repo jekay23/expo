@@ -8,6 +8,7 @@ use Expo\App\Http\Controllers\HTTPQueryHandler;
 use Expo\App\Models\Entities\Likes;
 use Expo\App\Models\Entities\Photos;
 use Expo\App\Models\Entities\Users;
+use Expo\Config\ExceptionWithUserMessage;
 use Expo\Resources\Views\View;
 
 class UserActions
@@ -26,7 +27,7 @@ class UserActions
         }
         $uriQuery = [];
         parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-        $validUriQuery = HTTPQueryHandler::processGET($uriQuery);
+        $validUriQuery = HTTPQueryHandler::validateGet($uriQuery);
         if ($validUriQuery && isset($uriQuery['photoID'])) {
             $photoID = $uriQuery['photoID'];
             $likeSet = Likes::checkLike($userID, $photoID);
@@ -95,10 +96,11 @@ class UserActions
     public static function editProfile()
     {
         $post = $_POST;
-        $userID = \Expo\App\Http\Controllers\Authentication::getUserIdFromCookie();
-        list($postStatus, $error) = \Expo\App\Http\Controllers\HTTPQueryHandler::processPOST($post);
-        if (!$postStatus) {
-            $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
+        $userID = Authentication::getUserIdFromCookie();
+        try {
+            HTTPQueryHandler::validateAndProcessPost($post);
+        } catch (ExceptionWithUserMessage $e) {
+            $uriQuery = http_build_query(['message' => $e->getMessage(), 'color' => 'red']);
             header("Location: /profile/$userID/edit?$uriQuery");
             exit;
         }
@@ -109,7 +111,7 @@ class UserActions
             'bio' => $post['bio'],
             'contact' => $post['contact']
         ];
-        \Expo\App\Models\Entities\Users::updateProfileData($user);
+        Users::updateProfileData($user);
         $uriQuery = http_build_query(['message' => 'Данные профиля обновлены', 'color' => 'green']);
         header("Location: /profile/$userID?$uriQuery");
     }
@@ -128,7 +130,7 @@ class UserActions
         }
         $uriQuery = [];
         parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-        $validUriQuery = HTTPQueryHandler::processGET($uriQuery);
+        $validUriQuery = HTTPQueryHandler::validateGet($uriQuery);
         if ($validUriQuery && isset($uriQuery['photoID'])) {
             $photoID = $uriQuery['photoID'];
             $likeSet = Likes::checkLike($userID, $photoID);
@@ -221,7 +223,7 @@ class UserActions
     {
         $uriQuery = [];
         parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-        if (HTTPQueryHandler::processGET($uriQuery)) {
+        if (HTTPQueryHandler::validateGet($uriQuery)) {
             return $uriQuery;
         } else {
             return [];
