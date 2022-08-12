@@ -10,46 +10,50 @@ use Expo\Config\ExceptionWithUserMessage;
 
 class Authentication
 {
+    /**
+     * @throws Exception
+     */
     public static function authenticate(string $type)
     {
         $post = $_POST;
         try {
             HTTPQueryHandler::validateAndProcessPostWithPassword($post);
         } catch (ExceptionWithUserMessage $e) {
-            $uriQuery = http_build_query(['message' => $e->getMessage(), 'color' => 'red']);
-            header("Location: /$type?$uriQuery");
+            self::openPageWithUserMessage("/$type", $e->getMessage());
             exit;
         }
-        $authStatus = false;
-        $data = null;
-        if ('sign-in' == $type) {
-            list($authStatus, $data) = self::signIn($post);
-        } elseif ('sign-up' == $type) {
-            list($authStatus, $data) = self::signUp($post);
+        try {
+            if ('sign-in' == $type) {
+                $userID = self::signIn($post);
+            } elseif ('sign-up') {
+                $userID = self::signUp($post);
+            } else {
+                throw new Exception('Unknown authentication type');
+            }
+        } catch (ExceptionWithUserMessage $e) {
+            self::openPageWithUserMessage("/$type", $e->getMessage());
+            exit;
         }
-        if ($authStatus) {
-            header("Location: /profile/$data");
-        } else {
-            $uriQuery = http_build_query(['message' => $data, 'color' => 'red']);
-            header("Location: /$type?$uriQuery");
-        }
+        header("Location: /profile/$userID");
     }
 
     /**
+     * @throws ExceptionWithUserMessage
      * @throws Exception
      */
-    private static function signUp(array $credentials): array
+    private static function signUp(array $credentials): int
     {
         if (isset($credentials['email'], $credentials['name'], $credentials['passwordHash'])) {
-            $emailIsNew = self::checkEmailIsNew($credentials['email']);
-            if ($emailIsNew) {
+            if (self::isEmailNew($credentials['email'])) {
                 $userID = Users::create($credentials);
                 self::saveHashToCookie($userID);
                 $token = self::getToken($userID, 'verify');
                 EmailSender::send('verify', $userID, ['verifyUrl' => Api::getUrlWithToken('verify', $token)]);
-                return [true, $userID];
+                return $userID;
             } else {
-                return [false, 'Email уже зарегистрирован. Пожалуйста, воспользуйтесь формой входа.'];
+                throw new ExceptionWithUserMessage(
+                    'Email уже зарегистрирован. Пожалуйста, воспользуйтесь формой входа.'
+                );
             }
         } else {
             throw new Exception('Insufficient information for sign-up.');
@@ -57,9 +61,10 @@ class Authentication
     }
 
     /**
+     * @throws ExceptionWithUserMessage
      * @throws Exception
      */
-    private static function signIn(array $credentials, bool $saveCookie = true): array
+    private static function signIn(array $credentials, bool $saveCookie = true): int
     {
         if (isset($credentials['email'], $credentials['passwordHash'])) {
             $userID = Users::getIdByEmail($credentials['email']);
@@ -69,13 +74,10 @@ class Authentication
                     if ($saveCookie) {
                         self::saveHashToCookie($userID);
                     }
-                    return [true, $userID];
-                } else {
-                    return [false, 'Неверная комбинация email и пароля'];
+                    return $userID;
                 }
-            } else {
-                return [false, 'Неверная комбинация email и пароля'];
             }
+            throw new ExceptionWithUserMessage('Неверная комбинация email и пароля');
         } else {
             throw new Exception('Insufficient information for sign-in.');
         }
@@ -154,92 +156,60 @@ class Authentication
      */
     private static function compareUserLevel(int $userLevel, int $condition, string $comparisonType = 'geq'): bool
     {
-        switch ($comparisonType) {
-            case 'geq':
-                return ($userLevel >= $condition);
-            case 'leq':
-                return ($userLevel <= $condition);
-            case 'greater':
-                return ($userLevel > $condition);
-            case 'less':
-                return ($userLevel < $condition);
-            case 'equal':
-                return ($userLevel == $condition);
-            default:
-                throw new Exception('Unknown comparison type in Authentication::compareUserLevel()');
+        $comparisonResults = [
+            'geq' => ($userLevel >= $condition),
+            'leq' => ($userLevel <= $condition),
+            'greater' => ($userLevel > $condition),
+            'less' => ($userLevel < $condition),
+            'equal' => ($userLevel == $condition)
+        ];
+        if (isset($comparisonResults[$comparisonType])) {
+            return $comparisonResults[$comparisonType];
+        } else {
+            throw new Exception('Unknown comparison type');
         }
     }
 
     /**
      * @throws Exception
      */
-    private static function checkEmailIsNew(string $email): bool
+    private static function isEmailNew(string $email): bool
     {
         $userID = Users::getIdByEmail($email);
         return !$userID;
     }
 
-    public static function changePasswordEmail()
+    private static function changeOnlyPassword(array $post, int $userID)
     {
-        $post = $_POST;
-        $userID = Authentication::getUserIdFromCookie();
-        try {
-            HTTPQueryHandler::validateAndProcessPost($post);
-        } catch (ExceptionWithUserMessage $e) {
-            $uriQuery = http_build_query(['message' => $e->getMessage(), 'color' => 'red']);
-            header("Location: /profile/$userID/change-password-email?$uriQuery");
-            exit;
-        }
-        try {
-            $user = Users::getUserData($userID, true);
-        } catch (Exception $e) {
-            if ($e->getCode() == 1) {
-                $uriQuery = http_build_query(['message' => $e->getMessage(), 'color' => 'red']);
-                header("Location: /?$uriQuery");
-                exit;
-            } else {
-                throw $e;
-            }
-        }
-        $oldEmail = $user['email'];
-        $oldHash = HashHandler::getHash('password', $post['oldPassword'], $oldEmail);
-        list($status, $error) = self::signIn(['email' => $oldEmail, 'passwordHash' => $oldHash], false);
-        if (!$status) {
-            $uriQuery = http_build_query(['message' => $error, 'color' => 'red']);
-            header("Location: /profile/$userID/change-password-email?$uriQuery");
-            exit;
-        }
-        if ($oldEmail == $post['email']) {
-            if (empty($post['newPassword']) && empty($post['newPasswordAgain'])) {
-                $uriQuery = http_build_query(['message' => 'Вы ничего не изменили', 'color' => 'red']);
-                header("Location: /profile/$userID/change-password-email?$uriQuery");
-            } elseif ($post['newPassword'] == $post['newPasswordAgain']) {
-                $newHash = HashHandler::getHash('password', $post['newPassword'], $post['email']);
-                $user = [
-                    'userID' => $userID,
-                    'passwordHash' => $newHash
-                ];
-                Users::updateProfileData($user);
-                $uriQuery = http_build_query(['message' => 'Пароль изменён', 'color' => 'green']);
-                header("Location: /profile/$userID?$uriQuery");
-            } else {
-                $uriQuery = http_build_query(['message' => 'Пароли не совпадают', 'color' => 'red']);
-                header("Location: /profile/$userID/change-password-email?$uriQuery");
-            }
-        } elseif (Users::getIdByEmail($post['email'])) {
-            $uriQuery = http_build_query(['message' => 'Профиль с данным email уже существует', 'color' => 'red']);
-            header("Location: /profile/$userID/change-password-email?$uriQuery");
-        } elseif (empty($post['newPassword']) && empty($post['newPasswordAgain'])) {
-            $newHash = HashHandler::getHash('password', $post['oldPassword'], $post['email']);
+        if ($post['newPassword'] == $post['newPasswordAgain']) {
+            $newHash = HashHandler::getHash('password', $post['newPassword'], $post['email']);
             $user = [
                 'userID' => $userID,
-                'email' => $post['email'],
                 'passwordHash' => $newHash
             ];
             Users::updateProfileData($user);
-            $uriQuery = http_build_query(['message' => 'Email изменён', 'color' => 'green']);
-            header("Location: /profile/$userID?$uriQuery");
-        } elseif ($post['newPassword'] == $post['newPasswordAgain']) {
+            self::openPageWithUserMessage("/profile/$userID", 'Пароль изменён', 'green');
+        } else {
+            self::openPageWithUserMessage("/profile/$userID/change-password-email", 'Пароли не совпадают');
+        }
+    }
+
+    private static function changeOnlyEmail(array $post, int $userID)
+    {
+        // password hash is formed with email as salt
+        $newHash = HashHandler::getHash('password', $post['oldPassword'], $post['email']);
+        $user = [
+            'userID' => $userID,
+            'email' => $post['email'],
+            'passwordHash' => $newHash
+        ];
+        Users::updateProfileData($user);
+        self::openPageWithUserMessage("/profile/$userID", 'Email изменён', 'green');
+    }
+
+    private static function changeBothPasswordAndEmail(array $post, int $userID)
+    {
+        if ($post['newPassword'] == $post['newPasswordAgain']) {
             $newHash = HashHandler::getHash('password', $post['newPassword'], $post['email']);
             $user = [
                 'userID' => $userID,
@@ -247,13 +217,48 @@ class Authentication
                 'passwordHash' => $newHash
             ];
             Users::updateProfileData($user);
-            $uriQuery = http_build_query(['message' => 'Email и пароль изменены', 'color' => 'green']);
-            header("Location: /profile/$userID?$uriQuery");
+            self::openPageWithUserMessage("/profile/$userID", 'Email и пароль изменены', 'green');
         } else {
-            $uriQuery = http_build_query(['message' => 'Пароли не совпадают', 'color' => 'red']);
-            header("Location: /profile/$userID/change-password-email?$uriQuery");
+            self::openPageWithUserMessage("/profile/$userID/change-password-email", 'Пароли не совпадают');
         }
-        exit;
+    }
+
+    /**
+     * @throws ExceptionWithUserMessage
+     * @throws Exception
+     */
+    public static function changePasswordOrEmail()
+    {
+        $post = $_POST;
+        $userID = Authentication::getUserIdFromCookie();
+        try {
+            HTTPQueryHandler::validateAndProcessPost($post);
+        } catch (ExceptionWithUserMessage $e) {
+            self::openPageWithUserMessage("/profile/$userID/change-password-email", $e->getMessage());
+            exit;
+        }
+        $user = Users::getUserData($userID, true);
+        $oldEmail = $user['email'];
+        $oldHash = HashHandler::getHash('password', $post['oldPassword'], $oldEmail);
+        try {
+            self::signIn(['email' => $oldEmail, 'passwordHash' => $oldHash], false);
+        } catch (ExceptionWithUserMessage $e) {
+            self::openPageWithUserMessage("/profile/$userID/change-password-email", $e->getMessage());
+            exit;
+        }
+        if ($oldEmail == $post['email']) {
+            if (empty($post['newPassword']) && empty($post['newPasswordAgain'])) {
+                self::openPageWithUserMessage("/profile/$userID/change-password-email", 'Вы ничего не изменили');
+            } else {
+                self::changeOnlyPassword($post, $userID);
+            }
+        } elseif (Users::getIdByEmail($post['email'])) {
+            self::openPageWithUserMessage("/profile/$userID/change-password-email", 'Недопустимый email');
+        } elseif (empty($post['newPassword']) && empty($post['newPasswordAgain'])) {
+            self::changeOnlyEmail($post, $userID);
+        } else {
+            self::changeBothPasswordAndEmail($post, $userID);
+        }
     }
 
     /**
@@ -269,7 +274,7 @@ class Authentication
     /**
      * @throws Exception
      */
-    public static function checkToken(int $userID, string $token, string $type): bool
+    private static function isTokenValid(int $userID, string $token, string $type): bool
     {
         return Tokens::check($userID, $token, $type);
     }
@@ -283,36 +288,34 @@ class Authentication
         try {
             HTTPQueryHandler::validateAndProcessPostWithPassword($post);
         } catch (ExceptionWithUserMessage $e) {
-            $uriQuery = http_build_query(['message' => $e->getMessage(), 'color' => 'red']);
-            header("Location: /?$uriQuery");
+            self::openPageWithUserMessage('/', $e->getMessage());
             exit;
         }
-        list($authStatus, $data) = self::signIn($post, false);
-        if ($authStatus) {
-            $tokenStatus = self::checkToken($data, $token, 'verify');
-            if ($tokenStatus) {
-                Tokens::delete($token);
-                Users::verifyEmail($data);
-                $uriQuery = http_build_query(['message' => 'Email подтверждён', 'color' => 'green']);
-                header("Location: /profile/$data?$uriQuery");
-            } else {
-                $uriQuery = http_build_query(['message' => 'Email не подтверждён', 'color' => 'red']);
-                header("Location: /?$uriQuery");
-            }
+        try {
+            $userID = self::signIn($post, false);
+        } catch (ExceptionWithUserMessage $e) {
+            self::openPageWithUserMessage('/verify', $e->getMessage(), 'red', $token);
+            exit;
+        }
+        if (self::isTokenValid($userID, $token, 'verify')) {
+            Tokens::delete($token);
+            Users::verifyEmail($userID);
+            self::openPageWithUserMessage("/profile/$userID", 'Email подтверждён', 'green');
         } else {
-            $uriQuery = http_build_query(['message' => $data, 'color' => 'red']);
-            header("Location: /verify?token=$token&$uriQuery");
+            self::openPageWithUserMessage('/', 'Email не подтверждён');
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public static function requestRestore()
     {
         $post = $_POST;
         try {
             HTTPQueryHandler::validateAndProcessPost($post);
         } catch (ExceptionWithUserMessage $e) {
-            $uriQuery = http_build_query(['message' => $e->getMessage(), 'color' => 'red']);
-            header("Location: /request-restore?$uriQuery");
+            self::openPageWithUserMessage('/request-restore', $e->getMessage());
             exit;
         }
         $email = $post['email'];
@@ -321,13 +324,16 @@ class Authentication
             $token = self::getToken($userID, 'restore');
             EmailSender::send('restore', $userID, ['restoreUrl' => Api::getUrlWithToken('restore', $token)]);
         }
-        $uriQuery = http_build_query([
-            'message' => "Если email $email зарегистрирован на сайте, на него придёт письмо c инструкциями",
-            'color' => 'green'
-        ]);
-        header("Location: /request-restore?$uriQuery");
+        self::openPageWithUserMessage(
+            '/request-restore',
+            "Если email $email зарегистрирован на сайте, на него придёт письмо c инструкциями",
+            'green'
+        );
     }
 
+    /**
+     * @throws Exception
+     */
     public static function restorePassword(string $token)
     {
         $hash = HashHandler::getHash('password', $_POST['password'], $_POST['email']);
@@ -340,27 +346,36 @@ class Authentication
         try {
             HTTPQueryHandler::validateAndProcessPost($post);
         } catch (ExceptionWithUserMessage $e) {
-            $uriQuery = http_build_query(['message' => $e->getMessage(), 'color' => 'red']);
-            header("Location: /request-restore?$uriQuery");
+            self::openPageWithUserMessage('/request-restore', $e->getMessage());
             exit;
         }
         if ($post['passwordHash'] != $post['passwordHashAgain']) {
-            $uriQuery = http_build_query(['message' => 'Пароли не совпадают', 'color' => 'red', 'token' => $token]);
-            header("Location: /restore?$uriQuery");
+            self::openPageWithUserMessage('/restore', 'Пароли не совпадают', 'red', $token);
             exit;
         }
         $userID = Users::getIdByEmail($post['email']);
         if ($userID) {
-            $tokenStatus = self::checkToken($userID, $token, 'restore');
-            if ($tokenStatus) {
+            if (self::isTokenValid($userID, $token, 'restore')) {
                 Tokens::delete($token);
                 Users::updatePassword($userID, $post['passwordHash']);
-                $uriQuery = http_build_query(['message' => 'Пароль изменён', 'color' => 'green']);
-                header("Location: /sign-in?$uriQuery");
+                self::openPageWithUserMessage('/sign-in', 'Пароль изменён', 'green');
                 exit;
             }
         }
-        $uriQuery = http_build_query(['message' => 'Пароль не изменён', 'color' => 'red']);
-        header("Location: /request-restore?$uriQuery");
+        self::openPageWithUserMessage('/request-restore', 'Пароль не изменён');
+    }
+
+    private static function openPageWithUserMessage(
+        string $href,
+        string $message,
+        string $color = 'red',
+        string $token = null
+    ) {
+        $queryArray = ['message' => $message, 'color' => $color];
+        if (isset($token)) {
+            $queryArray['token'] = $token;
+        }
+        $uriQuery = http_build_query($queryArray);
+        header("Location: $href?$uriQuery");
     }
 }

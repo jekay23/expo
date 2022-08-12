@@ -31,7 +31,7 @@ class Api
                 UserActions::changeAvatar();
                 break;
             case 'change-password-email':
-                Authentication::changePasswordEmail();
+                Authentication::changePasswordOrEmail();
                 break;
             case 'sign-out':
                 Authentication::signOut();
