@@ -2,8 +2,13 @@
 
 namespace Expo\App\Http\Controllers;
 
+use Exception;
+
 class HashHandler
 {
+    /**
+     * @throws Exception
+     */
     public static function getHash(string $type, string $string, string $extraSalt = ''): string
     {
         $types = ['password', 'id', 'filename', 'token'];
@@ -12,7 +17,7 @@ class HashHandler
             $extraSalt = trim($extraSalt);
             return hash('sha256', $string . $salt . $string . $extraSalt);
         } else {
-            throw new \Exception('Unknown hash type');
+            throw new Exception('Unknown hash type');
         }
     }
 }

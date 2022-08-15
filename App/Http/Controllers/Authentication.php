@@ -7,6 +7,7 @@ use Expo\App\Mail\EmailSender;
 use Expo\App\Models\Entities\Tokens;
 use Expo\App\Models\Entities\Users;
 use Expo\Config\ExceptionWithUserMessage;
+use Expo\Resources\Views\View;
 
 class Authentication
 {
@@ -179,6 +180,9 @@ class Authentication
         return !$userID;
     }
 
+    /**
+     * @throws Exception
+     */
     private static function changeOnlyPassword(array $post, int $userID)
     {
         if ($post['newPassword'] == $post['newPasswordAgain']) {
@@ -194,6 +198,9 @@ class Authentication
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private static function changeOnlyEmail(array $post, int $userID)
     {
         // password hash is formed with email as salt
@@ -207,6 +214,9 @@ class Authentication
         self::openPageWithUserMessage("/profile/$userID", 'Email изменён', 'green');
     }
 
+    /**
+     * @throws Exception
+     */
     private static function changeBothPasswordAndEmail(array $post, int $userID)
     {
         if ($post['newPassword'] == $post['newPasswordAgain']) {
@@ -282,8 +292,15 @@ class Authentication
     /**
      * @throws Exception
      */
-    public static function verifyEmail(string $token)
+    public static function verifyEmail()
     {
+        $uriQuery = HTTPQueryHandler::validateAndParseGet();
+        if (isset($uriQuery['token'])) {
+            $token = $uriQuery['token'];
+        } else {
+            View::render('404');
+            exit;
+        }
         $post = $_POST;
         try {
             HTTPQueryHandler::validateAndProcessPostWithPassword($post);
@@ -334,8 +351,15 @@ class Authentication
     /**
      * @throws Exception
      */
-    public static function restorePassword(string $token)
+    public static function restorePassword()
     {
+        $uriQuery = HTTPQueryHandler::validateAndParseGet();
+        if (isset($uriQuery['token'])) {
+            $token = $uriQuery['token'];
+        } else {
+            View::render('404');
+            exit;
+        }
         $hash = HashHandler::getHash('password', $_POST['password'], $_POST['email']);
         $hashAgain = HashHandler::getHash('password', $_POST['passwordAgain'], $_POST['email']);
         $post = $_POST;

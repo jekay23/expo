@@ -4,6 +4,7 @@ namespace Expo\App\Http\Controllers\Api;
 
 use Exception;
 use Expo\App\Http\Controllers\Authentication;
+use Expo\App\Http\Controllers\HTTPQueryHandler;
 use Expo\App\Mail\EmailSender;
 use Expo\App\Models\Entities\Compilations;
 use Expo\App\Models\Entities\Photos;
@@ -17,11 +18,9 @@ class AdminActions
      */
     public static function getUsers()
     {
-        if (Authentication::checkUserIsEditor()) {
+        self::callIfUserIsEditor(function () {
             print json_encode(Users::getUsers());
-        } else {
-            View::render('403');
-        }
+        });
     }
 
     /**
@@ -29,11 +28,9 @@ class AdminActions
      */
     public static function getPhotos()
     {
-        if (Authentication::checkUserIsEditor()) {
+        self::callIfUserIsEditor(function () {
             print json_encode(Photos::getPhotos('all'));
-        } else {
-            View::render('403');
-        }
+        });
     }
 
     /**
@@ -41,62 +38,99 @@ class AdminActions
      */
     public static function getCompilations()
     {
-        if (Authentication::checkUserIsEditor()) {
+        self::callIfUserIsEditor(function () {
             print json_encode(Compilations::getCompilations());
+        });
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function getCompilationItems()
+    {
+        $uriQuery = HTTPQueryHandler::validateAndParseGet();
+        if (isset($uriQuery['compilationID'])) {
+            self::callIfUserIsEditor(function ($uriQuery) {
+                print json_encode(Photos::getCompilationItems($uriQuery['compilationID']));
+            }, $uriQuery);
         } else {
-            View::render('403');
+            View::render('404');
         }
     }
 
     /**
      * @throws Exception
      */
-    public static function getCompilationItems(int $compilationID)
+    public static function change(string $field)
     {
+        $callbacks = [
+            'description' => function ($uriQuery) {
+                Compilations::updateString(
+                    $uriQuery['compilationID'],
+                    'description',
+                    $uriQuery['value']
+                );
+            },
+            'name' => function ($uriQuery) {
+                Compilations::updateString(
+                    $uriQuery['compilationID'],
+                    'name',
+                    $uriQuery['value']
+                );
+            },
+            'isHidden' => function ($uriQuery) {
+                Compilations::updateBool(
+                    $uriQuery['compilationID'],
+                    'isHidden',
+                    self::convertToBool($uriQuery['enabled'])
+                );
+            },
+            'isExhibit' => function ($uriQuery) {
+                Compilations::updateExhibit(
+                    $uriQuery['compilationID'],
+                    'isExhibit',
+                    self::convertToBool($uriQuery['enabled']),
+                    ($uriQuery['value'] ? Compilations::getNextExhibitNumber() : 0)
+                );
+            },
+            'isHiddenProfile' => function ($uriQuery) {
+                Users::updateBool(
+                    $uriQuery['userID'],
+                    'isHiddenProfile',
+                    self::convertToBool($uriQuery['enabled'])
+                );
+            },
+            'isHiddenBio' => function ($uriQuery) {
+                Users::updateBool(
+                    $uriQuery['userID'],
+                    'isHiddenBio',
+                    self::convertToBool($uriQuery['enabled'])
+                );
+            },
+            'isHiddenAvatar' => function ($uriQuery) {
+                Users::updateBool(
+                    $uriQuery['userID'],
+                    'isHiddenAvatar',
+                    self::convertToBool($uriQuery['enabled'])
+                );
+            },
+            'updateAccessLevel' => function ($uriQuery) {
+                Users::updateAccessLevel(
+                    $uriQuery['userID'],
+                    $uriQuery['value']
+                );
+            },
+            'isPhotoHidden' => function ($uriQuery) {
+                Photos::hide(
+                    $uriQuery['photoID'],
+                    self::convertToBool($uriQuery['enabled'])
+                );
+            }
+        ];
         if (Authentication::checkUserIsEditor()) {
-            print json_encode(Photos::getCompilationItems($compilationID));
-        } else {
-            View::render('403');
-        }
-    }
-
-    public static function change(int $id, string $field, $value)
-    {
-        if (Authentication::checkUserIsEditor()) {
-            if ('description' == $field || 'name' == $field) {
-                Compilations::updateString($id, $field, $value);
-            } elseif ('isHidden' == $field) {
-                if ('true' === $value || 1 === $value || '1' === $value) {
-                    $value = true;
-                } else {
-                    $value = false;
-                }
-                Compilations::updateBool($id, $field, $value);
-            } elseif ('isExhibit' == $field) {
-                if ('true' === $value || 1 === $value || '1' === $value) {
-                    $value = true;
-                    $exhibitNumber = Compilations::getNextExhibitNumber();
-                } else {
-                    $value = false;
-                    $exhibitNumber = 0;
-                }
-                Compilations::updateExhibit($id, $field, $value, $exhibitNumber);
-            } elseif ('isHiddenProfile' == $field || 'isHiddenBio' == $field || 'isHiddenAvatar' == $field) {
-                if ('true' === $value || 1 === $value || '1' === $value) {
-                    $value = true;
-                } else {
-                    $value = false;
-                }
-                Users::updateBool($id, $field, $value);
-            } elseif ('updateAccessLevel' == $field) {
-                Users::updateAccessLevel($id, $value);
-            } elseif ('hidePhoto' == $field) {
-                if ('true' === $value || 1 === $value || '1' === $value) {
-                    $value = true;
-                } else {
-                    $value = false;
-                }
-                Photos::hide($id, $value);
+            $uriQuery = HTTPQueryHandler::validateAndParseGet();
+            if (isset($callbacks[$field])) {
+                call_user_func($callbacks[$field], $uriQuery);
             } else {
                 View::render('404');
             }
@@ -107,33 +141,60 @@ class AdminActions
 
     public static function createCompilation()
     {
-        if (Authentication::checkUserIsEditor()) {
+        self::callIfUserIsEditor(function () {
             Compilations::create(Authentication::getUserIdFromCookie());
+        });
+    }
+
+    public static function addCompilationItem()
+    {
+        $uriQuery = HTTPQueryHandler::validateAndParseGet();
+        if (isset($uriQuery['compilationID']) && isset($uriQuery['photoID'])) {
+            self::callIfUserIsEditor(function ($uriQuery) {
+                Compilations::addCompilationItem($uriQuery['compilationID'], $uriQuery['photoID']);
+            }, $uriQuery);
         } else {
-            View::render('403');
+            View::render('404');
         }
     }
 
-    public static function addCompilationItem(int $compilationID, int $photoID)
+    public static function removeCompilationItem()
     {
-        if (Authentication::checkUserIsEditor()) {
-            Compilations::addCompilationItem($compilationID, $photoID);
+        $uriQuery = HTTPQueryHandler::validateAndParseGet();
+        if (isset($uriQuery['compilationID']) && isset($uriQuery['photoID'])) {
+            self::callIfUserIsEditor(function ($uriQuery) {
+                Compilations::removeCompilationItem($uriQuery['compilationID'], $uriQuery['photoID']);
+            }, $uriQuery);
         } else {
-            View::render('403');
+            View::render('404');
         }
     }
 
-    public static function removeCompilationItem($compilationID, $photoID)
+    public static function sendEmail()
     {
-        if (Authentication::checkUserIsEditor()) {
-            Compilations::removeCompilationItem($compilationID, $photoID);
+        $uriQuery = HTTPQueryHandler::validateAndParseGet();
+        if (isset($uriQuery['type']) && isset($uriQuery['userID'])) {
+            EmailSender::send($uriQuery['type'], $uriQuery['userID'], ['This is a test email']);
         } else {
-            View::render('403');
+            View::render('404');
         }
     }
 
-    public static function sendEmail(int $id, string $type)
+    private static function convertToBool($value): bool
     {
-        EmailSender::send($type, $id);
+        return ('true' === $value || 1 === $value || '1' === $value);
+    }
+
+    private static function callIfUserIsEditor(callable $callback, $uriQuery = null)
+    {
+        try {
+            if (Authentication::checkUserIsEditor()) {
+                call_user_func($callback, $uriQuery);
+            } else {
+                View::render('403');
+            }
+        } catch (Exception $e) {
+            View::render('503');
+        }
     }
 }

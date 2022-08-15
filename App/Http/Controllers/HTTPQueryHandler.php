@@ -62,4 +62,15 @@ class HTTPQueryHandler
         }
         return true;
     }
+
+    public static function validateAndParseGet(): array
+    {
+        $uriQuery = [];
+        parse_str($_SERVER['QUERY_STRING'], $uriQuery);
+        if (self::validateGet($uriQuery)) {
+            return $uriQuery;
+        } else {
+            return [];
+        }
+    }
 }

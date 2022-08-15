@@ -14,188 +14,110 @@ class Api
      */
     public static function execute(array $requestList, array $requestQuery)
     {
-        switch ($requestList[0]) {
-            case 'sign-in':
+        $callbacks = [
+            'sign-in' => function () {
                 Authentication::authenticate('sign-in');
-                break;
-            case 'sign-up':
+            },
+            'sign-up' => function () {
                 Authentication::authenticate('sign-up');
-                break;
-            case 'upload':
+            },
+            'upload' => function () {
                 UserActions::upload();
-                break;
-            case 'edit-profile':
+            },
+            'edit-profile' => function () {
                 UserActions::editProfile();
-                break;
-            case 'change-avatar':
+            },
+            'change-avatar' => function () {
                 UserActions::changeAvatar();
-                break;
-            case 'change-password-email':
+            },
+            'change-password-email' => function () {
                 Authentication::changePasswordOrEmail();
-                break;
-            case 'sign-out':
+            },
+            'sign-out' => function () {
                 Authentication::signOut();
-                break;
-            case 'like':
-                UserActions::addLike();
-                break;
-            case 'dislike':
-                UserActions::removeLike();
-                break;
-            case 'users':
+            },
+            'like' => function () {
+                UserActions::toggleLike('like');
+            },
+            'dislike' => function () {
+                UserActions::toggleLike('dislike');
+            },
+            'users' => function () {
                 AdminActions::getUsers();
-                break;
-            case 'photos':
+            },
+            'photos' => function () {
                 AdminActions::getPhotos();
-                break;
-            case 'compilations':
+            },
+            'compilations' => function () {
                 AdminActions::getCompilations();
-                break;
-            case 'compilation-items':
-                $uriQuery = self::getUriQueryArray();
-                if (isset($uriQuery['compilationID'])) {
-                    AdminActions::getCompilationItems($uriQuery['compilationID']);
-                } else {
-                    View::render('404');
-                }
-                break;
-            case 'changeDesc':
-                $uriQuery = self::getUriQueryArray();
-                if (isset($uriQuery['compilationID']) && isset($uriQuery['value'])) {
-                    AdminActions::change($uriQuery['compilationID'], 'description', $uriQuery['value']);
-                } else {
-                    View::render('404');
-                }
-                break;
-            case 'changeName':
-                $uriQuery = self::getUriQueryArray();
-                if (isset($uriQuery['compilationID']) && isset($uriQuery['value'])) {
-                    AdminActions::change($uriQuery['compilationID'], 'name', $uriQuery['value']);
-                } else {
-                    View::render('404');
-                }
-                break;
-            case 'makeExhibit':
-                $uriQuery = self::getUriQueryArray();
-                if (isset($uriQuery['compilationID']) && isset($uriQuery['enabled'])) {
-                    AdminActions::change($uriQuery['compilationID'], 'isExhibit', $uriQuery['enabled']);
-                } else {
-                    View::render('404');
-                }
-                break;
-            case 'hideCompilation':
-                $uriQuery = self::getUriQueryArray();
-                if (isset($uriQuery['compilationID']) && isset($uriQuery['enabled'])) {
-                    AdminActions::change($uriQuery['compilationID'], 'isHidden', $uriQuery['enabled']);
-                } else {
-                    View::render('404');
-                }
-                break;
-            case 'hideProfile':
-                $uriQuery = self::getUriQueryArray();
-                if (isset($uriQuery['userID']) && isset($uriQuery['enabled'])) {
-                    AdminActions::change($uriQuery['userID'], 'isHiddenProfile', $uriQuery['enabled']);
-                } else {
-                    View::render('404');
-                }
-                break;
-            case 'hideBio':
-                $uriQuery = self::getUriQueryArray();
-                if (isset($uriQuery['userID']) && isset($uriQuery['enabled'])) {
-                    AdminActions::change($uriQuery['userID'], 'isHiddenBio', $uriQuery['enabled']);
-                } else {
-                    View::render('404');
-                }
-                break;
-            case 'hideAvatar':
-                $uriQuery = self::getUriQueryArray();
-                if (isset($uriQuery['userID']) && isset($uriQuery['enabled'])) {
-                    AdminActions::change($uriQuery['userID'], 'isHiddenAvatar', $uriQuery['enabled']);
-                } else {
-                    View::render('404');
-                }
-                break;
-            case 'changeUserLevel':
-                $uriQuery = self::getUriQueryArray();
-                if (isset($uriQuery['userID']) && isset($uriQuery['value'])) {
-                    AdminActions::change($uriQuery['userID'], 'updateAccessLevel', $uriQuery['value']);
-                } else {
-                    View::render('404');
-                }
-                break;
-            case 'hidePhoto':
-                $uriQuery = self::getUriQueryArray();
-                if (isset($uriQuery['photoID']) && isset($uriQuery['enabled'])) {
-                    AdminActions::change($uriQuery['photoID'], 'hidePhoto', $uriQuery['enabled']);
-                } else {
-                    View::render('404');
-                }
-                break;
-            case 'createCompilation':
+            },
+            'compilation-items' => function () {
+                AdminActions::getCompilationItems();
+            },
+            'changeDesc' => function () {
+                AdminActions::change('description');
+            },
+            'changeName' => function () {
+                AdminActions::change('name');
+            },
+            'makeExhibit' => function () {
+                AdminActions::change('isExhibit');
+            },
+            'hideCompilation' => function () {
+                AdminActions::change('isHidden');
+            },
+            'hideProfile' => function () {
+                AdminActions::change('isHiddenProfile');
+            },
+            'hideBio' => function () {
+                AdminActions::change('isHiddenBio');
+            },
+            'hideAvatar' => function () {
+                AdminActions::change('isHiddenAvatar');
+            },
+            'changeUserLevel' => function () {
+                AdminActions::change('updateAccessLevel');
+            },
+            'hidePhoto' => function () {
+                AdminActions::change('isPhotoHidden');
+            },
+            'createCompilation' => function () {
                 AdminActions::createCompilation();
-                break;
-            case 'addCompilationItem':
-                $uriQuery = self::getUriQueryArray();
-                if (isset($uriQuery['compilationID']) && isset($uriQuery['photoID'])) {
-                    AdminActions::addCompilationItem($uriQuery['compilationID'], $uriQuery['photoID']);
-                } else {
-                    View::render('404');
-                }
-                break;
-            case 'removeCompilationItem':
-                $uriQuery = self::getUriQueryArray();
-                if (isset($uriQuery['compilationID']) && isset($uriQuery['photoID'])) {
-                    AdminActions::removeCompilationItem($uriQuery['compilationID'], $uriQuery['photoID']);
-                } else {
-                    View::render('404');
-                }
-                break;
-            case 'checkEmail':
-                $uriQuery = self::getUriQueryArray();
-                if (isset($uriQuery['userID']) && isset($uriQuery['type'])) {
-                    AdminActions::sendEmail($uriQuery['userID'], $uriQuery['type']);
-                } else {
-                    View::render('404');
-                }
-                break;
-            case 'verify':
-                $uriQuery = self::getUriQueryArray();
-                if (isset($uriQuery['token'])) {
-                    Authentication::verifyEmail($uriQuery['token']);
-                } else {
-                    View::render('404');
-                }
-                break;
-            case 'requestRestore':
+            },
+            'addCompilationItem' => function () {
+                AdminActions::addCompilationItem();
+            },
+            'removeCompilationItem' => function () {
+                AdminActions::removeCompilationItem();
+            },
+            'checkEmail' => function () {
+                AdminActions::sendEmail();
+            },
+            'verify' => function () {
+                Authentication::verifyEmail();
+            },
+            'requestRestore' => function () {
                 Authentication::requestRestore();
-                break;
-            case 'restore':
-                $uriQuery = self::getUriQueryArray();
-                if (isset($uriQuery['token'])) {
-                    Authentication::restorePassword($uriQuery['token']);
-                } else {
-                    View::render('404');
-                }
-                break;
-            case 'quick-like':
+            },
+            'restore' => function () {
+                Authentication::restorePassword();
+            },
+            'quick-like' => function () {
                 UserActions::quickAction('like');
-                break;
-            case 'quick-dislike':
+            },
+            'quick-dislike' => function () {
                 UserActions::quickAction('dislike');
-                break;
+            }
+        ];
+        if (isset($callbacks[$requestList[0]])) {
+            call_user_func($callbacks[$requestList[0]]);
+        } else {
+            View::render('404');
         }
-    }
-
-    private static function getUriQueryArray(): array
-    {
-        $uriQuery = [];
-        parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-        return $uriQuery;
     }
 
     public static function getUrlWithToken(string $type, string $token): string
     {
-        $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . "/$type?token=$token";
-        return $url;
+        return $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . "/$type?token=$token";
     }
 }

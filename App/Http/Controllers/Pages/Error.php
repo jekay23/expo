@@ -4,7 +4,7 @@ namespace Expo\App\Http\Controllers\Pages;
 
 use Expo\Resources\Views\View;
 
-class Error404
+class Error
 {
     private static array $types = ['403', '404', '503'];
 

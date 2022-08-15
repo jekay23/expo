@@ -2,6 +2,7 @@
 
 namespace Expo\App\Http\Controllers\Api;
 
+use Exception;
 use Expo\App\Http\Controllers\Authentication;
 use Expo\App\Http\Controllers\HashHandler;
 use Expo\App\Http\Controllers\HTTPQueryHandler;
@@ -13,8 +14,16 @@ use Expo\Resources\Views\View;
 
 class UserActions
 {
-    public static function addLike()
+    /**
+     * @throws Exception
+     */
+    public static function toggleLike(string $type)
     {
+        $types = ['like', 'dislike'];
+        if (!in_array($type, $types)) {
+            throw new Exception('Unknown like toggle type');
+        }
+        $likeShouldBeSet = ('like' == $type);
         $userID = Authentication::getUserIdFromCookie();
         if (0 == $userID) {
             $uriQuery = http_build_query(['message' => 'Войдите в профиль, чтобы оценивать фото', 'color' => 'red']);
@@ -30,12 +39,12 @@ class UserActions
         $validUriQuery = HTTPQueryHandler::validateGet($uriQuery);
         if ($validUriQuery && isset($uriQuery['photoID'])) {
             $photoID = $uriQuery['photoID'];
-            $likeSet = Likes::checkLike($userID, $photoID);
-            if ($likeSet) {
+            $isLikeSet = Likes::checkLike($userID, $photoID);
+            if ($isLikeSet == $likeShouldBeSet) {
                 $uriQuery = http_build_query(['message' => 'Вы уже оценивали это фото', 'color' => 'red']);
                 header("Location: /photo/$photoID?$uriQuery");
             } else {
-                Likes::addLike($userID, $photoID);
+                $likeShouldBeSet ? Likes::addLike($userID, $photoID) : Likes::removeLike($userID, $photoID);
                 header("Location: /photo/$photoID");
             }
         } else {
@@ -43,6 +52,9 @@ class UserActions
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public static function changeAvatar()
     {
         $userID = Authentication::getUserIdFromCookie();
@@ -93,6 +105,9 @@ class UserActions
         header("Location: /profile/$userID?$uriQuery");
     }
 
+    /**
+     * @throws Exception
+     */
     public static function editProfile()
     {
         $post = $_POST;
@@ -116,36 +131,9 @@ class UserActions
         header("Location: /profile/$userID?$uriQuery");
     }
 
-    public static function removeLike()
-    {
-        $userID = Authentication::getUserIdFromCookie();
-        if (0 == $userID) {
-            $uriQuery = http_build_query(['message' => 'Войдите в профиль, чтобы оценивать фото', 'color' => 'red']);
-            header("Location: /sign-in?$uriQuery");
-            exit;
-        }
-        if (empty($_SERVER['QUERY_STRING'])) {
-            header("Location: /");
-            exit;
-        }
-        $uriQuery = [];
-        parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-        $validUriQuery = HTTPQueryHandler::validateGet($uriQuery);
-        if ($validUriQuery && isset($uriQuery['photoID'])) {
-            $photoID = $uriQuery['photoID'];
-            $likeSet = Likes::checkLike($userID, $photoID);
-            if (!$likeSet) {
-                $uriQuery = http_build_query(['message' => 'Вы не оценивали это фото', 'color' => 'red']);
-                header("Location: /photo/$photoID?$uriQuery");
-            } else {
-                Likes::removeLike($userID, $photoID);
-                header("Location: /photo/$photoID");
-            }
-        } else {
-            header("Location: /");
-        }
-    }
-
+    /**
+     * @throws Exception
+     */
     public static function upload()
     {
         $numOfFiles = count($_FILES['files']['name']);
@@ -161,14 +149,11 @@ class UserActions
             if (0 === $files['error'][$i]) {
                 $time = time();
                 $filename = HashHandler::getHash('filename', "$time/" . "$i");
-                switch ($files['type'][$i]) {
-                    case 'image/jpeg':
-                        $filename .= '.jpg';
-                        break;
-                    case 'image/png':
-                        $filename .= '.png';
-                        break;
-                }
+                $filenameExtensions = [
+                    'image/jpeg' => '.jpg',
+                    'image/png' => '.png'
+                ];
+                $filename .= $filenameExtensions[$files['type'][$i]];
                 while (file_exists(__DIR__ . '/../../../../Public/uploads/photos/' . $filename)) {
                     $extraSymbol = rand(0, 9);
                     $filename = substr_replace($filename, "$extraSymbol", -5, 0);
@@ -199,6 +184,9 @@ class UserActions
         header("Location: /profile/$userID?$uriQuery");
     }
 
+    /**
+     * @throws Exception
+     */
     public static function quickAction(string $type)
     {
         $uriQuery = self::getUriQueryArray();
