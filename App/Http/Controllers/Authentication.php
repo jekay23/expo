@@ -20,7 +20,7 @@ class Authentication
         try {
             HTTPQueryHandler::validateAndProcessPostWithPassword($post);
         } catch (ExceptionWithUserMessage $e) {
-            self::openPageWithUserMessage("/$type", $e->getMessage());
+            Api::openPageWithUserMessage("/$type", $e->getMessage());
             exit;
         }
         try {
@@ -32,7 +32,7 @@ class Authentication
                 throw new Exception('Unknown authentication type');
             }
         } catch (ExceptionWithUserMessage $e) {
-            self::openPageWithUserMessage("/$type", $e->getMessage());
+            Api::openPageWithUserMessage("/$type", $e->getMessage());
             exit;
         }
         header("Location: /profile/$userID");
@@ -49,7 +49,7 @@ class Authentication
                 $userID = Users::create($credentials);
                 self::saveHashToCookie($userID);
                 $token = self::getToken($userID, 'verify');
-                EmailSender::send('verify', $userID, ['verifyUrl' => Api::getUrlWithToken('verify', $token)]);
+                EmailSender::send('verify', $userID, ['verifyUrl' => self::getUrlWithToken('verify', $token)]);
                 return $userID;
             } else {
                 throw new ExceptionWithUserMessage(
@@ -106,14 +106,15 @@ class Authentication
         setcookie('userID', $userID, time() + 10 * 24 * 3600, '/');
     }
 
-    /**
-     * @throws Exception
-     */
     public static function getUserIdFromCookie(): int
     {
         if (isset($_COOKIE['userID']) && isset($_COOKIE['authenticatedUserIDHash']) && $_COOKIE['userID'] > 0) {
-            if (HashHandler::getHash('id', $_COOKIE['userID']) == $_COOKIE['authenticatedUserIDHash']) {
-                return $_COOKIE['userID'];
+            try {
+                if (HashHandler::getHash('id', $_COOKIE['userID']) == $_COOKIE['authenticatedUserIDHash']) {
+                    return $_COOKIE['userID'];
+                }
+            } catch (Exception $e) {
+                return 0;
             }
         }
         return 0;
@@ -192,9 +193,9 @@ class Authentication
                 'passwordHash' => $newHash
             ];
             Users::updateProfileData($user);
-            self::openPageWithUserMessage("/profile/$userID", 'Пароль изменён', 'green');
+            Api::openPageWithUserMessage("/profile/$userID", 'Пароль изменён', 'green');
         } else {
-            self::openPageWithUserMessage("/profile/$userID/change-password-email", 'Пароли не совпадают');
+            Api::openPageWithUserMessage("/profile/$userID/change-password-email", 'Пароли не совпадают');
         }
     }
 
@@ -211,7 +212,7 @@ class Authentication
             'passwordHash' => $newHash
         ];
         Users::updateProfileData($user);
-        self::openPageWithUserMessage("/profile/$userID", 'Email изменён', 'green');
+        Api::openPageWithUserMessage("/profile/$userID", 'Email изменён', 'green');
     }
 
     /**
@@ -227,9 +228,9 @@ class Authentication
                 'passwordHash' => $newHash
             ];
             Users::updateProfileData($user);
-            self::openPageWithUserMessage("/profile/$userID", 'Email и пароль изменены', 'green');
+            Api::openPageWithUserMessage("/profile/$userID", 'Email и пароль изменены', 'green');
         } else {
-            self::openPageWithUserMessage("/profile/$userID/change-password-email", 'Пароли не совпадают');
+            Api::openPageWithUserMessage("/profile/$userID/change-password-email", 'Пароли не совпадают');
         }
     }
 
@@ -244,7 +245,7 @@ class Authentication
         try {
             HTTPQueryHandler::validateAndProcessPost($post);
         } catch (ExceptionWithUserMessage $e) {
-            self::openPageWithUserMessage("/profile/$userID/change-password-email", $e->getMessage());
+            Api::openPageWithUserMessage("/profile/$userID/change-password-email", $e->getMessage());
             exit;
         }
         $user = Users::getUserData($userID, true);
@@ -253,17 +254,17 @@ class Authentication
         try {
             self::signIn(['email' => $oldEmail, 'passwordHash' => $oldHash], false);
         } catch (ExceptionWithUserMessage $e) {
-            self::openPageWithUserMessage("/profile/$userID/change-password-email", $e->getMessage());
+            Api::openPageWithUserMessage("/profile/$userID/change-password-email", $e->getMessage());
             exit;
         }
         if ($oldEmail == $post['email']) {
             if (empty($post['newPassword']) && empty($post['newPasswordAgain'])) {
-                self::openPageWithUserMessage("/profile/$userID/change-password-email", 'Вы ничего не изменили');
+                Api::openPageWithUserMessage("/profile/$userID/change-password-email", 'Вы ничего не изменили');
             } else {
                 self::changeOnlyPassword($post, $userID);
             }
         } elseif (Users::getIdByEmail($post['email'])) {
-            self::openPageWithUserMessage("/profile/$userID/change-password-email", 'Недопустимый email');
+            Api::openPageWithUserMessage("/profile/$userID/change-password-email", 'Недопустимый email');
         } elseif (empty($post['newPassword']) && empty($post['newPasswordAgain'])) {
             self::changeOnlyEmail($post, $userID);
         } else {
@@ -305,21 +306,21 @@ class Authentication
         try {
             HTTPQueryHandler::validateAndProcessPostWithPassword($post);
         } catch (ExceptionWithUserMessage $e) {
-            self::openPageWithUserMessage('/', $e->getMessage());
+            Api::openPageWithUserMessage('/', $e->getMessage());
             exit;
         }
         try {
             $userID = self::signIn($post, false);
         } catch (ExceptionWithUserMessage $e) {
-            self::openPageWithUserMessage('/verify', $e->getMessage(), 'red', $token);
+            Api::openPageWithUserMessage('/verify', $e->getMessage(), 'red', $token);
             exit;
         }
         if (self::isTokenValid($userID, $token, 'verify')) {
             Tokens::delete($token);
             Users::verifyEmail($userID);
-            self::openPageWithUserMessage("/profile/$userID", 'Email подтверждён', 'green');
+            Api::openPageWithUserMessage("/profile/$userID", 'Email подтверждён', 'green');
         } else {
-            self::openPageWithUserMessage('/', 'Email не подтверждён');
+            Api::openPageWithUserMessage('/', 'Email не подтверждён');
         }
     }
 
@@ -332,16 +333,16 @@ class Authentication
         try {
             HTTPQueryHandler::validateAndProcessPost($post);
         } catch (ExceptionWithUserMessage $e) {
-            self::openPageWithUserMessage('/request-restore', $e->getMessage());
+            Api::openPageWithUserMessage('/request-restore', $e->getMessage());
             exit;
         }
         $email = $post['email'];
         $userID = Users::getIdByEmail($email);
         if ($userID) {
             $token = self::getToken($userID, 'restore');
-            EmailSender::send('restore', $userID, ['restoreUrl' => Api::getUrlWithToken('restore', $token)]);
+            EmailSender::send('restore', $userID, ['restoreUrl' => self::getUrlWithToken('restore', $token)]);
         }
-        self::openPageWithUserMessage(
+        Api::openPageWithUserMessage(
             '/request-restore',
             "Если email $email зарегистрирован на сайте, на него придёт письмо c инструкциями",
             'green'
@@ -370,11 +371,11 @@ class Authentication
         try {
             HTTPQueryHandler::validateAndProcessPost($post);
         } catch (ExceptionWithUserMessage $e) {
-            self::openPageWithUserMessage('/request-restore', $e->getMessage());
+            Api::openPageWithUserMessage('/request-restore', $e->getMessage());
             exit;
         }
         if ($post['passwordHash'] != $post['passwordHashAgain']) {
-            self::openPageWithUserMessage('/restore', 'Пароли не совпадают', 'red', $token);
+            Api::openPageWithUserMessage('/restore', 'Пароли не совпадают', 'red', $token);
             exit;
         }
         $userID = Users::getIdByEmail($post['email']);
@@ -382,24 +383,15 @@ class Authentication
             if (self::isTokenValid($userID, $token, 'restore')) {
                 Tokens::delete($token);
                 Users::updatePassword($userID, $post['passwordHash']);
-                self::openPageWithUserMessage('/sign-in', 'Пароль изменён', 'green');
+                Api::openPageWithUserMessage('/sign-in', 'Пароль изменён', 'green');
                 exit;
             }
         }
-        self::openPageWithUserMessage('/request-restore', 'Пароль не изменён');
+        Api::openPageWithUserMessage('/request-restore', 'Пароль не изменён');
     }
 
-    private static function openPageWithUserMessage(
-        string $href,
-        string $message,
-        string $color = 'red',
-        string $token = null
-    ) {
-        $queryArray = ['message' => $message, 'color' => $color];
-        if (isset($token)) {
-            $queryArray['token'] = $token;
-        }
-        $uriQuery = http_build_query($queryArray);
-        header("Location: $href?$uriQuery");
+    private static function getUrlWithToken(string $type, string $token): string
+    {
+        return $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . "/$type?token=$token";
     }
 }

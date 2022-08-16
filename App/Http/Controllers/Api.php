@@ -116,8 +116,17 @@ class Api
         }
     }
 
-    public static function getUrlWithToken(string $type, string $token): string
-    {
-        return $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . "/$type?token=$token";
+    public static function openPageWithUserMessage(
+        string $href,
+        string $message,
+        string $color = 'red',
+        string $token = null
+    ) {
+        $queryArray = ['message' => $message, 'color' => $color];
+        if (isset($token)) {
+            $queryArray['token'] = $token;
+        }
+        $uriQuery = http_build_query($queryArray);
+        header("Location: $href?$uriQuery");
     }
 }

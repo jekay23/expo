@@ -3,6 +3,7 @@
 namespace Expo\App\Http\Controllers\Api;
 
 use Exception;
+use Expo\App\Http\Controllers\Api;
 use Expo\App\Http\Controllers\Authentication;
 use Expo\App\Http\Controllers\HashHandler;
 use Expo\App\Http\Controllers\HTTPQueryHandler;
@@ -26,8 +27,7 @@ class UserActions
         $likeShouldBeSet = ('like' == $type);
         $userID = Authentication::getUserIdFromCookie();
         if (0 == $userID) {
-            $uriQuery = http_build_query(['message' => 'Войдите в профиль, чтобы оценивать фото', 'color' => 'red']);
-            header("Location: /sign-in?$uriQuery");
+            Api::openPageWithUserMessage('/sign-in', 'Войдите в профиль, чтобы оценивать фото');
             exit;
         }
         if (empty($_SERVER['QUERY_STRING'])) {
@@ -41,8 +41,7 @@ class UserActions
             $photoID = $uriQuery['photoID'];
             $isLikeSet = Likes::checkLike($userID, $photoID);
             if ($isLikeSet == $likeShouldBeSet) {
-                $uriQuery = http_build_query(['message' => 'Вы уже оценивали это фото', 'color' => 'red']);
-                header("Location: /photo/$photoID?$uriQuery");
+                Api::openPageWithUserMessage("/photo/$photoID", 'Вы уже оценивали это фото');
             } else {
                 $likeShouldBeSet ? Likes::addLike($userID, $photoID) : Likes::removeLike($userID, $photoID);
                 header("Location: /photo/$photoID");
@@ -60,22 +59,13 @@ class UserActions
         $userID = Authentication::getUserIdFromCookie();
         if ('' === $_FILES['file']['name']) {
             $message = 'Вы не выбрали ни одного фото';
-            $uriQuery = http_build_query(['message' => $message, 'color' => 'red']);
-            header("Location: /profile/$userID/change-avatar?$uriQuery");
+            Api::openPageWithUserMessage("/profile/$userID/change-avatar", $message);
             exit;
         }
         $file = $_FILES['file'];
         if (0 === $file['error']) {
             $time = time();
-            $filename = HashHandler::getHash('filename', "$time/");
-            switch ($file['type']) {
-                case 'image/jpeg':
-                    $filename .= '.jpg';
-                    break;
-                case 'image/png':
-                    $filename .= '.png';
-                    break;
-            }
+            $filename = self::appendExtensionToFilename(HashHandler::getHash('filename', "$time/"), $file['type']);
             while (file_exists(__DIR__ . '/../../../../Public/uploads/photos/' . $filename)) {
                 $extraSymbol = rand(0, 9);
                 $filename = substr_replace($filename, "$extraSymbol", -5, 0);
@@ -96,13 +86,11 @@ class UserActions
                 6 => 'Файл не был помещён во временную папку на сервере'
             ];
             $message = $messageEndings[$file['error']];
-            $uriQuery = http_build_query(['message' => $message, 'color' => 'red']);
-            header("Location: /profile/$userID/change-avatar?$uriQuery");
+            Api::openPageWithUserMessage("/profile/$userID/change-avatar", $message);
             exit;
         }
         $message = 'Аватар обновлён';
-        $uriQuery = http_build_query(['message' => $message, 'color' => 'green']);
-        header("Location: /profile/$userID?$uriQuery");
+        Api::openPageWithUserMessage("/photo/$userID", $message, 'green');
     }
 
     /**
@@ -115,8 +103,7 @@ class UserActions
         try {
             HTTPQueryHandler::validateAndProcessPost($post);
         } catch (ExceptionWithUserMessage $e) {
-            $uriQuery = http_build_query(['message' => $e->getMessage(), 'color' => 'red']);
-            header("Location: /profile/$userID/edit?$uriQuery");
+            Api::openPageWithUserMessage("/profile/$userID/edit", $e->getMessage());
             exit;
         }
         $user = [
@@ -127,8 +114,7 @@ class UserActions
             'contact' => $post['contact']
         ];
         Users::updateProfileData($user);
-        $uriQuery = http_build_query(['message' => 'Данные профиля обновлены', 'color' => 'green']);
-        header("Location: /profile/$userID?$uriQuery");
+        Api::openPageWithUserMessage("/profile/$userID", 'Данные профиля обновлены', 'green');
     }
 
     /**
@@ -139,8 +125,7 @@ class UserActions
         $numOfFiles = count($_FILES['files']['name']);
         if (0 === $numOfFiles || (1 === $numOfFiles && '' === $_FILES['files']['name'][0])) {
             $message = 'Вы не выбрали ни одного фото';
-            $uriQuery = http_build_query(['message' => $message, 'color' => 'red']);
-            header("Location: /upload?$uriQuery");
+            Api::openPageWithUserMessage('/upload', $message);
             exit;
         }
         $files = $_FILES['files'];
@@ -148,12 +133,10 @@ class UserActions
         for ($i = 0; $i < $numOfFiles; $i++) {
             if (0 === $files['error'][$i]) {
                 $time = time();
-                $filename = HashHandler::getHash('filename', "$time/" . "$i");
-                $filenameExtensions = [
-                    'image/jpeg' => '.jpg',
-                    'image/png' => '.png'
-                ];
-                $filename .= $filenameExtensions[$files['type'][$i]];
+                $filename = self::appendExtensionToFilename(
+                    HashHandler::getHash('filename', "$time/" . "$i"),
+                    $files['type'][$i]
+                );
                 while (file_exists(__DIR__ . '/../../../../Public/uploads/photos/' . $filename)) {
                     $extraSymbol = rand(0, 9);
                     $filename = substr_replace($filename, "$extraSymbol", -5, 0);
@@ -174,14 +157,12 @@ class UserActions
                     6 => '-й файл не был помещён во временную папку на сервере'
                 ];
                 $message = $i . ' фото было добавлено, однако ' . ($i + 1) . $messageEndings[$files['error'][$i]];
-                $uriQuery = http_build_query(['message' => $message, 'color' => 'red']);
-                header("Location: /upload?$uriQuery");
+                Api::openPageWithUserMessage('/upload', $message);
                 exit;
             }
         }
         $message = $i . ' фото было добавлено';
-        $uriQuery = http_build_query(['message' => $message, 'color' => 'green']);
-        header("Location: /profile/$userID?$uriQuery");
+        Api::openPageWithUserMessage("/profile/$userID", $message, 'green');
     }
 
     /**
@@ -211,10 +192,15 @@ class UserActions
     {
         $uriQuery = [];
         parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-        if (HTTPQueryHandler::validateGet($uriQuery)) {
-            return $uriQuery;
-        } else {
-            return [];
-        }
+        return (HTTPQueryHandler::validateGet($uriQuery) ? $uriQuery : []);
+    }
+
+    private static function appendExtensionToFilename(string $filename, string $type): string
+    {
+        $filenameExtensions = [
+            'image/jpeg' => '.jpg',
+            'image/png' => '.png'
+        ];
+        return $filename . $filenameExtensions[$type];
     }
 }

@@ -7,6 +7,11 @@ use Expo\Resources\Views\View;
 
 class Announcement
 {
+    private static array $bgClasses = [
+        'red' => 'bg-warning',
+        'green' => 'bg-success'
+    ];
+
     public static function render()
     {
         if (!empty($_SERVER['QUERY_STRING'])) {
@@ -15,19 +20,13 @@ class Announcement
             $validUriQuery = HTTPQueryHandler::validateGet($uriQuery);
             if ($validUriQuery) {
                 $message = '';
-                $bgClass = 'bg-info';
                 if (isset($uriQuery['message'])) {
                     $message = $uriQuery['message'];
                 }
                 if (isset($uriQuery['color'])) {
-                    switch ($uriQuery['color']) {
-                        case 'red':
-                            $bgClass = 'bg-warning';
-                            break;
-                        case 'green':
-                            $bgClass = 'bg-success';
-                            break;
-                    }
+                    $bgClass = self::$bgClasses[$uriQuery['color']] ?? 'bg-info';
+                } else {
+                    $bgClass = 'bg-info';
                 }
                 View::requireTemplate('announcementBar', 'Component', compact('message', 'bgClass'));
             }
