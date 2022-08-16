@@ -8,7 +8,6 @@ class Photo
 {
     public static function render(bool &$stickFooter, $photo)
     {
-        $varNames = null;
         $stickFooter = false;
         switch ($photo['likeStatus']) {
             case 'notSignedIn':
@@ -41,8 +40,7 @@ class Photo
         }
 
         if (isset($photo)) {
-            $varNames = ['photo'];
-            View::requireTemplate('photo', 'Page', compact($varNames));
+            View::requireTemplate('photo', 'Page', compact(['photo']));
         }
     }
 }

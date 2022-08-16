@@ -32,10 +32,7 @@ class Profile
             ] : [
                 'status' => false
             ];
-            $compact = compact(
-                'user',
-                'button'
-            );
+            $compact = compact('user', 'button');
         }
         View::requireTemplate('profile', 'Page', $compact);
 

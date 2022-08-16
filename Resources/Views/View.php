@@ -3,7 +3,6 @@
 namespace Expo\Resources\Views;
 
 use Expo\App\Http\Controllers\Authentication;
-use Expo\Resources\Views\Pages;
 
 class View
 {
@@ -47,43 +46,9 @@ class View
         'requestRestore'
     ];
 
-    private static array $titles = [
-        'frontpage' => 'Выставка фотографов мехмата',
-        'profile' => 'Платон Антониу',
-        'photo' => 'Фото',
-        'compilation' => 'Подборка &quot;Лето в Академгородке&quot;',
-        'exhibition' => 'Текущая выставка',
-        'signIn' => 'Вход',
-        'signUp' => 'Регистрация',
-        '404' => 'Страница не найдена',
-        '403' => 'Доступ запрещён',
-        '503' => 'Сервис не отвечает',
-        'upload' => 'Загрузка снимков',
-        'editProfile' => 'Настройки профиля',
-        'changeAvatar' => 'Смена аватара',
-        'changePasswordEmail' => 'Смена пароля и email',
-        'support' => 'Поддержка',
-        'faq' => 'Частозадаваемые вопросы',
-        'license' => 'Пользовательское соглашение',
-        'verify' => 'Подтверждение email',
-        'requestRestore' => 'Восстановление пароля',
-        'restore' => 'Восстановление пароля'
-    ];
-
-    private static function makeTitle(string $requestTitle, $override = null): string
+    public static function render(string $requestView, array $data = null, string $title = '')
     {
-        $title = $override ?? self::$titles[$requestTitle];
-
-        if ($requestTitle != 'frontpage') {
-            $title = $title . ' | Выставка фотографов мехмата';
-        }
-
-        return $title;
-    }
-
-    public static function render(string $requestView, array $data = null, string $title = null)
-    {
-        $title = self::makeTitle($requestView, $title);
+        $title = Title::get($requestView, $title);
 
         $userID = Authentication::getUserIdFromCookie();
 

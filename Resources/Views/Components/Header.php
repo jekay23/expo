@@ -11,7 +11,7 @@ class Header
         if ($userID != 0) {
             $navbarLink3 = ['href' => "profile/$userID", 'name' => 'Профиль'];
         } else {
-            $navbarLink3 = ['href' => "sign-in", 'name' => 'Войти'];
+            $navbarLink3 = ['href' => 'sign-in', 'name' => 'Войти'];
         }
         $navbarLinksExtraClass = [
             'feed' => '',

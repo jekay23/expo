@@ -9,7 +9,7 @@ class EditProfile
     public static function render(bool &$stickFooter, $user)
     {
         $stickFooter = false;
-        $varNames = null;
+        $compact = [];
         if (isset($user)) {
             $userID = $user['userID'];
             $profileName = $user['name'];
@@ -19,8 +19,8 @@ class EditProfile
             $pronounSelector[$user['pronoun']] = 'selected';
             $bio = $user['bio'];
             $contact = $user['contact'];
-            $varNames = ['userID', 'profileName', 'email', 'avatarLocation', 'pronounSelector', 'bio', 'contact'];
+            $compact = compact('userID', 'profileName', 'email', 'avatarLocation', 'pronounSelector', 'bio', 'contact');
         }
-        View::requireTemplate('editProfile', 'Page', compact($varNames));
+        View::requireTemplate('editProfile', 'Page', $compact);
     }
 }
