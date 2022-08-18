@@ -1,7 +1,7 @@
 #!/bin/bash
 
-cd ..
 git pull
 cd React || exit
 git pull
+npm install
 npm run build
