@@ -18,6 +18,9 @@ class Email
         'restore' => 'Восстановление пароля — Выставка фотографов мехмата'
     ];
 
+    /**
+     * @param string $type 'verify' | 'exhibit' | 'restore' | 'custom'
+     */
     public function __construct(string $type)
     {
         if (in_array($type, self::$types)) {
@@ -47,47 +50,32 @@ class Email
 
     public function setBody(array $customStings): bool
     {
-        $this->body = '';
         if (isset($this->recipientName)) {
-            $this->body .= "<p><b>Здравствуйте, $this->recipientName!</b></p>";
+            $this->body = "<p><b>Здравствуйте, $this->recipientName!</b></p>";
         } else {
-            $this->body .= '<p><b>Здравствуйте!</b></p>';
+            $this->body = '<p><b>Здравствуйте!</b></p>';
         }
         $this->body .= '<br>';
         switch ($this->type) {
             case 'verify':
+                ob_start();
                 $verifyUrl = $customStings['verifyUrl'];
                 $recipientEmail = $this->recipientEmails[0];
-                $this->body .= '<p>Вы только что зарегистрировались на сайте ';
-                $this->body .= '<a href="http://62.113.110.35/">Выставки фотографов мехмата</a>.</p>';
-                $this->body .= "<p>Пожалуйста, подтвердите ваш адрес электронной почты <b>$recipientEmail</b>, ";
-                $this->body .= "перейдя по одноразовой ссылке <a href=\"$verifyUrl\">$verifyUrl</a>.</p><br>";
-                $this->body .= '<p>Пожалуйста, <b>никому не сообщайте данную ссылку</b>.</p><br>';
-                $this->body .= '<p>Если вы не регистрировались на сайте, вы можете проигнорировать это письмо.</p><br>';
-                $this->body .= '<br><p>C уважением, <br>Команда мехмата</p>';
+                require 'Bodies/verify.php';
+                $this->body .= ob_get_clean();
                 break;
             case 'exhibit':
+                ob_start();
                 $photoUrl = $customStings['photoUrl'];
                 $exhibitUrl = $customStings['exhibitUrl'];
-                $this->body .= '<p>Ваша фотография на сайте ';
-                $this->body .= '<a href="http://62.113.110.35/">Выставки фотографов мехмата</a> ';
-                $this->body .= 'была отобрана для участия в следующей выставке!</p><br>';
-                $this->body .= '<p>Подробности:</p>';
-                $this->body .= "<ul><li>фотография: <a href=\"$photoUrl\">$photoUrl</a></li>";
-                $this->body .= "<li>выставка: <a href=\"$exhibitUrl\">$exhibitUrl</a></li></ul>";
-                $this->body .= '<br><br>';
-                $this->body .= '<p>C уважением, <br>Команда мехмата</p>';
+                require 'Bodies/exhibit.php';
+                $this->body .= ob_get_clean();
                 break;
             case 'restore':
+                ob_start();
                 $restoreUrl = $customStings['restoreUrl'];
-                $this->body .= '<p>Нам только что поступил запрос на восстновление пароля от вашего аккаунта ';
-                $this->body .= 'на сайте <a href="http://62.113.110.35/">Выставки фотографов мехмата</a>.</p><br>';
-                $this->body .= "<p>Если это были вы, пожалуйста, перейдите по одноразовой ссылке ";
-                $this->body .= "<a href=\"$restoreUrl\">$restoreUrl</a> ";
-                $this->body .= 'для восстановления пароля. <b>Никому не сообщайте данную ссылку</b>.</p><br>';
-                $this->body .= '<p>Если это были не вы, пожалуйста, проигнорируйте это письмо. ';
-                $this->body .= 'Ваш аккаунт в безопасности.</p><br><br>';
-                $this->body .= '<p>C уважением, <br>Команда мехмата</p>';
+                require 'Bodies/restore.php';
+                $this->body .= ob_get_clean();
                 break;
             case 'custom':
                 $this->body .= $customStings[0];
