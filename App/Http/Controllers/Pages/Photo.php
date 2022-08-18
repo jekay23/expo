@@ -15,7 +15,7 @@ class Photo
     /**
      * @throws \Exception
      */
-    public static function prepare(array $requestList, array $requestQuery)
+    public static function prepare(array $requestList)
     {
         $photoID = $requestList[0];
         $photo = Photos::getPhotoDetails($photoID);

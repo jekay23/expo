@@ -6,11 +6,14 @@
 
 namespace Expo\Pub;
 
-use Expo\Routes\Router;
+use Expo\Routes\PageRouter;
 
-require __DIR__ . '/../Config/debugFlag.php';
-require __DIR__ . '/../Config/errorReporting.php';
-require __DIR__ . '/../Routes/autoloader.php';
-require __DIR__ . '/../Routes/routeTable.php';
+const __ROOT__ = __DIR__ . '/..';
 
-Router::callback($_SERVER['REQUEST_URI']);
+require __ROOT__ . '/Config/debugFlag.php';
+require __ROOT__ . '/Config/errorReporting.php';
+require __ROOT__ . '/Routes/autoloader.php';
+require __ROOT__ . '/Routes/routeTable.php';
+require __ROOT__ . '/Routes/apiRouteTable.php';
+
+PageRouter::callback($_SERVER['REQUEST_URI']);

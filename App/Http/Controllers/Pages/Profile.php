@@ -14,7 +14,7 @@ use Expo\Resources\Views\View;
 
 class Profile
 {
-    public static function prepare(array $requestList, array $requestQuery)
+    public static function prepare(array $requestList)
     {
         $userID = $requestList[0];
         $accessHidden = Authentication::checkUserIsEditor();

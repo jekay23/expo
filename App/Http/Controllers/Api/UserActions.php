@@ -13,6 +13,8 @@ use Expo\App\Models\Entities\Users;
 use Expo\Config\ExceptionWithUserMessage;
 use Expo\Resources\Views\View;
 
+use const Expo\Pub\__ROOT__;
+
 class UserActions
 {
     /**
@@ -66,13 +68,13 @@ class UserActions
         if (0 === $file['error']) {
             $time = time();
             $filename = self::appendExtensionToFilename(HashHandler::getHash('filename', "$time/"), $file['type']);
-            while (file_exists(__DIR__ . '/../../../../Public/uploads/photos/' . $filename)) {
+            while (file_exists(__ROOT__ . '/Public/uploads/photos/' . $filename)) {
                 $extraSymbol = rand(0, 9);
                 $filename = substr_replace($filename, "$extraSymbol", -5, 0);
             }
             $moveStatus = move_uploaded_file(
                 $file['tmp_name'],
-                __DIR__ . '/../../../../Public/uploads/photos/' . $filename
+                __ROOT__ . '/Public/uploads/photos/' . $filename
             );
             if ($moveStatus) {
                 Users::updateAvatar($userID, $filename);
@@ -137,13 +139,14 @@ class UserActions
                     HashHandler::getHash('filename', "$time/" . "$i"),
                     $files['type'][$i]
                 );
-                while (file_exists(__DIR__ . '/../../../../Public/uploads/photos/' . $filename)) {
+                // TODO: remove code duplication (here below and in changeAvatar()
+                while (file_exists(__ROOT__ . '/Public/uploads/photos/' . $filename)) {
                     $extraSymbol = rand(0, 9);
                     $filename = substr_replace($filename, "$extraSymbol", -5, 0);
                 }
                 $moveStatus = move_uploaded_file(
                     $files['tmp_name'][$i],
-                    __DIR__ . '/../../../../Public/uploads/photos/' . $filename
+                    __ROOT__ . '/Public/uploads/photos/' . $filename
                 );
                 if ($moveStatus) {
                     Photos::addPhoto($userID, $filename);

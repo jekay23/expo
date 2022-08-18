@@ -7,7 +7,7 @@ use Expo\Resources\Views\View;
 
 class Upload
 {
-    public static function prepare(array $requestList, array $requestQuery)
+    public static function prepare(array $requestList)
     {
         if (!empty($requestList)) {
             View::render('404');

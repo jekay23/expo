@@ -2,15 +2,17 @@
 
 namespace Expo\App\Http\Controllers\Pages;
 
+use Expo\App\Http\Controllers\HTTPQueryHandler;
 use Expo\Resources\Views\View;
 
 class Restore
 {
 
-    public static function prepare(array $requestList, array $requestQuery)
+    public static function prepare(array $requestList)
     {
-        if (isset($requestQuery['token']) && empty($requestList)) {
-            $token = $requestQuery['token'];
+        $uriQuery = HTTPQueryHandler::validateAndParseGet();
+        if (isset($uriQuery['token']) && empty($requestList)) {
+            $token = $uriQuery['token'];
             View::render('restore', compact('token'));
         } else {
             View::render('404');

@@ -2,15 +2,16 @@
 
 namespace Expo\App\Http\Controllers\Pages;
 
-use Expo\App\Models\Entities\Tokens;
+use Expo\App\Http\Controllers\HTTPQueryHandler;
 use Expo\Resources\Views\View;
 
 class Verify
 {
-    public static function prepare(array $requestList, array $requestQuery)
+    public static function prepare(array $requestList)
     {
-        if (isset($requestQuery['token']) && empty($requestList)) {
-            $token = $requestQuery['token'];
+        $uriQuery = HTTPQueryHandler::validateAndParseGet();
+        if (isset($uriQuery['token']) && empty($requestList)) {
+            $token = $uriQuery['token'];
             View::render('verify', compact('token'));
         } else {
             View::render('404');

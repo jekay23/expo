@@ -1,76 +1,77 @@
 <?php
 
 use Expo\App\Http\Controllers;
-use Expo\Routes\Router;
+use Expo\Routes\ApiRouter;
+use Expo\Routes\PageRouter;
 
-Router::saveCallback('', function (array $requestList, array $requestQuery) {
-    Controllers\Pages\Front::prepare($requestList, $requestQuery);
+PageRouter::saveCallback('', function (array $requestList) {
+    Controllers\Pages\Front::prepare($requestList);
 });
 
-Router::saveCallback('profile', function (array $requestList, array $requestQuery) {
-    Controllers\Pages\Profile::prepare($requestList, $requestQuery);
+PageRouter::saveCallback('profile', function (array $requestList) {
+    Controllers\Pages\Profile::prepare($requestList);
 }, true);
 
-Router::saveCallback('photo', function (array $requestList, array $requestQuery) {
-    Controllers\Pages\Photo::prepare($requestList, $requestQuery);
+PageRouter::saveCallback('photo', function (array $requestList) {
+    Controllers\Pages\Photo::prepare($requestList);
 }, true);
 
-Router::saveCallback('compilation', function (array $requestList, array $requestQuery) {
-    Controllers\Pages\Compilation::prepare($requestList, $requestQuery);
+PageRouter::saveCallback('compilation', function (array $requestList) {
+    Controllers\Pages\Compilation::prepare($requestList);
 }, true);
 
-Router::saveCallback('exhibition', function (array $requestList, array $requestQuery) {
-    Controllers\Pages\Exhibition::prepare($requestList, $requestQuery);
+PageRouter::saveCallback('exhibition', function (array $requestList) {
+    Controllers\Pages\Exhibition::prepare($requestList);
 });
 
-Router::saveCallback('sign-in', function (array $requestList, array $requestQuery) {
-    Controllers\Pages\SignIn::prepare($requestList, $requestQuery);
+PageRouter::saveCallback('sign-in', function (array $requestList) {
+    Controllers\Pages\SignIn::prepare($requestList);
 });
 
-Router::saveCallback('sign-up', function (array $requestList, array $requestQuery) {
-    Controllers\Pages\SignUp::prepare($requestList, $requestQuery);
+PageRouter::saveCallback('sign-up', function (array $requestList) {
+    Controllers\Pages\SignUp::prepare($requestList);
 });
 
-Router::saveCallback('api', function (array $requestList, array $requestQuery) {
-    Controllers\Api::execute($requestList, $requestQuery);
+PageRouter::saveCallback('api', function (array $requestList) {
+    ApiRouter::callback($requestList);
 });
 
-Router::saveCallback('upload', function (array $requestList, array $requestQuery) {
-    Controllers\Pages\Upload::prepare($requestList, $requestQuery);
+PageRouter::saveCallback('upload', function (array $requestList) {
+    Controllers\Pages\Upload::prepare($requestList);
 });
 
-Router::saveCallback('404', function () {
+PageRouter::saveCallback('404', function () {
     Controllers\Pages\Error::prepare('404');
 });
 
-Router::saveCallback('403', function () {
+PageRouter::saveCallback('403', function () {
     Controllers\Pages\Error::prepare('403');
 });
 
-Router::saveCallback('503', function () {
+PageRouter::saveCallback('503', function () {
     Controllers\Pages\Error::prepare('503');
 });
 
-Router::saveCallback('support', function (array $requestList, array $requestQuery) {
-    Controllers\Pages\Support::prepare($requestList, $requestQuery);
+PageRouter::saveCallback('support', function (array $requestList) {
+    Controllers\Pages\Support::prepare($requestList);
 });
 
-Router::saveCallback('license', function (array $requestList, array $requestQuery) {
-    Controllers\Pages\License::prepare($requestList, $requestQuery);
+PageRouter::saveCallback('license', function (array $requestList) {
+    Controllers\Pages\License::prepare($requestList);
 });
 
-Router::saveCallback('faq', function (array $requestList, array $requestQuery) {
-    Controllers\Pages\FAQ::prepare($requestList, $requestQuery);
+PageRouter::saveCallback('faq', function (array $requestList) {
+    Controllers\Pages\FAQ::prepare($requestList);
 });
 
-Router::saveCallback('verify', function (array $requestList, array $requestQuery) {
-    Controllers\Pages\Verify::prepare($requestList, $requestQuery);
+PageRouter::saveCallback('verify', function (array $requestList) {
+    Controllers\Pages\Verify::prepare($requestList);
 });
 
-Router::saveCallback('request-restore', function (array $requestList, array $requestQuery) {
-    Controllers\Pages\RequestRestore::prepare($requestList, $requestQuery);
+PageRouter::saveCallback('request-restore', function (array $requestList) {
+    Controllers\Pages\RequestRestore::prepare($requestList);
 });
 
-Router::saveCallback('restore', function (array $requestList, array $requestQuery) {
-    Controllers\Pages\Restore::prepare($requestList, $requestQuery);
+PageRouter::saveCallback('restore', function (array $requestList) {
+    Controllers\Pages\Restore::prepare($requestList);
 });
