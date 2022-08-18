@@ -588,3 +588,18 @@ a {
 .mmd-exhibit-slider-photo {
     position: relative;
 }
+
+.mmd-faq-row {
+    flex: 0 0 auto;
+    width: 66.66666667%;
+}
+
+@media screen and (max-width: 767px) {
+    .mmd-faq-row {
+        width: 91.66666667%;
+    }
+}
+
+.mmd-faq > .d-flex {
+    flex-wrap: wrap;
+}

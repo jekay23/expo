@@ -12,7 +12,7 @@ class Entity
     protected static function prepareExecution()
     {
         if (!DataBaseConnection::makeSureConnectionIsOpen()) {
-            throw new Exception('Unable to connect to server. Please try again later or contact support.', 0);
+            throw new Exception('Unable to connect to server. Please try again later or contact support.');
         }
     }
 

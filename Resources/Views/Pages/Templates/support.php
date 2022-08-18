@@ -1,7 +1,7 @@
 <div class="mt-3 text-center mmd-faq">
     <h1><strong>Поддержка</strong></h1>
-    <div class="row justify-content-center text-start">
-        <div class="col-11 col-md-8 col-lg-7">
+    <div class="d-flex justify-content-center text-start">
+        <div class="mmd-faq-row">
             Если у вас возникли следующие вопросы или трудности:
             <ul class="mmd-list">
                 <li>трудности с аутентификацией — входом в аккаунт или регистрацией,</li>

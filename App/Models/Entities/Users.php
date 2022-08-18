@@ -202,7 +202,7 @@ class Users extends Entity
         if (isset($users[0]['userID'])) {
             return $users[0]['userID'];
         } else {
-            throw new Exception('Unknown error: user created, but ID inaccessible.', 0);
+            throw new Exception('Unknown error: user created, but ID inaccessible.');
         }
     }
 
@@ -217,7 +217,7 @@ class Users extends Entity
         if (isset($users[0]['passwordHash'])) {
             return ($passwordHash == $users[0]['passwordHash']);
         } else {
-            throw new Exception("User either doesn't exist or has no password hash.", 0);
+            throw new Exception("User either doesn't exist or has no password hash.");
         }
     }
 
