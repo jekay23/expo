@@ -2,11 +2,6 @@
 
 namespace Expo\App\Http\Controllers;
 
-use Exception;
-use Expo\App\Http\Controllers\Api\AdminActions;
-use Expo\App\Http\Controllers\Api\UserActions;
-use Expo\Resources\Views\View;
-
 class Api
 {
     public static function openPageWithUserMessage(

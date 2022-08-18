@@ -1,58 +1,18 @@
 <?php
 
-namespace Expo\App\Http\Controllers\Api;
+namespace Expo\App\Http\Controllers\Api\UserActions;
 
 use Exception;
 use Expo\App\Http\Controllers\Api;
 use Expo\App\Http\Controllers\Authentication;
 use Expo\App\Http\Controllers\HashHandler;
-use Expo\App\Http\Controllers\HTTPQueryHandler;
-use Expo\App\Models\Entities\Likes;
 use Expo\App\Models\Entities\Photos;
 use Expo\App\Models\Entities\Users;
-use Expo\Config\ExceptionWithUserMessage;
-use Expo\Resources\Views\View;
 
 use const Expo\Pub\__ROOT__;
 
-class UserActions
+class PhotoUploading
 {
-    /**
-     * @throws Exception
-     */
-    public static function toggleLike(string $type)
-    {
-        $types = ['like', 'dislike'];
-        if (!in_array($type, $types)) {
-            throw new Exception('Unknown like toggle type');
-        }
-        $likeShouldBeSet = ('like' == $type);
-        $userID = Authentication::getUserIdFromCookie();
-        if (0 == $userID) {
-            Api::openPageWithUserMessage('/sign-in', 'Войдите в профиль, чтобы оценивать фото');
-            exit;
-        }
-        if (empty($_SERVER['QUERY_STRING'])) {
-            header("Location: /");
-            exit;
-        }
-        $uriQuery = [];
-        parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-        $validUriQuery = HTTPQueryHandler::validateGet($uriQuery);
-        if ($validUriQuery && isset($uriQuery['photoID'])) {
-            $photoID = $uriQuery['photoID'];
-            $isLikeSet = Likes::checkLike($userID, $photoID);
-            if ($isLikeSet == $likeShouldBeSet) {
-                Api::openPageWithUserMessage("/photo/$photoID", 'Вы уже оценивали это фото');
-            } else {
-                $likeShouldBeSet ? Likes::addLike($userID, $photoID) : Likes::removeLike($userID, $photoID);
-                header("Location: /photo/$photoID");
-            }
-        } else {
-            header("Location: /");
-        }
-    }
-
     /**
      * @throws Exception
      */
@@ -93,30 +53,6 @@ class UserActions
         }
         $message = 'Аватар обновлён';
         Api::openPageWithUserMessage("/photo/$userID", $message, 'green');
-    }
-
-    /**
-     * @throws Exception
-     */
-    public static function editProfile()
-    {
-        $post = $_POST;
-        $userID = Authentication::getUserIdFromCookie();
-        try {
-            HTTPQueryHandler::validateAndProcessPost($post);
-        } catch (ExceptionWithUserMessage $e) {
-            Api::openPageWithUserMessage("/profile/$userID/edit", $e->getMessage());
-            exit;
-        }
-        $user = [
-            'userID' => $userID,
-            'name' => $post['name'],
-            'pronoun' => $post['pronoun'],
-            'bio' => $post['bio'],
-            'contact' => $post['contact']
-        ];
-        Users::updateProfileData($user);
-        Api::openPageWithUserMessage("/profile/$userID", 'Данные профиля обновлены', 'green');
     }
 
     /**
@@ -166,36 +102,6 @@ class UserActions
         }
         $message = $i . ' фото было добавлено';
         Api::openPageWithUserMessage("/profile/$userID", $message, 'green');
-    }
-
-    /**
-     * @throws Exception
-     */
-    public static function quickAction(string $type)
-    {
-        $uriQuery = self::getUriQueryArray();
-        if (isset($uriQuery['name'])) {
-            $userID = Authentication::getUserIdFromCookie();
-            if ($userID) {
-                switch ($type) {
-                    case 'like':
-                        Likes::addLikeByName($userID, $uriQuery['name']);
-                        break;
-                    case 'dislike':
-                        Likes::removeLikeByName($userID, $uriQuery['name']);
-                        break;
-                }
-            }
-        } else {
-            View::render('404');
-        }
-    }
-
-    private static function getUriQueryArray(): array
-    {
-        $uriQuery = [];
-        parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-        return (HTTPQueryHandler::validateGet($uriQuery) ? $uriQuery : []);
     }
 
     private static function appendExtensionToFilename(string $filename, string $type): string

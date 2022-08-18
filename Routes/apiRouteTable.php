@@ -1,8 +1,12 @@
 <?php
 
-use Expo\App\Http\Controllers\Api\AdminActions;
-use Expo\App\Http\Controllers\Api\UserActions;
+use Expo\App\Http\Controllers\Api\AdminActions\ChangeData;
+use Expo\App\Http\Controllers\Api\AdminActions\GetData;
+use Expo\App\Http\Controllers\Api\UserActions\Liking;
+use Expo\App\Http\Controllers\Api\UserActions\PhotoUploading;
+use Expo\App\Http\Controllers\Api\UserActions\ProfileEditing;
 use Expo\App\Http\Controllers\Authentication;
+use Expo\App\Mail\EmailSender;
 use Expo\Routes\ApiRouter;
 
 ApiRouter::saveCallback('sign-in', function () {
@@ -18,15 +22,15 @@ ApiRouter::saveCallback('sign-up', function () {
 });
 
 ApiRouter::saveCallback('upload', function () {
-    UserActions::upload();
+    PhotoUploading::upload();
 });
 
 ApiRouter::saveCallback('edit-profile', function () {
-    UserActions::editProfile();
+    ProfileEditing::editProfile();
 });
 
 ApiRouter::saveCallback('change-avatar', function () {
-    UserActions::changeAvatar();
+    PhotoUploading::changeAvatar();
 });
 
 ApiRouter::saveCallback('change-password-email', function () {
@@ -38,79 +42,79 @@ ApiRouter::saveCallback('sign-out', function () {
 });
 
 ApiRouter::saveCallback('like', function () {
-    UserActions::toggleLike('like');
+    Liking::toggleLike('like');
 });
 
 ApiRouter::saveCallback('dislike', function () {
-    UserActions::toggleLike('dislike');
+    Liking::toggleLike('dislike');
 });
 
 ApiRouter::saveCallback('users', function () {
-    AdminActions::getUsers();
+    GetData::getUsers();
 });
 
 ApiRouter::saveCallback('photos', function () {
-    AdminActions::getPhotos();
+    GetData::getPhotos();
 });
 
 ApiRouter::saveCallback('compilations', function () {
-    AdminActions::getCompilations();
+    GetData::getCompilations();
 });
 
 ApiRouter::saveCallback('compilation-items', function () {
-    AdminActions::getCompilationItems();
+    GetData::getCompilationItems();
 });
 
 ApiRouter::saveCallback('changeDesc', function () {
-    AdminActions::change('description');
+    ChangeData::change('description');
 });
 
 ApiRouter::saveCallback('changeName', function () {
-    AdminActions::change('name');
+    ChangeData::change('name');
 });
 
 ApiRouter::saveCallback('makeExhibit', function () {
-    AdminActions::change('isExhibit');
+    ChangeData::change('isExhibit');
 });
 
 ApiRouter::saveCallback('hideCompilation', function () {
-    AdminActions::change('isHidden');
+    ChangeData::change('isHidden');
 });
 
 ApiRouter::saveCallback('hideProfile', function () {
-    AdminActions::change('isHiddenProfile');
+    ChangeData::change('isHiddenProfile');
 });
 
 ApiRouter::saveCallback('hideBio', function () {
-    AdminActions::change('isHiddenBio');
+    ChangeData::change('isHiddenBio');
 });
 
 ApiRouter::saveCallback('hideAvatar', function () {
-    AdminActions::change('isHiddenAvatar');
+    ChangeData::change('isHiddenAvatar');
 });
 
 ApiRouter::saveCallback('changeUserLevel', function () {
-    AdminActions::change('updateAccessLevel');
+    ChangeData::change('updateAccessLevel');
 });
 
 ApiRouter::saveCallback('hidePhoto', function () {
-    AdminActions::change('isPhotoHidden');
+    ChangeData::change('isPhotoHidden');
 });
 
 ApiRouter::saveCallback('createCompilation', function () {
-    AdminActions::createCompilation();
+    ChangeData::createCompilation();
 });
 
 ApiRouter::saveCallback('addCompilationItem', function () {
-    AdminActions::addCompilationItem();
+    ChangeData::addCompilationItem();
 });
 
 ApiRouter::saveCallback('removeCompilationItem', function () {
-    AdminActions::removeCompilationItem();
+    ChangeData::removeCompilationItem();
 });
 
 ApiRouter::saveCallback('checkEmail', function () {
-    AdminActions::sendEmail();
+    EmailSender::sendTestEmail();
 });
 
 ApiRouter::saveCallback('verify', function () {
@@ -126,9 +130,9 @@ ApiRouter::saveCallback('restore', function () {
 });
 
 ApiRouter::saveCallback('quick-like', function () {
-    UserActions::quickAction('like');
+    Liking::quickAction('like');
 });
 
 ApiRouter::saveCallback('quick-dislike', function () {
-    UserActions::quickAction('dislike');
+    Liking::quickAction('dislike');
 });

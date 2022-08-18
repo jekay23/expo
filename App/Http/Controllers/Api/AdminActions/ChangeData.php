@@ -1,63 +1,17 @@
 <?php
 
-namespace Expo\App\Http\Controllers\Api;
+namespace Expo\App\Http\Controllers\Api\AdminActions;
 
 use Exception;
 use Expo\App\Http\Controllers\Authentication;
 use Expo\App\Http\Controllers\HTTPQueryHandler;
-use Expo\App\Mail\EmailSender;
 use Expo\App\Models\Entities\Compilations;
 use Expo\App\Models\Entities\Photos;
 use Expo\App\Models\Entities\Users;
 use Expo\Resources\Views\View;
 
-class AdminActions
+class ChangeData
 {
-    /**
-     * @throws Exception
-     */
-    public static function getUsers()
-    {
-        self::callIfUserIsEditor(function () {
-            print json_encode(Users::getUsers());
-        });
-    }
-
-    /**
-     * @throws Exception
-     */
-    public static function getPhotos()
-    {
-        self::callIfUserIsEditor(function () {
-            print json_encode(Photos::getPhotos('all'));
-        });
-    }
-
-    /**
-     * @throws Exception
-     */
-    public static function getCompilations()
-    {
-        self::callIfUserIsEditor(function () {
-            print json_encode(Compilations::getCompilations());
-        });
-    }
-
-    /**
-     * @throws Exception
-     */
-    public static function getCompilationItems()
-    {
-        $uriQuery = HTTPQueryHandler::validateAndParseGet();
-        if (isset($uriQuery['compilationID'])) {
-            self::callIfUserIsEditor(function ($uriQuery) {
-                print json_encode(Photos::getCompilationItems($uriQuery['compilationID']));
-            }, $uriQuery);
-        } else {
-            View::render('404');
-        }
-    }
-
     /**
      * @throws Exception
      */
@@ -141,7 +95,7 @@ class AdminActions
 
     public static function createCompilation()
     {
-        self::callIfUserIsEditor(function () {
+        Authorizer::callIfUserIsEditor(function () {
             Compilations::create(Authentication::getUserIdFromCookie());
         });
     }
@@ -150,7 +104,7 @@ class AdminActions
     {
         $uriQuery = HTTPQueryHandler::validateAndParseGet();
         if (isset($uriQuery['compilationID']) && isset($uriQuery['photoID'])) {
-            self::callIfUserIsEditor(function ($uriQuery) {
+            Authorizer::callIfUserIsEditor(function ($uriQuery) {
                 Compilations::addCompilationItem($uriQuery['compilationID'], $uriQuery['photoID']);
             }, $uriQuery);
         } else {
@@ -162,19 +116,9 @@ class AdminActions
     {
         $uriQuery = HTTPQueryHandler::validateAndParseGet();
         if (isset($uriQuery['compilationID']) && isset($uriQuery['photoID'])) {
-            self::callIfUserIsEditor(function ($uriQuery) {
+            Authorizer::callIfUserIsEditor(function ($uriQuery) {
                 Compilations::removeCompilationItem($uriQuery['compilationID'], $uriQuery['photoID']);
             }, $uriQuery);
-        } else {
-            View::render('404');
-        }
-    }
-
-    public static function sendEmail()
-    {
-        $uriQuery = HTTPQueryHandler::validateAndParseGet();
-        if (isset($uriQuery['type']) && isset($uriQuery['userID'])) {
-            EmailSender::send($uriQuery['type'], $uriQuery['userID'], ['This is a test email']);
         } else {
             View::render('404');
         }
@@ -183,18 +127,5 @@ class AdminActions
     private static function convertToBool($value): bool
     {
         return ('true' === $value || 1 === $value || '1' === $value);
-    }
-
-    private static function callIfUserIsEditor(callable $callback, $uriQuery = null)
-    {
-        try {
-            if (Authentication::checkUserIsEditor()) {
-                call_user_func($callback, $uriQuery);
-            } else {
-                View::render('403');
-            }
-        } catch (Exception $e) {
-            View::render('503');
-        }
     }
 }

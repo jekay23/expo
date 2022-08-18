@@ -3,7 +3,10 @@
 namespace Expo\App\Mail;
 
 use Exception;
+use Expo\App\Http\Controllers\Api\AdminActions\Authorizer;
+use Expo\App\Http\Controllers\HTTPQueryHandler;
 use Expo\App\Models\Entities\Users;
+use Expo\Resources\Views\View;
 
 class EmailSender
 {
@@ -22,5 +25,20 @@ class EmailSender
         $email->setRecipientName($user['name']);
         $email->setBody($customStrings);
         $email->send();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function sendTestEmail()
+    {
+        $uriQuery = HTTPQueryHandler::validateAndParseGet();
+        if (isset($uriQuery['type']) && isset($uriQuery['userID'])) {
+            Authorizer::callIfUserIsEditor(function ($uriQuery) {
+                EmailSender::send($uriQuery['type'], $uriQuery['userID'], ['This is a test email']);
+            }, $uriQuery);
+        } else {
+            View::render('404');
+        }
     }
 }

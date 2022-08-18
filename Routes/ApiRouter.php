@@ -12,10 +12,11 @@ class ApiRouter extends Router
     {
         if (isset($requestList[0]) && !isset($requestList[1])) {
             if (isset(static::$callbacks[$requestList[0]])) {
-                call_user_func(static::$callbacks[$requestList[0]]);
+                return call_user_func(static::$callbacks[$requestList[0]]);
             }
-        } else {
-            View::render('404');
         }
+        return call_user_func(function () {
+            View::render('404');
+        });
     }
 }
