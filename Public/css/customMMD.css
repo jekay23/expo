@@ -6,8 +6,8 @@
     --bs-secondary-rgb: 35, 34, 34;
     --bs-light: #fff;
     --bs-light-rgb: 255, 255, 255;
-    --bs-success: #BCDDCD;
-    --bs-success-rgb: 188, 221, 205;
+    --bs-success: #b1dac6;
+    --bs-success-rgb: 177, 218, 198;
     --bs-warning: #ff8f81;
     --bs-warning-rgb: 255, 143, 129;
     --bs-info: #939292;
@@ -334,7 +334,7 @@ hr {
 }
 
 .mmd-input-wrap > input:focus, .mmd-select:focus {
-    background-color: rgba(84, 182, 134, 0.34);
+    background-color: var(--bs-success);
 }
 
 .mmd-thin-button {
@@ -493,7 +493,7 @@ a {
 }
 
 .mmd-edit-wrap > input:focus, .mmd-select:focus {
-    background-color: rgba(84, 182, 134, 0.34);
+    background-color: var(--bs-success);
 }
 
 .mmd-photo-page > div > img {
@@ -539,7 +539,7 @@ a {
     border: 0.15rem solid var(--bs-info);
     padding: 0.5rem;
     font-weight: bold;
-    background-color: #BCDDCD;
+    background-color: var(--bs-success);
 }
 
 .mmd-admin-table > tbody > tr > td {
