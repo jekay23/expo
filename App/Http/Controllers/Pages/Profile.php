@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Front page controller class
- * Manages the front page, which is accessed by URL 'IP/'.
- */
-
 namespace Expo\App\Http\Controllers\Pages;
 
 use Exception;
@@ -14,6 +9,9 @@ use Expo\Resources\Views\View;
 
 class Profile
 {
+    /**
+     * @throws Exception
+     */
     public static function prepare(array $requestList)
     {
         $userID = $requestList[0];

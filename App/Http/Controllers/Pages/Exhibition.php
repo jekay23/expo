@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Front page controller class
- * Manages the front page, which is accessed by URL 'IP/'.
- */
-
 namespace Expo\App\Http\Controllers\Pages;
 
 use Expo\App\Models\Entities\Compilations;

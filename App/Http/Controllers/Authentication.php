@@ -295,10 +295,8 @@ class Authentication
      */
     public static function verifyEmail()
     {
-        $uriQuery = HTTPQueryHandler::validateAndParseGet();
-        if (isset($uriQuery['token'])) {
-            $token = $uriQuery['token'];
-        } else {
+        $token = HTTPQueryHandler::parseGetAndGetToken();
+        if (empty($token)) {
             View::render('404');
             exit;
         }
@@ -354,22 +352,14 @@ class Authentication
      */
     public static function restorePassword()
     {
-        $uriQuery = HTTPQueryHandler::validateAndParseGet();
-        if (isset($uriQuery['token'])) {
-            $token = $uriQuery['token'];
-        } else {
+        $token = HTTPQueryHandler::parseGetAndGetToken();
+        if (empty($token)) {
             View::render('404');
             exit;
         }
-        $hash = HashHandler::getHash('password', $_POST['password'], $_POST['email']);
-        $hashAgain = HashHandler::getHash('password', $_POST['passwordAgain'], $_POST['email']);
         $post = $_POST;
-        unset($post['password']);
-        unset($post['passwordAgain']);
-        $post['passwordHash'] = $hash;
-        $post['passwordHashAgain'] = $hashAgain;
         try {
-            HTTPQueryHandler::validateAndProcessPost($post);
+            HTTPQueryHandler::validateAndProcessPostWithPassword($post, true);
         } catch (ExceptionWithUserMessage $e) {
             Api::openPageWithUserMessage('/request-restore', $e->getMessage());
             exit;

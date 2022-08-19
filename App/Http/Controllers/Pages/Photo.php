@@ -1,19 +1,15 @@
 <?php
 
-/**
- * Front page controller class
- * Manages the front page, which is accessed by URL 'IP/'.
- */
-
 namespace Expo\App\Http\Controllers\Pages;
 
+use Exception;
 use Expo\App\Models\Entities\Photos;
 use Expo\Resources\Views\View;
 
 class Photo
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function prepare(array $requestList)
     {

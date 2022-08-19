@@ -7,7 +7,6 @@ use Expo\Resources\Views\View;
 
 class Restore
 {
-
     public static function prepare(array $requestList)
     {
         $uriQuery = HTTPQueryHandler::validateAndParseGet();
@@ -19,3 +18,4 @@ class Restore
         }
     }
 }
+

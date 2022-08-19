@@ -6,13 +6,8 @@ use Expo\Resources\Views\View;
 
 class RequestRestore
 {
-
     public static function prepare(array $requestList)
     {
-        if (empty($requestList)) {
-            View::render('requestRestore');
-        } else {
-            View::render('404');
-        }
+        PagesWithNoPreparation::open($requestList, 'requestRestore');
     }
 }

@@ -45,11 +45,16 @@ class HTTPQueryHandler
      * @throws ExceptionWithUserMessage
      * @throws Exception
      */
-    public static function validateAndProcessPostWithPassword(array &$post): bool
+    public static function validateAndProcessPostWithPassword(array &$post, bool $isPasswordTwice = false): bool
     {
         $hash = HashHandler::getHash('password', $post['password'], $post['email']);
         unset($post['password']);
         $post['passwordHash'] = $hash;
+        if ($isPasswordTwice) {
+            $hashAgain = HashHandler::getHash('password', $post['passwordAgain'], $post['email']);
+            unset($post['passwordAgain']);
+            $post['passwordHashAgain'] = $hashAgain;
+        }
         return self::validateAndProcessPost($post);
     }
 
@@ -63,14 +68,22 @@ class HTTPQueryHandler
         return true;
     }
 
+    public static function parseGetAndGetToken(): string
+    {
+        $uriQuery = self::parseGet();
+        return $uriQuery['token'] ?? '';
+    }
+
     public static function validateAndParseGet(): array
+    {
+        $uriQuery = self::parseGet();
+        return (self::validateGet($uriQuery) ? $uriQuery : []);
+    }
+
+    private static function parseGet(): array
     {
         $uriQuery = [];
         parse_str($_SERVER['QUERY_STRING'], $uriQuery);
-        if (self::validateGet($uriQuery)) {
-            return $uriQuery;
-        } else {
-            return [];
-        }
+        return $uriQuery;
     }
 }
