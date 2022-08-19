@@ -1,3 +1,3 @@
-<img alt="<?php echo($liked ? 'Лайк' : 'Непоставленный лайк')?>"
-     class="mmd-like"
-     src="/image/<?php echo($liked ? 'filledHeart.png' : 'emptyWhiteHeart.png')?>">
+<img alt="<?= ($liked ? 'Лайк' : 'Непоставленный лайк') ?>"
+     class="mmd-like <?= ($liked ? 'mmd-liked' : 'mmd-not-liked') ?>"
+     src="/image/<?= ($liked ? 'filledHeart.png' : 'emptyWhiteHeart.png') ?>">

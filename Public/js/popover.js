@@ -1,3 +1,5 @@
-$(document).ready(function () {
-    $('[data-toggle="popover"]').popover();
-});
+(function ($) {
+    $(document).ready(function () {
+        $('[data-toggle="popover"]').popover();
+    });
+})(jQuery);
