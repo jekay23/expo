@@ -5,7 +5,7 @@ namespace Expo\Resources\Views;
 class Title
 {
     private static array $titles = [
-        'frontpage' => 'Выставка фотографов мехмата',
+        'front' => 'Выставка фотографов мехмата',
         'profile' => 'Платон Антониу',
         'photo' => 'Фото',
         'compilation' => 'Подборка &quot;Лето в Академгородке&quot;',

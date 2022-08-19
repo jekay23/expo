@@ -2,11 +2,16 @@
 
 namespace Expo\App\Http\Controllers\Components;
 
+use Exception;
 use Expo\App\Models\Entities\Photos;
 use Expo\Resources\Views;
+use Expo\Resources\Views\Components\Photo;
 
 class PhotoDisplay
 {
+    /**
+     * @throws Exception
+     */
     public static function prepare(
         string $appearanceType,
         string $headerText,
@@ -19,7 +24,7 @@ class PhotoDisplay
         } else {
             $args = null;
         }
-        $photos = Photos::getPhotos($dataType, $quantity, $args);
+        $photos = self::generatePhotosArray(Photos::getPhotos($dataType, $quantity, $args));
         if (!empty($photos)) {
             switch ($appearanceType) {
                 case 'carousel':
@@ -32,5 +37,14 @@ class PhotoDisplay
                     Views\Components\SmallGrid::render($headerText, $photos);
             }
         }
+    }
+
+    public static function generatePhotosArray(array $photos): array
+    {
+        $result = [];
+        foreach ($photos as $photo) {
+            $result[] = new Photo($photo);
+        }
+        return $result;
     }
 }

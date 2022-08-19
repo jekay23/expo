@@ -11,11 +11,7 @@
         <?php foreach ($rows as $row) : ?>
             <div class="one-of-stack d-flex justify-content-evenly">
                 <?php foreach ($row as $photo) : ?>
-                    <a class="mmd-exhibit-slider-photo" href="/photo/<?= $photo['photoID'] ?>">
-                        <img alt="<?= $photo['altText'] ?>" class="mmd-image"
-                             src="<?= '/uploads/photos/' . $photo['location'] ?>">
-                        <?php \Expo\Resources\Views\Components\Like::render($photo['liked']) ?>
-                    </a>
+                    <?= $photo->render() ?>
                 <?php endforeach; ?>
             </div>
         <?php endforeach; ?>

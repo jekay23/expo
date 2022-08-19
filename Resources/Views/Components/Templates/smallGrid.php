@@ -4,11 +4,7 @@
     <?php foreach ($blocks as $block) : ?>
         <div class="small-grid-triple d-inline-flex">
             <?php foreach ($block as $photo) : ?>
-                <a class="mmd-small-grid-image" href="/photo/<?= $photo['photoID'] ?>">
-                    <img alt="<?= $photo['altText'] ?>" class="mmd-image"
-                         src="<?= '/uploads/photos/' . $photo['location'] ?>">
-                    <?php \Expo\Resources\Views\Components\Like::render($photo['liked']) ?>
-                </a>
+                <?= $photo->render() ?>
             <?php endforeach; ?>
         </div>
     <?php endforeach; ?>

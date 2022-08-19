@@ -4,6 +4,7 @@ namespace Expo\App\Http\Controllers\Pages;
 
 use Exception;
 use Expo\App\Http\Controllers\Authentication;
+use Expo\App\Http\Controllers\Components\PhotoDisplay;
 use Expo\App\Models\Entities\Users;
 use Expo\Resources\Views\View;
 
@@ -22,6 +23,7 @@ class Profile
             View::render('404');
             exit;
         }
+        $user['photos'] = PhotoDisplay::generatePhotosArray($user['photos']);
         if ($userID == Authentication::getUserIdFromCookie()) {
             $user['isProfileOwner'] = true;
         } else {

@@ -18,7 +18,7 @@ class ExhibitionSlider
         } else {
             $args = null;
         }
-        $photos = Photos::getPhotos('compilation', $quantity, $args);
+        $photos = PhotoDisplay::generatePhotosArray(Photos::getPhotos('compilation', $quantity, $args));
         if (!empty($photos)) {
             $compilation = Compilations::getCompilationDetails($compilationID);
             if (!empty($compilation)) {

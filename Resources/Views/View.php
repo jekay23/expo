@@ -7,7 +7,7 @@ use Expo\App\Http\Controllers\Authentication;
 class View
 {
     private static array $requests = [
-        'frontpage' => 'Front',
+        'front' => 'Front',
         'profile' => 'Profile',
         'photo' => 'Photo',
         'compilation' => 'Compilation',
@@ -19,7 +19,7 @@ class View
     ];
 
     private static array $navbarLinks = [
-        'frontpage' => 'feed',
+        'front' => 'feed',
         'profile' => 'profile',
         'signIn' => 'profile',
         'signUp' => 'profile',

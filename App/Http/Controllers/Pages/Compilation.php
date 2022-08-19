@@ -2,6 +2,7 @@
 
 namespace Expo\App\Http\Controllers\Pages;
 
+use Expo\App\Http\Controllers\Components\PhotoDisplay;
 use Expo\App\Models\Entities\Compilations;
 use Expo\App\Models\Entities\Photos;
 use Expo\Resources\Views\View;
@@ -18,11 +19,11 @@ class Compilation
             if (empty($compilation)) {
                 View::render('404');
             } else {
-                $compilationPhotos = Photos::getPhotos(
+                $compilationPhotos = PhotoDisplay::generatePhotosArray(Photos::getPhotos(
                     'compilation',
                     30,
                     ['compilationID' => $compilationID]
-                );
+                ));
                 if (empty($compilationPhotos)) {
                     View::render('404');
                 } else {

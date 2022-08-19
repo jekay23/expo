@@ -9,6 +9,9 @@ class SmallGrid
     public static function render(string $headerText, array $photos, int $photosPerBlock = 3)
     {
         if (!empty($photos)) {
+            foreach ($photos as $photo) {
+                $photo->addClass('mmd-small-grid-image');
+            }
             $numOfBlocks = self::getNumOfBlocks($photos, $photosPerBlock);
             $blocks = self::fillBlocksWithPhotos($numOfBlocks, $photos, $photosPerBlock);
             View::requireTemplate('smallGrid', 'Component', compact('headerText', 'blocks'));
