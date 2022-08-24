@@ -7,7 +7,7 @@ use Expo\App\Mail\EmailSender;
 use Expo\App\Models\Entities\Tokens;
 use Expo\App\Models\Entities\Users;
 use Expo\Config\ExceptionWithUserMessage;
-use Expo\Resources\Views\View;
+use Expo\Resources\Views\Html;
 
 class Authentication
 {
@@ -297,7 +297,7 @@ class Authentication
     {
         $token = HTTPQueryHandler::parseGetAndGetToken();
         if (empty($token)) {
-            View::render('404');
+            Html::render('404');
             exit;
         }
         $post = $_POST;
@@ -354,7 +354,7 @@ class Authentication
     {
         $token = HTTPQueryHandler::parseGetAndGetToken();
         if (empty($token)) {
-            View::render('404');
+            Html::render('404');
             exit;
         }
         $post = $_POST;

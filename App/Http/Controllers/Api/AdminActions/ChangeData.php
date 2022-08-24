@@ -8,7 +8,7 @@ use Expo\App\Http\Controllers\HTTPQueryHandler;
 use Expo\App\Models\Entities\Compilations;
 use Expo\App\Models\Entities\Photos;
 use Expo\App\Models\Entities\Users;
-use Expo\Resources\Views\View;
+use Expo\Resources\Views\Html;
 
 class ChangeData
 {
@@ -86,10 +86,10 @@ class ChangeData
             if (isset($callbacks[$field])) {
                 call_user_func($callbacks[$field], $uriQuery);
             } else {
-                View::render('404');
+                Html::render('404');
             }
         } else {
-            View::render('403');
+            Html::render('403');
         }
     }
 
@@ -108,7 +108,7 @@ class ChangeData
                 Compilations::addCompilationItem($uriQuery['compilationID'], $uriQuery['photoID']);
             }, $uriQuery);
         } else {
-            View::render('404');
+            Html::render('404');
         }
     }
 
@@ -120,7 +120,7 @@ class ChangeData
                 Compilations::removeCompilationItem($uriQuery['compilationID'], $uriQuery['photoID']);
             }, $uriQuery);
         } else {
-            View::render('404');
+            Html::render('404');
         }
     }
 

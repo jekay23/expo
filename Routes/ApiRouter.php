@@ -2,7 +2,7 @@
 
 namespace Expo\Routes;
 
-use Expo\Resources\Views\View;
+use Expo\Resources\Views\Html;
 
 class ApiRouter extends Router
 {
@@ -16,7 +16,7 @@ class ApiRouter extends Router
             }
         }
         return call_user_func(function () {
-            View::render('404');
+            Html::render('404');
         });
     }
 }

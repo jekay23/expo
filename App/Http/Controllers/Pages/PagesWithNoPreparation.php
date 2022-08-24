@@ -2,7 +2,7 @@
 
 namespace Expo\App\Http\Controllers\Pages;
 
-use Expo\Resources\Views\View;
+use Expo\Resources\Views\Html;
 
 class PagesWithNoPreparation
 {
@@ -19,9 +19,9 @@ class PagesWithNoPreparation
     public static function open(array $requestList, string $pageName)
     {
         if (!empty($requestList) || !in_array($pageName, self::$pageNames)) {
-            View::render('404');
+            Html::render('404');
         } else {
-            View::render($pageName);
+            Html::render($pageName);
         }
     }
 }

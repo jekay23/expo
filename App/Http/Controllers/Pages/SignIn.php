@@ -2,15 +2,15 @@
 
 namespace Expo\App\Http\Controllers\Pages;
 
-use Expo\Resources\Views\View;
+use Expo\Resources\Views\Html;
 
 class SignIn
 {
     public static function prepare(array $requestList)
     {
         if (!empty($requestList)) {
-            View::render('404');
+            Html::render('404');
         }
-        View::render('signIn');
+        Html::render('signIn');
     }
 }

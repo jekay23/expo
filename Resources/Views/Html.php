@@ -2,39 +2,64 @@
 
 namespace Expo\Resources\Views;
 
+use Expo\App\Http\Controllers\Authentication;
 use Expo\App\Models\DataBaseConnection;
 
 class Html
 {
-    public static function requireDynamic(
-        string $title,
-        string $templateClass,
-        $data,
-        int $userID = 0,
-        string $currentNavbarLink = null
-    ) {
-        $stickFooter = false;
-        $templateClass = 'Expo\\Resources\\Views\\Pages\\' . $templateClass;
-        $page = null;
-        require 'html.php';
-    }
+    private static array $dynamicPageClasses = [
+        'front' => 'Front',
+        'profile' => 'Profile',
+        'photo' => 'Photo',
+        'compilation' => 'Compilation',
+        'exhibition' => 'Compilation',
+        'editProfile' => 'EditProfile',
+        'changePasswordEmail' => 'ChangePasswordEmail',
+        'verify' => 'Verify',
+        'restore' => 'Restore'
+    ];
 
-    public static function requireStatic(string $title, string $page, int $userID = 0, string $currentNavbarLink = null)
+    private static array $staticPages = [
+        '404',
+        '403',
+        '503',
+        'upload',
+        'signIn',
+        'signUp',
+        'support',
+        'license',
+        'faq',
+        'changeAvatar',
+        'requestRestore'
+    ];
+
+    public static function render(string $requestView, array $data = null, string $title = '')
     {
+        $title = Title::get($requestView, $title);
         $stickFooter = false;
+        $userID = Authentication::getUserIdFromCookie();
+        $page = null;
         $templateClass = null;
-        $page = 'Pages/Templates/' . $page . '.php';
-        $data = null;
-        require 'html.php';
+        if (isset(self::$dynamicPageClasses[$requestView])) {
+            $templateClass = 'Expo\\Resources\\Views\\Pages\\' . self::$dynamicPageClasses[$requestView];
+        } elseif (in_array($requestView, self::$staticPages)) {
+            $page = 'Pages/Templates/' . $requestView . '.php';
+        }
+        $renderMainCallback = self::getRenderMainCallback($templateClass, $page, $stickFooter, $data);
+        $compact = compact('title', 'userID', 'requestView', 'stickFooter', 'renderMainCallback');
+        View::requireTemplate('html', '', $compact);
     }
 
-    public static function render($templateClass, $page, bool &$stickFooter, $data)
+    public static function getRenderMainCallback($templateClass, $page, bool &$stickFooter, $data)
     {
         if (isset($templateClass)) {
-            $templateClass::render($stickFooter, $data);
+            return function () use ($templateClass, $data, $stickFooter) {
+                $templateClass::render($stickFooter, $data);
+            };
         } elseif (isset($page)) {
-            require $page;
+            return function () use ($page) {
+                require $page;
+            };
         }
-        DataBaseConnection::close();
     }
 }

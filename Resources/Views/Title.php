@@ -8,7 +8,7 @@ class Title
         'front' => 'Выставка фотографов мехмата',
         'profile' => 'Платон Антониу',
         'photo' => 'Фото',
-        'compilation' => 'Подборка &quot;Лето в Академгородке&quot;',
+        'compilation' => 'Подборка &quot;Лето в Академгородке&quot;', // TODO: remove hard-code
         'exhibition' => 'Текущая выставка',
         'signIn' => 'Вход',
         'signUp' => 'Регистрация',

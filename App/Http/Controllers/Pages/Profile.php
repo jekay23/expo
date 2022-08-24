@@ -6,7 +6,7 @@ use Exception;
 use Expo\App\Http\Controllers\Authentication;
 use Expo\App\Http\Controllers\Components\PhotoDisplay;
 use Expo\App\Models\Entities\Users;
-use Expo\Resources\Views\View;
+use Expo\Resources\Views\Html;
 
 class Profile
 {
@@ -20,7 +20,7 @@ class Profile
         try {
             $user = Users::getProfilePageData($userID, $accessHidden);
         } catch (Exception $e) {
-            View::render('404');
+            Html::render('404');
             exit;
         }
         $user['photos'] = PhotoDisplay::generatePhotosArray($user['photos']);
@@ -33,23 +33,23 @@ class Profile
             if ($user['isProfileOwner']) {
                 switch ($requestList[1]) {
                     case 'edit':
-                        View::render('editProfile', $user);
+                        Html::render('editProfile', $user);
                         break;
                     case 'change-avatar':
-                        View::render('changeAvatar', $user);
+                        Html::render('changeAvatar', $user);
                         break;
                     case 'change-password-email':
-                        View::render('changePasswordEmail', $user);
+                        Html::render('changePasswordEmail', $user);
                         break;
                     default:
-                        View::render('404');
+                        Html::render('404');
                         break;
                 }
             } else {
-                View::render('403');
+                Html::render('403');
             }
         } else {
-            View::render('profile', $user, $user['name']);
+            Html::render('profile', $user, $user['name']);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Expo\App\Http\Controllers\Pages;
 
 use Exception;
 use Expo\App\Models\Entities\Photos;
-use Expo\Resources\Views\View;
+use Expo\Resources\Views\Html;
 
 class Photo
 {
@@ -16,9 +16,9 @@ class Photo
         $photoID = $requestList[0];
         $photo = Photos::getPhotoDetails($photoID);
         if (empty($photo)) {
-            View::render('404');
+            Html::render('404');
         } else {
-            View::render('photo', $photo, 'Фото пользователя ' . $photo['authorName']);
+            Html::render('photo', $photo, 'Фото пользователя ' . $photo['authorName']);
         }
     }
 }

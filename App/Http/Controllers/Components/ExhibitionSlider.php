@@ -2,6 +2,7 @@
 
 namespace Expo\App\Http\Controllers\Components;
 
+use Exception;
 use Expo\App\Models\Entities\Compilations;
 use Expo\App\Models\Entities\Photos;
 use Expo\Resources\Views;
@@ -9,7 +10,7 @@ use Expo\Resources\Views;
 class ExhibitionSlider
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function prepare(string $headerText, string $type, int $quantity, int $compilationID = null)
     {

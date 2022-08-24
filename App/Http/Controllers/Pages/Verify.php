@@ -3,7 +3,7 @@
 namespace Expo\App\Http\Controllers\Pages;
 
 use Expo\App\Http\Controllers\HTTPQueryHandler;
-use Expo\Resources\Views\View;
+use Expo\Resources\Views\Html;
 
 class Verify
 {
@@ -12,9 +12,9 @@ class Verify
         $uriQuery = HTTPQueryHandler::validateAndParseGet();
         if (isset($uriQuery['token']) && empty($requestList)) {
             $token = $uriQuery['token'];
-            View::render('verify', compact('token'));
+            Html::render('verify', compact('token'));
         } else {
-            View::render('404');
+            Html::render('404');
         }
     }
 }

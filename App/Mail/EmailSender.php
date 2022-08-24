@@ -6,7 +6,7 @@ use Exception;
 use Expo\App\Http\Controllers\Api\AdminActions\Authorizer;
 use Expo\App\Http\Controllers\HTTPQueryHandler;
 use Expo\App\Models\Entities\Users;
-use Expo\Resources\Views\View;
+use Expo\Resources\Views\Html;
 
 class EmailSender
 {
@@ -38,7 +38,7 @@ class EmailSender
                 EmailSender::send($uriQuery['type'], $uriQuery['userID'], ['This is a test email']);
             }, $uriQuery);
         } else {
-            View::render('404');
+            Html::render('404');
         }
     }
 }

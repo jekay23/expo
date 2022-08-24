@@ -3,7 +3,7 @@
 namespace Expo\App\Http\Controllers\Pages;
 
 use Expo\App\Http\Controllers\HTTPQueryHandler;
-use Expo\Resources\Views\View;
+use Expo\Resources\Views\Html;
 
 class Restore
 {
@@ -12,10 +12,9 @@ class Restore
         $uriQuery = HTTPQueryHandler::validateAndParseGet();
         if (isset($uriQuery['token']) && empty($requestList)) {
             $token = $uriQuery['token'];
-            View::render('restore', compact('token'));
+            Html::render('restore', compact('token'));
         } else {
-            View::render('404');
+            Html::render('404');
         }
     }
 }
-

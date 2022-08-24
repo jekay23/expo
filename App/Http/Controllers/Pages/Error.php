@@ -2,7 +2,7 @@
 
 namespace Expo\App\Http\Controllers\Pages;
 
-use Expo\Resources\Views\View;
+use Expo\Resources\Views\Html;
 
 class Error
 {
@@ -13,6 +13,6 @@ class Error
         if (!in_array($type, self::$types)) {
             $type = '404';
         }
-        View::render($type);
+        Html::render($type);
     }
 }

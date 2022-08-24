@@ -7,7 +7,7 @@ use Expo\App\Http\Controllers\HTTPQueryHandler;
 use Expo\App\Models\Entities\Compilations;
 use Expo\App\Models\Entities\Photos;
 use Expo\App\Models\Entities\Users;
-use Expo\Resources\Views\View;
+use Expo\Resources\Views\Html;
 
 class GetData
 {
@@ -52,7 +52,7 @@ class GetData
                 print json_encode(Photos::getCompilationItems($uriQuery['compilationID']));
             }, $uriQuery);
         } else {
-            View::render('404');
+            Html::render('404');
         }
     }
 }

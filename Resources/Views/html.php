@@ -13,11 +13,11 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
     </head>
     <body>
-        <?php \Expo\Resources\Views\Components\Header::render($userID, $currentNavbarLink); ?>
+        <?php \Expo\Resources\Views\Components\Header::render($userID, $requestView); ?>
         <main class="container-fluid mmd-main" role="main">
             <?php \Expo\App\Http\Controllers\Components\Announcement::render(); ?>
             <div style="padding: 0 1vw">
-                <?php \Expo\Resources\Views\Html::render($templateClass, $page, $stickFooter, $data); ?>
+                <?php $renderMainCallback() ?>
             </div>
         </main>
         <?php \Expo\Resources\Views\Components\Footer::render($stickFooter); ?>

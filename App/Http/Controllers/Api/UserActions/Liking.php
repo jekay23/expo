@@ -7,7 +7,7 @@ use Expo\App\Http\Controllers\Api;
 use Expo\App\Http\Controllers\Authentication;
 use Expo\App\Http\Controllers\HTTPQueryHandler;
 use Expo\App\Models\Entities\Likes;
-use Expo\Resources\Views\View;
+use Expo\Resources\Views\Html;
 
 class Liking
 {
@@ -65,7 +65,7 @@ class Liking
                     break;
             }
         } else {
-            View::render('404');
+            Html::render('404');
         }
     }
 
