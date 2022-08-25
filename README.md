@@ -1,5 +1,7 @@
 # Exhibition of photographers of Mathematics and mechanics department of NSU
 
+<hr style="background-color: #54b686; height: 3px">
+
 ## Description
 
 This is an educational project with ambition to be actually deployed in the framework of Novosibirsk State University's website. 
@@ -10,11 +12,16 @@ All backend is custom, its structure is inspired by Laravel.
 App uses MVC pattern for separation of concerns:
 - **Model**, which includes custom QueryObject-style interface for interaction with MySQL database via PDO and Entity classes for corresponding MySQL tables, can be found in [**~/App/Models**](https://github.com/jekay23/expo/tree/master/App/Models).
 - **View**, which includes View-classes that format data for usage in templates and templates of all kinds themselves, can be found in [**~/Resources/Views**](https://github.com/jekay23/expo/tree/master/Resources/Views).
-- **Controller**, which includes all the data fetching, API handling, validation etc., can be found in [**~/App/Http/Controllers**](https://github.com/jekay23/expo/tree/master/App/Http/Controllers). Routing, which is usually considered to be part of Controller too, is located in [**~/Routes**](https://github.com/jekay23/expo/tree/master/Routes).
+- **Controller**, which includes all the data fetching, API handling, validation etc., can be found in [**~/App/Http/Controllers**](https://github.com/jekay23/expo/tree/master/App/Http/Controllers). 
+Routing, which is usually considered to be part of Controller too, is located in [**~/Routes**](https://github.com/jekay23/expo/tree/master/Routes).
 
 This app exploits server-side rendering with a few JavaScript-enabled interactivity features.
 
 Commits have preceding task codes (e.g. T-9.4) for internal use, can be ignored.
+
+Used PHP version: 7.4. 
+The code is written in compliance with PSR-12. 
+Virtual machine or container with LAMP is recommended 
 
 ## How to run
 To have a fully-functional application, after cloning this repo you have to:
@@ -43,11 +50,12 @@ Right now my internship, during which I created the app, has successfully finish
 It's not being actively worked on, but there are plans for finding people who will continue its development. 
 The project is not yet production-ready. But to get there, there are following obvious proposals:
 - implement all components to be dynamic objects, not static classes (like the latest **~/Resources/Views/Components/Like**),
-- enhance APIs, make all of them RESTful
-- add lazy-loading capabilities for images
-- work on the issue of being able to quick-like photos without being signed in
-- load only useful JS and CSS for each specific page
-- make more filters and enhance the compilation's UI/UX
+- enhance APIs, make all of them RESTful,
+- add lazy-loading capabilities for images,
+- work on the issue of being able to quick-like photos without being signed in,
+- load only useful JS and CSS for each specific page,
+- make more filters and enhance the compilation's UI/UX,
+- create dev and test branches if there's ever a new developer on this project...
 
 ## Contacts
 
