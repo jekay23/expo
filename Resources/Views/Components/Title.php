@@ -1,6 +1,6 @@
 <?php
 
-namespace Expo\Resources\Views;
+namespace Expo\Resources\Views\Components;
 
 class Title
 {

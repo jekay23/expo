@@ -3,7 +3,7 @@
 namespace Expo\Resources\Views;
 
 use Expo\App\Http\Controllers\Authentication;
-use Expo\App\Models\DataBaseConnection;
+use Expo\Resources\Views\Components\Title;
 
 class Html
 {
