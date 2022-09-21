@@ -2,9 +2,10 @@
 
 namespace Expo\Resources\Views\Components;
 
+use Expo\Resources\Views\Renderable;
 use Expo\Resources\Views\View;
 
-class Like
+class Like extends Renderable
 {
     private bool $liked;
 
